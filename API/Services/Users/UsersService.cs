@@ -80,10 +80,11 @@ public class UsersService(AppDbContext context,
         
         if (existUser != null)
             return new GeneralResponse() { Success = false, Error = "User already exists" };
-
+        
         var newUser = userDto.Adapt<User>();
         
         context.Users.Add(newUser);
+        newUser.Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
         await context.SaveChangesAsync();
         
         return new GeneralResponse() { Success = true, Data = new { Id = newUser.Id } };

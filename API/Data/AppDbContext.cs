@@ -42,7 +42,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             }
             else if (entry.State == EntityState.Modified)
             {
-                ((BaseEntity)entry.Entity).UpdatedAt = DateTime.Now;
+                ((BaseEntity)entry.Entity).UpdatedAt = DateTime.UtcNow;
             }
         }
         

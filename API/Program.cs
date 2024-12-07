@@ -1,11 +1,15 @@
 using System.Text;
 using API.Data;
+using API.Services.Doctors;
 using API.Services.Users;
+using API.Validations.Doctors;
 using API.Validations.Users;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Models.DTOs.Doctors;
+using Models.DTOs.DoctorSchedules;
 using Models.DTOs.Users;
 using Models.Entities;
 
@@ -42,11 +46,14 @@ builder.Services.AddAuthentication(o =>
 
 //Services
 builder.Services.AddScoped<IUsersService, UsersService>();
+builder.Services.AddScoped<IDoctorService, DoctorService>();
 
 //Validations
 builder.Services.AddScoped<IValidator<LoginRequestDto>, UserLoginValidation>();
 builder.Services.AddScoped<IValidator<AddUserDto>, AddUserValidation>();
 builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserValidation>();
+builder.Services.AddScoped<IValidator<UpsertDoctorDto>, UpsertDoctorValidation>();
+builder.Services.AddScoped<IValidator<UpsertDoctorScheduleDto>, UpsertDoctorScheduleValidation>();
 
 var app = builder.Build();
 
