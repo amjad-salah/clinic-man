@@ -37,8 +37,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         {
             if (entry.State == EntityState.Added)
             {
-                ((BaseEntity)entry.Entity).CreatedAt = DateTime.Now;
-                ((BaseEntity)entry.Entity).UpdatedAt = DateTime.Now;
+                ((BaseEntity)entry.Entity).CreatedAt = DateTime.UtcNow;
+                ((BaseEntity)entry.Entity).UpdatedAt = DateTime.UtcNow;
             }
             else if (entry.State == EntityState.Modified)
             {
