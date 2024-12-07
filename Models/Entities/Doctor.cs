@@ -8,10 +8,8 @@ public class Doctor : BaseEntity
 {
     public string PhoneNo { get; set; } = string.Empty;
     public string Specialization { get; set; } = string.Empty;
-    
     public int UserId { get; set; }
     [ForeignKey("UserId")]
     public virtual User? User { get; set; }
-
     public virtual IList<DoctorSchedule>? Schedules { get; set; }
 }

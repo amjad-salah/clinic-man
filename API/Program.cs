@@ -1,6 +1,7 @@
 using System.Text;
 using API.Data;
 using API.Services.Doctors;
+using API.Services.DoctorSchedules;
 using API.Services.Users;
 using API.Validations.Doctors;
 using API.Validations.Users;
@@ -17,7 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(
+    options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 builder.Services.AddOpenApi();
 
 //DbContext
@@ -47,6 +49,7 @@ builder.Services.AddAuthentication(o =>
 //Services
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
+builder.Services.AddScoped<IDoctorSchedulesService, DoctorSchedulesService>();
 
 //Validations
 builder.Services.AddScoped<IValidator<LoginRequestDto>, UserLoginValidation>();

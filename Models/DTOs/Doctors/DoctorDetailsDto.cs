@@ -5,4 +5,4 @@ namespace Models.DTOs.Doctors;
 
 public record DoctorDetailsDto( 
     string PhoneNo, string Specialization, 
-    UserDto User, List<DoctorScheduleDto> Schedules);
+    UserDoctorDto User, List<DoctorScheduleDto> Schedules);
