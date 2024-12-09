@@ -67,6 +67,7 @@ builder.Services.AddScoped<IValidator<UpsertDoctorDto>, UpsertDoctorValidation>(
 builder.Services.AddScoped<IValidator<UpsertDoctorScheduleDto>, UpsertDoctorScheduleValidation>();
 builder.Services.AddScoped<IValidator<UpsertPatientDto>, UpsertPatientValidation>();
 builder.Services.AddScoped<IValidator<UpsertAppointmentDto>, UpsertAppointmentValidation>();
+builder.Services.AddScoped<IValidator<UpsertAppointmentDto>, UpsertAppointmentValidation>();
 
 var app = builder.Build();
 

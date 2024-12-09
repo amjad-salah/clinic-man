@@ -8,7 +8,7 @@ public class UpsertDoctorValidation : AbstractValidator<UpsertDoctorDto>
     public UpsertDoctorValidation()
     {
         RuleFor(d => d.UserId).NotEmpty().GreaterThan(0).WithMessage("User is required");
-        RuleFor(d => d.Specialization).NotEmpty().WithMessage("Specialization is required");
-        RuleFor(d => d.PhoneNo).NotEmpty().WithMessage("Phone number is required");
+        RuleFor(d => d.Specialization).NotEmpty().MaximumLength(200).WithMessage("Specialization is required");
+        RuleFor(d => d.PhoneNo).NotEmpty().MaximumLength(20).WithMessage("Phone number is required");
     }
 }

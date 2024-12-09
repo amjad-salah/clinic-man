@@ -17,6 +17,9 @@ public class Appointment : BaseEntity
     [MaxLength(255)]
     public string? Reason { get; set; }
     public AppointmentStatus Status { get; set; }
+    
+    public virtual List<Diagnose>? Diagnoses { get; set; }
+    public virtual List<Prescription>? Prescriptions { get; set; }
 }
 
 public enum AppointmentStatus

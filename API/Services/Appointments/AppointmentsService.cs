@@ -15,6 +15,7 @@ public class AppointmentsService(AppDbContext context) : IAppointmentsService
         var appointments = await context.Appointments.AsNoTracking()
             .Include(a => a.Patient)
             .Include(a => a.Doctor)
+            .ThenInclude(d => d!.User)
             .ProjectToType<AppointmentDto>()
             .ToListAsync();
         
@@ -26,6 +27,7 @@ public class AppointmentsService(AppDbContext context) : IAppointmentsService
         var appointment = await context.Appointments.AsNoTracking()
             .Include(a => a.Patient)
             .Include(a => a.Doctor)
+            .ThenInclude(d => d!.User)
             .FirstOrDefaultAsync(a => a.Id == id);
         
         return appointment == null ? new GeneralResponse() {Success = false, Error = "Appointment not found"} 
