@@ -1,0 +1,27 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Models.Entities;
+
+public class Appointment : BaseEntity
+{
+    public int PatientId { get; set; }
+    [ForeignKey("PatientId")]
+    public virtual Patient? Patient { get; set; }
+    public int DoctorId { get; set; }
+    [ForeignKey("DoctorId")]
+    public virtual Doctor? Doctor { get; set; }
+
+    public DateOnly Date { get; set; }
+    public TimeOnly Time { get; set; }
+    [MaxLength(255)]
+    public string? Reason { get; set; }
+    public AppointmentStatus Status { get; set; }
+}
+
+public enum AppointmentStatus
+{
+    Scheduled,
+    Completed,
+    Cancelled
+}

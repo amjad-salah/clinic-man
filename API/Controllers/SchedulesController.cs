@@ -10,13 +10,14 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin, Manager")]
+[Authorize]
 public class SchedulesController(IDoctorSchedulesService service,
     IValidator<UpsertDoctorScheduleDto> validator) : ControllerBase
 {
     //Add new schedule
     //POST /api/schedules
     [HttpPost]
+    [Authorize(Roles = "Admin, Manager")]
     public async Task<ActionResult<DoctorScheduleDto>> AddSchedule(UpsertDoctorScheduleDto scheduleDto)
     {
         try
@@ -83,6 +84,7 @@ public class SchedulesController(IDoctorSchedulesService service,
     //Update schedule by id
     //PUT /api/schedules/{id}
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin, Manager")]
     public async Task<ActionResult<GeneralResponse>> UpdateSchedule(int id, UpsertDoctorScheduleDto scheduleDto)
     {
         try
@@ -112,6 +114,7 @@ public class SchedulesController(IDoctorSchedulesService service,
     //Delete schedule by id
     //DELETE /api/schedules/{id}
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin, Manager")]
     public async Task<ActionResult<GeneralResponse>> DeleteSchedule(int id)
     {
         try

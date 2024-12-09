@@ -1,16 +1,22 @@
 using System.Text;
 using API.Data;
+using API.Services.Appointments;
 using API.Services.Doctors;
 using API.Services.DoctorSchedules;
+using API.Services.Patients;
 using API.Services.Users;
+using API.Validations;
 using API.Validations.Doctors;
+using API.Validations.Patients;
 using API.Validations.Users;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Models.DTOs.Appointments;
 using Models.DTOs.Doctors;
 using Models.DTOs.DoctorSchedules;
+using Models.DTOs.Patients;
 using Models.DTOs.Users;
 using Models.Entities;
 
@@ -50,6 +56,8 @@ builder.Services.AddAuthentication(o =>
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IDoctorSchedulesService, DoctorSchedulesService>();
+builder.Services.AddScoped<IPatientsService, PatientsService>();
+builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 
 //Validations
 builder.Services.AddScoped<IValidator<LoginRequestDto>, UserLoginValidation>();
@@ -57,6 +65,8 @@ builder.Services.AddScoped<IValidator<AddUserDto>, AddUserValidation>();
 builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserValidation>();
 builder.Services.AddScoped<IValidator<UpsertDoctorDto>, UpsertDoctorValidation>();
 builder.Services.AddScoped<IValidator<UpsertDoctorScheduleDto>, UpsertDoctorScheduleValidation>();
+builder.Services.AddScoped<IValidator<UpsertPatientDto>, UpsertPatientValidation>();
+builder.Services.AddScoped<IValidator<UpsertAppointmentDto>, UpsertAppointmentValidation>();
 
 var app = builder.Build();
 

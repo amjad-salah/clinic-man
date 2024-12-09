@@ -13,5 +13,5 @@ public record DoctorScheduleDetailsDto
     public TimeOnly StartTime { get; set; }
     [JsonConverter(typeof(TimeOnlyConverter))]
     public TimeOnly EndTime { get; set; }
-    public DoctorDetailsDto Doctor { get; set; }
+    public DoctorDto Doctor { get; set; }
 }
