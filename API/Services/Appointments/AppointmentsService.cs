@@ -28,10 +28,12 @@ public class AppointmentsService(AppDbContext context) : IAppointmentsService
             .Include(a => a.Patient)
             .Include(a => a.Doctor)
             .ThenInclude(d => d!.User)
+            .Include(a => a.Diagnoses)
+            .Include(a => a.Prescriptions)
             .FirstOrDefaultAsync(a => a.Id == id);
         
         return appointment == null ? new GeneralResponse() {Success = false, Error = "Appointment not found"} 
-            : new GeneralResponse() {Success = true, Data = appointment.Adapt<AppointmentDto>()};
+            : new GeneralResponse() {Success = true, Data = appointment.Adapt<AppointmentDetailsDto>()};
     }
 
     public async Task<GeneralResponse> AddAppointment(UpsertAppointmentDto appointment)

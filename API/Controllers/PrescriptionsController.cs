@@ -1,0 +1,138 @@
+using System.ComponentModel.DataAnnotations;
+using API.Services.Prescriptions;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
+using Models;
+using Models.DTOs.Prescriptions;
+
+namespace API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class PrescriptionsController(IPrescriptionsService service,
+    IValidator<UpsertPrescriptionDto> validator) : ControllerBase
+{
+    //Add new prescription
+    //POST /api/prescriptions
+    [HttpPost("")]
+    public async Task<ActionResult<GeneralResponse>> AddPrescription(UpsertPrescriptionDto prescriptionDto)
+    {
+        try
+        {
+            var validationResult = await validator.ValidateAsync(prescriptionDto);
+
+            if (!validationResult.IsValid)
+            {
+                var error = string.Join(',', validationResult.Errors.Select(x => x.ErrorMessage));
+                
+                return BadRequest(new GeneralResponse() {Success = false, Error = error});
+            }
+            
+            var response = await service.AddPrescription(prescriptionDto);
+            
+            if (!response.Success)
+                return BadRequest(response);
+            
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return Problem("Internal server error, try again later", statusCode: 500);
+        }
+    }
+    
+    //Get all prescriptions
+    //GET /api/prescriptions
+    [HttpGet("")]
+    public async Task<ActionResult<GeneralResponse>> GetPrescriptions()
+    {
+        try
+        {
+            var response = await service.GetPrescriptions();
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return Problem("Internal server error, try again later", statusCode: 500);
+        }
+    }
+    
+    //Get prescription by id
+    //GET /api/prescriptions/{id}
+    [HttpGet("{id}")]
+    public async Task<ActionResult<GeneralResponse>> GetPrescription(int id)
+    {
+        try
+        {
+            var response = await service.GetPrescription(id);
+            
+            if (!response.Success)
+                return NotFound(response);
+            
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return Problem("Internal server error, try again later", statusCode: 500);
+        }
+    }
+    
+    //Update prescription by id
+    //PUT /api/prescriptions/{id}
+    [HttpPut("{id}")]
+    public async Task<ActionResult<GeneralResponse>> UpdatePrescription(int id, 
+        UpsertPrescriptionDto prescriptionDto)
+    {
+        try
+        {
+            var validationResult = await validator.ValidateAsync(prescriptionDto);
+
+            if (!validationResult.IsValid)
+            {
+                var error = string.Join(", ", validationResult.Errors.Select(x => x.ErrorMessage));
+                return BadRequest(new GeneralResponse() {Success = false, Error = error});
+            }
+            
+            var response = await service.UpdatePrescription(id, prescriptionDto);
+
+            if (!response.Success)
+            {
+                if (response.Error == "Prescription not found")
+                    return NotFound(response);
+                
+                return BadRequest(response);
+            }
+            
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return Problem("Internal server error, try again later", statusCode: 500);
+        }
+    }
+    
+    //Delete prescription by id
+    //DELETE /api/prescriptions/{id}
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<GeneralResponse>> DeletePrescription(int id)
+    {
+        try
+        {
+            var response = await service.DeletePrescription(id);
+            
+            if (!response.Success)
+                return NotFound(response);
+            
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return Problem("Internal server error, try again later", statusCode: 500);
+        }
+    }
+}

@@ -16,7 +16,7 @@ public class PrescriptionsService(AppDbContext context) : IPrescriptionsService
         return new GeneralResponse() {Success = true, Data = prescriptions};
     }
 
-    public async Task<GeneralResponse> GetPrescriptions(int id)
+    public async Task<GeneralResponse> GetPrescription(int id)
     {
         var prescription = await context.Prescriptions.AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == id);

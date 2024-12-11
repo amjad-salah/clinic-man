@@ -8,7 +8,7 @@ using Models.Entities;
 
 namespace Models.DTOs.Appointments;
 
-public class AppointmentDto
+public class AppointmentDetailsDto
 {
     public int Id { get; set; }
     public int PatientId { get; set; }
@@ -21,4 +21,6 @@ public class AppointmentDto
     public AppointmentStatus Status { get; set; }
     public PatientDto Patient { get; set; }
     public DoctorDto Doctor { get; set; }
+    public List<DiagnoseDto>? Diagnoses { get; set; }
+    public List<PrescriptionDto>? Prescriptions { get; set; }
 }
