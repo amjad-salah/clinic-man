@@ -72,7 +72,7 @@ namespace API.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AppointmentId")
+                    b.Property<int?>("AppointmentId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
@@ -82,7 +82,7 @@ namespace API.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("PatientId")
+                    b.Property<int>("PatientId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -166,6 +166,45 @@ namespace API.Data.Migrations
                     b.ToTable("DoctorSchedules");
                 });
 
+            modelBuilder.Entity("Models.Entities.LabTest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Result")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TestName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("LabTests");
+                });
+
             modelBuilder.Entity("Models.Entities.Patient", b =>
                 {
                     b.Property<int>("Id")
@@ -226,7 +265,7 @@ namespace API.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AppointmentId")
+                    b.Property<int?>("AppointmentId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
@@ -252,7 +291,7 @@ namespace API.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.Property<int?>("PatientId")
+                    b.Property<int>("PatientId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -327,17 +366,17 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("Models.Entities.Diagnose", b =>
                 {
-                    b.HasOne("Models.Entities.Appointment", "Appointment")
+                    b.HasOne("Models.Entities.Appointment", null)
                         .WithMany("Diagnoses")
-                        .HasForeignKey("AppointmentId")
+                        .HasForeignKey("AppointmentId");
+
+                    b.HasOne("Models.Entities.Patient", "Patient")
+                        .WithMany("Diagnoses")
+                        .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.Entities.Patient", null)
-                        .WithMany("Diagnoses")
-                        .HasForeignKey("PatientId");
-
-                    b.Navigation("Appointment");
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("Models.Entities.Doctor", b =>
@@ -362,19 +401,30 @@ namespace API.Data.Migrations
                     b.Navigation("Doctor");
                 });
 
-            modelBuilder.Entity("Models.Entities.Prescription", b =>
+            modelBuilder.Entity("Models.Entities.LabTest", b =>
                 {
-                    b.HasOne("Models.Entities.Appointment", "Appointment")
-                        .WithMany("Prescriptions")
-                        .HasForeignKey("AppointmentId")
+                    b.HasOne("Models.Entities.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.Entities.Patient", null)
-                        .WithMany("Prescriptions")
-                        .HasForeignKey("PatientId");
+                    b.Navigation("Patient");
+                });
 
-                    b.Navigation("Appointment");
+            modelBuilder.Entity("Models.Entities.Prescription", b =>
+                {
+                    b.HasOne("Models.Entities.Appointment", null)
+                        .WithMany("Prescriptions")
+                        .HasForeignKey("AppointmentId");
+
+                    b.HasOne("Models.Entities.Patient", "Patient")
+                        .WithMany("Prescriptions")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("Models.Entities.Appointment", b =>

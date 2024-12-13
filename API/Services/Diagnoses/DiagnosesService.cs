@@ -29,11 +29,11 @@ public class DiagnosesService(AppDbContext context) : IDiagnosesService
 
     public async Task<GeneralResponse> AddDiagnose(UpsertDiagnoseDto diagnose)
     {
-        var existAppointment = await context.Appointments.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == diagnose.AppointmentId);
+        var existPatient = await context.Patients.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == diagnose.PatientId);
         
-        if (existAppointment == null)
-            return new GeneralResponse() {Success = false, Error = "Appointment Not Found"};
+        if (existPatient == null)
+            return new GeneralResponse() {Success = false, Error = "Patient Not Found"};
         
         context.Diagnoses.Add(diagnose.Adapt<Diagnose>());
         await context.SaveChangesAsync();
@@ -48,7 +48,13 @@ public class DiagnosesService(AppDbContext context) : IDiagnosesService
         if (existDiagnose == null)
             return new GeneralResponse() {Success = false, Error = "Diagnoses Not Found"};
         
-        existDiagnose.AppointmentId = diagnose.AppointmentId;
+        var existPatient = await context.Patients.AsNoTracking()
+            .FirstOrDefaultAsync(a => a.Id == diagnose.PatientId);
+        
+        if (existPatient == null)
+            return new GeneralResponse() {Success = false, Error = "Patient not found"};
+        
+        existDiagnose.PatientId = diagnose.PatientId;
         existDiagnose.Diagnosis = diagnose.Diagnosis;
         
         await context.SaveChangesAsync();

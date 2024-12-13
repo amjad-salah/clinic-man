@@ -11,5 +11,6 @@ public class UpsertPrescriptionValidation : AbstractValidator<UpsertPrescription
         RuleFor(p => p.Dosage).NotEmpty().MaximumLength(50).WithMessage("Dosage is required");
         RuleFor(p => p.Duration).NotEmpty().MaximumLength(50).WithMessage("Duration is required");
         RuleFor(p => p.Frequency).NotEmpty().MaximumLength(50).WithMessage("Frequency is required");
+        RuleFor(p => p.PatientId).NotEmpty().WithMessage("Patient is required");
     }
 }

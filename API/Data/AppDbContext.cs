@@ -56,4 +56,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<Diagnose> Diagnoses { get; set; }
     public DbSet<Prescription> Prescriptions { get; set; }
+    public DbSet<LabTest> LabTests { get; set; }
+    
 }

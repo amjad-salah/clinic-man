@@ -5,9 +5,9 @@ namespace Models.Entities;
 
 public class Prescription : BaseEntity
 {
-    public int AppointmentId { get; set; }
-    [ForeignKey(("AppointmentId"))]
-    public virtual Appointment? Appointment { get; set; }
+    public int PatientId { get; set; }
+    [ForeignKey(("PatientId"))]
+    public virtual Patient? Patient { get; set; }
     [MaxLength(255)]
     public string MedicationName { get; set; } = string.Empty;
     [MaxLength(50)]
