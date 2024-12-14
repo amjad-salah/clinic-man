@@ -11,7 +11,11 @@ public class DiagnosesService(AppDbContext context) : IDiagnosesService
 {
     public async Task<GeneralResponse> GetDiagnoses()
     {
-        var diagnoses = await context.Diagnoses.AsNoTracking().ToListAsync();
+        var diagnoses = await context.Diagnoses.AsNoTracking()
+            .Include(d => d.Appointment)
+            .Include(d => d.Patient)
+            .ProjectToType<DiagnoseDetailsDto>()
+            .ToListAsync();
         
         return new GeneralResponse() {Success = true, Data = diagnoses};
     }
@@ -19,23 +23,28 @@ public class DiagnosesService(AppDbContext context) : IDiagnosesService
     public async Task<GeneralResponse> GetDiagnoseById(int id)
     {
         var diagnose = await context.Diagnoses.AsNoTracking()
+            .Include(d => d.Appointment)
+            .Include(d => d.Patient)
             .FirstOrDefaultAsync(x => x.Id == id);
         
         if (diagnose == null)
             return new GeneralResponse() {Success = false, Error = "Diagnoses Not Found"};
         
-        return new GeneralResponse() {Success = true, Data = diagnose};
+        return new GeneralResponse() {Success = true, Data = diagnose.Adapt<DiagnoseDetailsDto>()};
     }
 
     public async Task<GeneralResponse> AddDiagnose(UpsertDiagnoseDto diagnose)
     {
-        var existPatient = await context.Patients.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == diagnose.PatientId);
+        var existAppointment = await context.Appointments.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == diagnose.AppointmentId);
         
-        if (existPatient == null)
-            return new GeneralResponse() {Success = false, Error = "Patient Not Found"};
+        if (existAppointment == null)
+            return new GeneralResponse() {Success = false, Error = "Appointment Not Found"};
         
-        context.Diagnoses.Add(diagnose.Adapt<Diagnose>());
+        var newDiagnose = diagnose.Adapt<Diagnose>();
+        newDiagnose.PatientId = existAppointment.PatientId;
+        
+        context.Diagnoses.Add(newDiagnose);
         await context.SaveChangesAsync();
         
         return new GeneralResponse() {Success = true, Data = diagnose};
@@ -47,15 +56,19 @@ public class DiagnosesService(AppDbContext context) : IDiagnosesService
         
         if (existDiagnose == null)
             return new GeneralResponse() {Success = false, Error = "Diagnoses Not Found"};
+
+        if (existDiagnose.AppointmentId != diagnose.AppointmentId)
+        {
+            var existAppointment = await context.Appointments.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == diagnose.AppointmentId);
         
-        var existPatient = await context.Patients.AsNoTracking()
-            .FirstOrDefaultAsync(a => a.Id == diagnose.PatientId);
-        
-        if (existPatient == null)
-            return new GeneralResponse() {Success = false, Error = "Patient not found"};
+            if (existAppointment == null)
+                return new GeneralResponse() {Success = false, Error = "Appointment Not Found"};
+        }
         
         existDiagnose.PatientId = diagnose.PatientId;
         existDiagnose.Diagnosis = diagnose.Diagnosis;
+        existDiagnose.AppointmentId = diagnose.AppointmentId;
         
         await context.SaveChangesAsync();
         

@@ -1,36 +1,34 @@
-using System.ComponentModel.DataAnnotations;
-using API.Services.Prescriptions;
+using API.Services.LabTests;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Models.DTOs.Prescriptions;
-
+using Models.DTOs.LabTests;
 namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PrescriptionsController(IPrescriptionsService service,
-    IValidator<UpsertPrescriptionDto> validator) : ControllerBase
+[Authorize]
+public class LabTestsController(ILabTestsService service,
+    IValidator<UpsertLabTestDto> validator) : ControllerBase
 {
-    //Add new prescription
-    //POST /api/prescriptions
+    //Add new Test
+    //POST /api/labtests
     [HttpPost("")]
-    [Authorize(Roles = "Doctor")]
-    public async Task<ActionResult<GeneralResponse>> AddPrescription(UpsertPrescriptionDto prescriptionDto)
+    public async Task<ActionResult<GeneralResponse>> AddTest(UpsertLabTestDto test)
     {
         try
         {
-            var validationResult = await validator.ValidateAsync(prescriptionDto);
+            var validation = await validator.ValidateAsync(test);
 
-            if (!validationResult.IsValid)
+            if (!validation.IsValid)
             {
-                var error = string.Join(',', validationResult.Errors.Select(x => x.ErrorMessage));
+                var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
                 
                 return BadRequest(new GeneralResponse() {Success = false, Error = error});
             }
-            
-            var response = await service.AddPrescription(prescriptionDto);
+
+            var response = await service.CreateTest(test);
             
             if (!response.Success)
                 return BadRequest(response);
@@ -44,14 +42,15 @@ public class PrescriptionsController(IPrescriptionsService service,
         }
     }
     
-    //Get all prescriptions
-    //GET /api/prescriptions
+    //Get All Tests
+    //GET /api/labtests
     [HttpGet("")]
-    public async Task<ActionResult<GeneralResponse>> GetPrescriptions()
+    public async Task<ActionResult<GeneralResponse>> GetTests()
     {
         try
         {
-            var response = await service.GetPrescriptions();
+            var response = await service.GetTests();
+            
             return Ok(response);
         }
         catch (Exception e)
@@ -61,16 +60,16 @@ public class PrescriptionsController(IPrescriptionsService service,
         }
     }
     
-    //Get prescription by id
-    //GET /api/prescriptions/{id}
+    //Get test by id
+    //GET /api/labtests/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<GeneralResponse>> GetPrescription(int id)
+    public async Task<ActionResult<GeneralResponse>> GetTest(int id)
     {
         try
         {
-            var response = await service.GetPrescription(id);
+            var response = await service.GetTestById(id);
             
-            if (!response.Success)
+            if (!response.Success) 
                 return NotFound(response);
             
             return Ok(response);
@@ -82,28 +81,26 @@ public class PrescriptionsController(IPrescriptionsService service,
         }
     }
     
-    //Update prescription by id
-    //PUT /api/prescriptions/{id}
+    //Update test by id
+    //PUT /api/labtests/{id}
     [HttpPut("{id}")]
-    [Authorize(Roles = "Doctor")]
-    public async Task<ActionResult<GeneralResponse>> UpdatePrescription(int id, 
-        UpsertPrescriptionDto prescriptionDto)
+    public async Task<ActionResult<GeneralResponse>> UpdateTest(int id, UpsertLabTestDto test)
     {
         try
         {
-            var validationResult = await validator.ValidateAsync(prescriptionDto);
+            var validation = await validator.ValidateAsync(test);
 
-            if (!validationResult.IsValid)
+            if (!validation.IsValid)
             {
-                var error = string.Join(", ", validationResult.Errors.Select(x => x.ErrorMessage));
+                var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
                 return BadRequest(new GeneralResponse() {Success = false, Error = error});
             }
             
-            var response = await service.UpdatePrescription(id, prescriptionDto);
+            var response = await service.UpdateTest(id, test);
 
             if (!response.Success)
             {
-                if (response.Error == "Prescription not found")
+                if (response.Error == "Test not found")
                     return NotFound(response);
                 
                 return BadRequest(response);
@@ -118,15 +115,14 @@ public class PrescriptionsController(IPrescriptionsService service,
         }
     }
     
-    //Delete prescription by id
-    //DELETE /api/prescriptions/{id}
+    //Delete test by id
+    //DELETE /api/labtests/{id}
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Doctor")]
-    public async Task<ActionResult<GeneralResponse>> DeletePrescription(int id)
+    public async Task<ActionResult<GeneralResponse>> DeleteTest(int id)
     {
         try
         {
-            var response = await service.DeletePrescription(id);
+            var response = await service.DeleteTest(id);
             
             if (!response.Success)
                 return NotFound(response);

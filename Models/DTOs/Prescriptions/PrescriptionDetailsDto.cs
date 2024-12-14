@@ -12,4 +12,6 @@ public class PrescriptionDetailsDto
     public string Frequency { get; set; } = string.Empty;
     public string Duration { get; set; } = string.Empty;
     public PatientDto? Patient { get; set; }
+    public int AppointmentId { get; set; }
+    public AppointmentDto? Appointment { get; set; }
 }

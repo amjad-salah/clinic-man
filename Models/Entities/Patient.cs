@@ -22,6 +22,7 @@ public class Patient : BaseEntity
     public virtual List<Appointment>? Appointments { get; set; }
     public virtual List<Diagnose>? Diagnoses { get; set; }
     public virtual List<Prescription>? Prescriptions { get; set; }
+    public virtual List<LabTest>? Tests { get; set; }
 }
 
 public enum Gender { Male, Female }

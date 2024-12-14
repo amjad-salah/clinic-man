@@ -1,3 +1,4 @@
+using Models.DTOs.Appointments;
 using Models.DTOs.Patients;
 using Models.Entities;
 
@@ -12,4 +13,6 @@ public class LabTestDetailsDto
     public TestStatus Status { get; set; }
     public int PatientId { get; set; }
     public PatientDto? Patient { get; set; }
+    public int AppointmentId { get; set; }
+    public AppointmentDto? Appointment { get; set; }
 }

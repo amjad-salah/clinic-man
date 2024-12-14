@@ -10,6 +10,7 @@ using API.Services.Users;
 using API.Validations;
 using API.Validations.Diagnoses;
 using API.Validations.Doctors;
+using API.Validations.LabTests;
 using API.Validations.Patients;
 using API.Validations.Prescriptions;
 using API.Validations.Users;
@@ -21,6 +22,7 @@ using Models.DTOs.Appointments;
 using Models.DTOs.Diagnoses;
 using Models.DTOs.Doctors;
 using Models.DTOs.DoctorSchedules;
+using Models.DTOs.LabTests;
 using Models.DTOs.Patients;
 using Models.DTOs.Prescriptions;
 using Models.DTOs.Users;
@@ -78,6 +80,7 @@ builder.Services.AddScoped<IValidator<UpsertAppointmentDto>, UpsertAppointmentVa
 builder.Services.AddScoped<IValidator<UpsertAppointmentDto>, UpsertAppointmentValidation>();
 builder.Services.AddScoped<IValidator<UpsertDiagnoseDto>, UpsertDiagnoseValidation>();
 builder.Services.AddScoped<IValidator<UpsertPrescriptionDto>, UpsertPrescriptionValidation>();
+builder.Services.AddScoped<IValidator<UpsertLabTestDto>, UpsertLabTestValidation>();
 
 var app = builder.Build();
 

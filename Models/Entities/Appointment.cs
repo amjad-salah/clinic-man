@@ -20,6 +20,7 @@ public class Appointment : BaseEntity
     
     public virtual List<Diagnose>? Diagnoses { get; set; }
     public virtual List<Prescription>? Prescriptions { get; set; }
+    public virtual List<LabTest>? Tests { get; set; }
 }
 
 public enum AppointmentStatus

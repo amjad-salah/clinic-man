@@ -13,6 +13,9 @@ public class LabTest :BaseEntity
     public int PatientId { get; set; }
     [ForeignKey("PatientId")]
     public Patient? Patient { get; set; }
+    public int AppointmentId { get; set; }
+    [ForeignKey(("AppointmentId"))]
+    public virtual Appointment? Appointment { get; set; }
 }
 
 public enum TestStatus

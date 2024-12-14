@@ -16,6 +16,7 @@ public class DiagnosesController(IDiagnosesService service,
     //Add new diagnose
     //POST /api/diagnoses
     [HttpPost("")]
+    [Authorize(Roles = "Doctor")]
     public async Task<ActionResult<GeneralResponse>> AddDiagnose(UpsertDiagnoseDto diagnoseDto)
     {
         try
@@ -85,6 +86,7 @@ public class DiagnosesController(IDiagnosesService service,
     //Update diagnose by id
     //PUT /api/diagnoses/{id}
     [HttpPut("{id}")]
+    [Authorize(Roles = "Doctor")]
     public async Task<ActionResult<GeneralResponse>> UpdateDiagnose(int id, UpsertDiagnoseDto diagnoseDto)
     {
         try
@@ -119,6 +121,7 @@ public class DiagnosesController(IDiagnosesService service,
     //Delete diagnose by id
     //DELETE /api/diagnoses/{id}
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Doctor")]
     public async Task<ActionResult<GeneralResponse>> DeleteDiagnose(int id)
     {
         try

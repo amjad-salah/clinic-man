@@ -11,7 +11,10 @@ public class PrescriptionsService(AppDbContext context) : IPrescriptionsService
 {
     public async Task<GeneralResponse> GetPrescriptions()
     {
-        var prescriptions = await context.Prescriptions.AsNoTracking().ToListAsync();
+        var prescriptions = await context.Prescriptions.AsNoTracking()
+            .Include(p => p.AppointmentId)
+            .Include(p =>p.Patient)
+            .ProjectToType<PrescriptionDetailsDto>().ToListAsync();
         
         return new GeneralResponse() {Success = true, Data = prescriptions};
     }
@@ -19,23 +22,28 @@ public class PrescriptionsService(AppDbContext context) : IPrescriptionsService
     public async Task<GeneralResponse> GetPrescription(int id)
     {
         var prescription = await context.Prescriptions.AsNoTracking()
+            .Include(p => p.AppointmentId)
+            .Include(p =>p.Patient)
             .FirstOrDefaultAsync(p => p.Id == id);
         
         if (prescription == null)
             return new GeneralResponse() {Success = false, Error = "Prescription not found"};
         
-        return new GeneralResponse() {Success = true, Data = prescription};
+        return new GeneralResponse() {Success = true, Data = prescription.Adapt<PrescriptionDetailsDto>()};
     }
 
     public async Task<GeneralResponse> AddPrescription(UpsertPrescriptionDto prescription)
     {
-        var existPatient = await context.Patients.AsNoTracking()
-            .FirstOrDefaultAsync(a => a.Id == prescription.PatientId);
+        var existAppointment = await context.Appointments.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == prescription.AppointmentId);
         
-        if (existPatient == null)
-            return new GeneralResponse() {Success = false, Error = "Patient not found"};
+        if (existAppointment == null)
+            return new GeneralResponse() {Success = false, Error = "Appointment Not Found"};
 
-        context.Prescriptions.Add(prescription.Adapt<Prescription>());
+        var newPrescription = prescription.Adapt<Prescription>();
+        newPrescription.PatientId = existAppointment.PatientId;
+        
+        context.Prescriptions.Add(newPrescription);
         await context.SaveChangesAsync();
         
         return new GeneralResponse() {Success = true, Data = prescription};
@@ -47,14 +55,18 @@ public class PrescriptionsService(AppDbContext context) : IPrescriptionsService
         
         if (existPrescription == null)
             return new GeneralResponse() {Success = false, Error = "Prescription not found"};
+
+        if (existPrescription.AppointmentId != prescription.AppointmentId)
+        {
+            var existAppointment = await context.Appointments.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == prescription.AppointmentId);
         
-        var existPatient = await context.Patients.AsNoTracking()
-            .FirstOrDefaultAsync(a => a.Id == prescription.PatientId);
-        
-        if (existPatient == null)
-            return new GeneralResponse() {Success = false, Error = "Patient not found"};
+            if (existAppointment == null)
+                return new GeneralResponse() {Success = false, Error = "Appointment Not Found"};
+        }
         
         existPrescription.PatientId = prescription.PatientId;
+        existPrescription.AppointmentId = prescription.AppointmentId;
         existPrescription.MedicationName = prescription.MedicationName;
         existPrescription.Frequency = prescription.Frequency;
         existPrescription.Dosage = prescription.Dosage;

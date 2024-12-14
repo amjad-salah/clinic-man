@@ -3,6 +3,7 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241213074917_BillingTables")]
+    partial class BillingTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,7 +157,7 @@ namespace API.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AppointmentId")
+                    b.Property<int?>("AppointmentId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
@@ -248,78 +251,6 @@ namespace API.Data.Migrations
                     b.ToTable("DoctorSchedules");
                 });
 
-            modelBuilder.Entity("Models.Entities.Inventory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateOnly>("ExpirationDate")
-                        .HasColumnType("date");
-
-                    b.Property<int>("MinQuantity")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Inventories");
-                });
-
-            modelBuilder.Entity("Models.Entities.InventoryLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("InventoryId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("SupplierId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InventoryId");
-
-                    b.HasIndex("SupplierId");
-
-                    b.ToTable("InventoryLogs");
-                });
-
             modelBuilder.Entity("Models.Entities.LabTest", b =>
                 {
                     b.Property<int>("Id")
@@ -327,9 +258,6 @@ namespace API.Data.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AppointmentId")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -356,8 +284,6 @@ namespace API.Data.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppointmentId");
 
                     b.HasIndex("PatientId");
 
@@ -458,7 +384,7 @@ namespace API.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AppointmentId")
+                    b.Property<int?>("AppointmentId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
@@ -497,39 +423,6 @@ namespace API.Data.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("Prescriptions");
-                });
-
-            modelBuilder.Entity("Models.Entities.Supplier", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ContactInfo")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Suppliers");
                 });
 
             modelBuilder.Entity("Models.Entities.User", b =>
@@ -614,19 +507,15 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("Models.Entities.Diagnose", b =>
                 {
-                    b.HasOne("Models.Entities.Appointment", "Appointment")
+                    b.HasOne("Models.Entities.Appointment", null)
                         .WithMany("Diagnoses")
-                        .HasForeignKey("AppointmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AppointmentId");
 
                     b.HasOne("Models.Entities.Patient", "Patient")
                         .WithMany("Diagnoses")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Appointment");
 
                     b.Navigation("Patient");
                 });
@@ -653,38 +542,13 @@ namespace API.Data.Migrations
                     b.Navigation("Doctor");
                 });
 
-            modelBuilder.Entity("Models.Entities.InventoryLog", b =>
-                {
-                    b.HasOne("Models.Entities.Inventory", "Inventory")
-                        .WithMany()
-                        .HasForeignKey("InventoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Entities.Supplier", "Supplier")
-                        .WithMany()
-                        .HasForeignKey("SupplierId");
-
-                    b.Navigation("Inventory");
-
-                    b.Navigation("Supplier");
-                });
-
             modelBuilder.Entity("Models.Entities.LabTest", b =>
                 {
-                    b.HasOne("Models.Entities.Appointment", "Appointment")
-                        .WithMany()
-                        .HasForeignKey("AppointmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Models.Entities.Patient", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Appointment");
 
                     b.Navigation("Patient");
                 });
@@ -702,19 +566,15 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("Models.Entities.Prescription", b =>
                 {
-                    b.HasOne("Models.Entities.Appointment", "Appointment")
+                    b.HasOne("Models.Entities.Appointment", null)
                         .WithMany("Prescriptions")
-                        .HasForeignKey("AppointmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AppointmentId");
 
                     b.HasOne("Models.Entities.Patient", "Patient")
                         .WithMany("Prescriptions")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Appointment");
 
                     b.Navigation("Patient");
                 });

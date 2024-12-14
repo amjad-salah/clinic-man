@@ -57,5 +57,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Diagnose> Diagnoses { get; set; }
     public DbSet<Prescription> Prescriptions { get; set; }
     public DbSet<LabTest> LabTests { get; set; }
+    public DbSet<Billing> Billings { get; set; }
+    public DbSet<BillItem> BillItems { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+    public DbSet<Supplier> Suppliers { get; set; }
+    public DbSet<Inventory> Inventories { get; set; }
+    public DbSet<InventoryLog> InventoryLogs { get; set; }
     
 }
