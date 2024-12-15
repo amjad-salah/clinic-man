@@ -64,11 +64,12 @@ public class DiagnosesService(AppDbContext context) : IDiagnosesService
         
             if (existAppointment == null)
                 return new GeneralResponse() {Success = false, Error = "Appointment Not Found"};
+            
+            existDiagnose.PatientId = existAppointment.PatientId;
+            existDiagnose.AppointmentId = existAppointment.Id;
         }
         
-        existDiagnose.PatientId = diagnose.PatientId;
         existDiagnose.Diagnosis = diagnose.Diagnosis;
-        existDiagnose.AppointmentId = diagnose.AppointmentId;
         
         await context.SaveChangesAsync();
         

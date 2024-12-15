@@ -13,8 +13,12 @@ public class Billing : BaseEntity
     public BillStatus Status { get; set; }
     public int PatientId { get; set; }
     [ForeignKey("PatientId")]
-    public Patient? Patient { get; set; }
-    public List<BillItem>? BillItems { get; set; }
+    public virtual Patient? Patient { get; set; }
+    public int AppointmentId { get; set; }
+    [ForeignKey("AppointmentId")]
+    public virtual Appointment? Appointment { get; set; }
+    public virtual List<BillItem>? BillItems { get; set; }
+    public virtual List<Payment>? Payments { get; set; }
 }
 
 public enum BillStatus

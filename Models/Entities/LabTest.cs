@@ -12,7 +12,7 @@ public class LabTest :BaseEntity
     public TestStatus Status { get; set; } = TestStatus.Ordered;
     public int PatientId { get; set; }
     [ForeignKey("PatientId")]
-    public Patient? Patient { get; set; }
+    public virtual Patient? Patient { get; set; }
     public int AppointmentId { get; set; }
     [ForeignKey(("AppointmentId"))]
     public virtual Appointment? Appointment { get; set; }

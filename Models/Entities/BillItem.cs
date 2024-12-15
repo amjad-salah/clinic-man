@@ -10,5 +10,5 @@ public class BillItem : BaseEntity
     public Decimal Total { get; set; }
     public int BillingId { get; set; }
     [ForeignKey("BillingId")]
-    public Billing? Billing { get; set; }
+    public virtual Billing? Billing { get; set; }
 }

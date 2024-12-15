@@ -1,17 +1,22 @@
 using System.Text;
 using API.Data;
 using API.Services.Appointments;
+using API.Services.Billings;
 using API.Services.Diagnoses;
 using API.Services.Doctors;
 using API.Services.DoctorSchedules;
+using API.Services.LabTests;
 using API.Services.Patients;
 using API.Services.Prescriptions;
 using API.Services.Users;
 using API.Validations;
+using API.Validations.BillingItems;
+using API.Validations.Billings;
 using API.Validations.Diagnoses;
 using API.Validations.Doctors;
 using API.Validations.LabTests;
 using API.Validations.Patients;
+using API.Validations.Payments;
 using API.Validations.Prescriptions;
 using API.Validations.Users;
 using FluentValidation;
@@ -19,11 +24,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Models.DTOs.Appointments;
+using Models.DTOs.BillingItems;
+using Models.DTOs.Billings;
 using Models.DTOs.Diagnoses;
 using Models.DTOs.Doctors;
 using Models.DTOs.DoctorSchedules;
 using Models.DTOs.LabTests;
 using Models.DTOs.Patients;
+using Models.DTOs.Payments;
 using Models.DTOs.Prescriptions;
 using Models.DTOs.Users;
 using Models.Entities;
@@ -68,6 +76,8 @@ builder.Services.AddScoped<IPatientsService, PatientsService>();
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 builder.Services.AddScoped<IDiagnosesService, DiagnosesService>();
 builder.Services.AddScoped<IPrescriptionsService, PrescriptionsService>();
+builder.Services.AddScoped<ILabTestsService, LabTestsService>();
+builder.Services.AddScoped<IBillingsService, BillingsService>();
 
 //Validations
 builder.Services.AddScoped<IValidator<LoginRequestDto>, UserLoginValidation>();
@@ -81,6 +91,9 @@ builder.Services.AddScoped<IValidator<UpsertAppointmentDto>, UpsertAppointmentVa
 builder.Services.AddScoped<IValidator<UpsertDiagnoseDto>, UpsertDiagnoseValidation>();
 builder.Services.AddScoped<IValidator<UpsertPrescriptionDto>, UpsertPrescriptionValidation>();
 builder.Services.AddScoped<IValidator<UpsertLabTestDto>, UpsertLabTestValidation>();
+builder.Services.AddScoped<IValidator<UpsertBillingDto>, UpsertBillingValidation>();
+builder.Services.AddScoped<IValidator<UpsertBillingItemDto>, UpsertBillingItemValidation>();
+builder.Services.AddScoped<IValidator<UpsertPaymentDto>, UpsertPaymentValidation>();
 
 var app = builder.Build();
 

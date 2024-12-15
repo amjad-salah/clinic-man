@@ -63,10 +63,11 @@ public class PrescriptionsService(AppDbContext context) : IPrescriptionsService
         
             if (existAppointment == null)
                 return new GeneralResponse() {Success = false, Error = "Appointment Not Found"};
+            existPrescription.PatientId = existAppointment.PatientId;
+            existPrescription.AppointmentId = existAppointment.Id;
+            
         }
         
-        existPrescription.PatientId = prescription.PatientId;
-        existPrescription.AppointmentId = prescription.AppointmentId;
         existPrescription.MedicationName = prescription.MedicationName;
         existPrescription.Frequency = prescription.Frequency;
         existPrescription.Dosage = prescription.Dosage;

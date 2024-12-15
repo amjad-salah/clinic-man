@@ -62,13 +62,14 @@ public class LabTestsService(AppDbContext context) : ILabTestsService
             
             if (appointment == null)
                 return new GeneralResponse() {Success = false, Error = "Appointment not found"};
+            
+            existingTest.PatientId = appointment.PatientId;
+            existingTest.AppointmentId = appointment.Id;
         }
         
         if (test.Status == TestStatus.Completed && string.IsNullOrEmpty(test.Result))
             return new GeneralResponse() {Success = false, Error = "Result is empty"};
         
-        existingTest.PatientId = test.PatientId;
-        existingTest.AppointmentId = test.AppointmentId;
         existingTest.TestName = test.TestName;
         existingTest.Description = test.Description;
         existingTest.Result = test.Result;

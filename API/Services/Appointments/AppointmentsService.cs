@@ -12,7 +12,8 @@ public class AppointmentsService(AppDbContext context) : IAppointmentsService
 {
     public async Task<GeneralResponse> GetAllAppointments()
     {
-        var appointments = await context.Appointments.AsNoTracking()
+        var appointments = await context.Appointments.OrderByDescending(a =>a.Date)
+            .AsNoTracking()
             .Include(a => a.Patient)
             .Include(a => a.Doctor)
             .ThenInclude(d => d!.User)

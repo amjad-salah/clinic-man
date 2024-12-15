@@ -9,7 +9,7 @@ public class InventoryLog : BaseEntity
     public Supplier? Supplier { get; set; }
     public int InventoryId { get; set; }
     [ForeignKey("InventoryId")]
-    public Inventory? Inventory { get; set; }
+    public virtual Inventory? Inventory { get; set; }
     public int Quantity { get; set; }
     public string Description { get; set; } = string.Empty;
     public LogType Type { get; set; }
