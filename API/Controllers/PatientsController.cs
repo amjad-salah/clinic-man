@@ -10,7 +10,8 @@ namespace API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class PatientsController(IPatientsService service,
+public class PatientsController(
+    IPatientsService service,
     IValidator<UpsertPatientDto> validator) : ControllerBase
 {
     //Add new patient
@@ -25,15 +26,15 @@ public class PatientsController(IPatientsService service,
             if (!validation.IsValid)
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
-                
-                return BadRequest(new GeneralResponse() {Success = false, Error = error});
+
+                return BadRequest(new GeneralResponse { Success = false, Error = error });
             }
-            
+
             var response = await service.CreatePatient(request);
-            
+
             if (!response.Success)
                 return BadRequest(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -42,7 +43,7 @@ public class PatientsController(IPatientsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Get all patients
     //GET /api/patients
     [HttpGet("")]
@@ -51,7 +52,7 @@ public class PatientsController(IPatientsService service,
         try
         {
             var response = await service.GetPatients();
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -60,7 +61,7 @@ public class PatientsController(IPatientsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Get patient by id
     //GET /api/patients/{id}
     [HttpGet("{id}")]
@@ -69,10 +70,10 @@ public class PatientsController(IPatientsService service,
         try
         {
             var response = await service.GetPatientById(id);
-            
+
             if (!response.Success)
                 return NotFound(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -81,7 +82,7 @@ public class PatientsController(IPatientsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Update patient by id
     //PUT /api/patients
     [HttpPut("{id}")]
@@ -95,19 +96,19 @@ public class PatientsController(IPatientsService service,
             if (!validation.IsValid)
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
-                return BadRequest(new GeneralResponse() {Success = false, Error = error});
+                return BadRequest(new GeneralResponse { Success = false, Error = error });
             }
-            
+
             var response = await service.UpdatePatient(id, request);
 
             if (!response.Success)
             {
                 if (response.Error == "Patient not found")
                     return NotFound(response);
-                
+
                 return BadRequest(response);
             }
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -116,7 +117,7 @@ public class PatientsController(IPatientsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Delete patient by id
     //DELETE /api/patients/{id}
     [HttpDelete("{id}")]
@@ -126,10 +127,10 @@ public class PatientsController(IPatientsService service,
         try
         {
             var response = await service.DeletePatient(id);
-            
+
             if (!response.Success)
                 return NotFound(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)

@@ -8,11 +8,11 @@ public class BillingDto
 {
     public int Id { get; set; }
     public DateOnly Date { get; set; }
-    public Decimal SubTotal { get; set; }
-    public Decimal Tax { get; set; }
-    public Decimal Total { get; set; }
-    public Decimal PaidAmount { get; set; }
-    public Decimal RemainingBalance { get; set; }
+    public decimal SubTotal { get; set; }
+    public decimal Tax { get; set; }
+    public decimal Total { get; set; }
+    public decimal PaidAmount { get; set; }
+    public decimal RemainingBalance { get; set; }
     public BillStatus Status { get; set; }
     public int PatientId { get; set; }
     public int AppointmentId { get; set; }

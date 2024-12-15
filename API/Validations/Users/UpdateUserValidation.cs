@@ -3,7 +3,7 @@ using Models.DTOs.Users;
 
 namespace API.Validations.Users;
 
-public class UpdateUserValidation : AbstractValidator<UpdateUserDto>    
+public class UpdateUserValidation : AbstractValidator<UpdateUserDto>
 {
     public UpdateUserValidation()
     {

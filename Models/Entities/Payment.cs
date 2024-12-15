@@ -5,11 +5,12 @@ namespace Models.Entities;
 
 public class Payment : BaseEntity
 {
-    public Decimal Amount { get; set; }
+    public decimal Amount { get; set; }
     public DateOnly Date { get; set; }
-    [MaxLength(100)]
-    public string? TransactionId { get; set; }
+
+    [MaxLength(100)] public string? TransactionId { get; set; }
+
     public int BillingId { get; set; }
-    [ForeignKey("BillingId")]
-    public virtual Billing? Billing { get; set; }
+
+    [ForeignKey("BillingId")] public virtual Billing? Billing { get; set; }
 }

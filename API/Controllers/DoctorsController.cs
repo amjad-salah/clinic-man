@@ -10,7 +10,8 @@ namespace API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class DoctorsController(IDoctorService service, 
+public class DoctorsController(
+    IDoctorService service,
     IValidator<UpsertDoctorDto> validator) : ControllerBase
 {
     [HttpPost("")]
@@ -24,16 +25,13 @@ public class DoctorsController(IDoctorService service,
             if (!validation.IsValid)
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
-                
-                return BadRequest(new GeneralResponse() { Success = false, Error = error });
+
+                return BadRequest(new GeneralResponse { Success = false, Error = error });
             }
-            
+
             var response = await service.AddDoctor(doctor);
 
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
+            if (!response.Success) return BadRequest(response);
 
             return Ok(response);
         }
@@ -50,7 +48,7 @@ public class DoctorsController(IDoctorService service,
         try
         {
             var response = await service.GetDoctors();
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -66,10 +64,10 @@ public class DoctorsController(IDoctorService service,
         try
         {
             var response = await service.GetDoctorById(id);
-            
+
             if (!response.Success)
                 return NotFound(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -90,18 +88,17 @@ public class DoctorsController(IDoctorService service,
             if (!validation.IsValid)
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
-                return BadRequest(new GeneralResponse() { Success = false, Error = error });
+                return BadRequest(new GeneralResponse { Success = false, Error = error });
             }
-            
+
             var response = await service.UpdateDoctor(id, doctor);
 
             if (response.Success) return Ok(response);
-            
+
             if (response.Error == "Doctor not found")
                 return NotFound(response);
-                
-            return BadRequest(response);
 
+            return BadRequest(response);
         }
         catch (Exception e)
         {
@@ -117,9 +114,9 @@ public class DoctorsController(IDoctorService service,
         try
         {
             var response = await service.DeleteDoctor(id);
-            
+
             if (response.Success) return Ok(response);
-            
+
             return NotFound(response);
         }
         catch (Exception e)

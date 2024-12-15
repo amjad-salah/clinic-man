@@ -1,6 +1,5 @@
 using Models;
 using Models.DTOs.Users;
-using Models.Entities;
 
 namespace API.Services.Users;
 

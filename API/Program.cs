@@ -35,13 +35,14 @@ using Models.DTOs.Payments;
 using Models.DTOs.Prescriptions;
 using Models.DTOs.Users;
 using Models.Entities;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers().AddNewtonsoftJson(
-    options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+    options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 builder.Services.AddOpenApi();
 
 //DbContext
@@ -56,7 +57,7 @@ builder.Services.AddAuthentication(o =>
     o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(cfg =>
 {
-    cfg.TokenValidationParameters = new TokenValidationParameters()
+    cfg.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidateAudience = true,
@@ -98,10 +99,7 @@ builder.Services.AddScoped<IValidator<UpsertPaymentDto>, UpsertPaymentValidation
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
 app.UseHttpsRedirection();
 
@@ -113,19 +111,19 @@ app.MapControllers();
 using (var serviceScope = app.Services.CreateScope())
 {
     var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-    
+
     var adminExists = context.Users.Any(u => u.Role == UserRole.Admin);
 
     if (!adminExists)
     {
-        await context.Users.AddAsync(new User()
+        await context.Users.AddAsync(new User
         {
             Email = "admin@admin.com",
             FullName = "Admin User",
             Role = UserRole.Admin,
             Password = BCrypt.Net.BCrypt.HashPassword("admin123")
         });
-        
+
         await context.SaveChangesAsync();
     }
 }

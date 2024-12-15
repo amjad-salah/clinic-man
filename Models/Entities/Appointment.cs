@@ -6,18 +6,20 @@ namespace Models.Entities;
 public class Appointment : BaseEntity
 {
     public int PatientId { get; set; }
-    [ForeignKey("PatientId")]
-    public virtual Patient? Patient { get; set; }
+
+    [ForeignKey("PatientId")] public virtual Patient? Patient { get; set; }
+
     public int DoctorId { get; set; }
-    [ForeignKey("DoctorId")]
-    public virtual Doctor? Doctor { get; set; }
+
+    [ForeignKey("DoctorId")] public virtual Doctor? Doctor { get; set; }
 
     public DateOnly Date { get; set; }
     public TimeOnly Time { get; set; }
-    [MaxLength(255)]
-    public string? Reason { get; set; }
+
+    [MaxLength(255)] public string? Reason { get; set; }
+
     public AppointmentStatus Status { get; set; }
-    
+
     public virtual List<Diagnose>? Diagnoses { get; set; }
     public virtual List<Prescription>? Prescriptions { get; set; }
     public virtual List<LabTest>? Tests { get; set; }

@@ -10,7 +10,8 @@ namespace API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class AppointmentsController(IAppointmentsService service,
+public class AppointmentsController(
+    IAppointmentsService service,
     IValidator<UpsertAppointmentDto> validator) : ControllerBase
 {
     //Add new appointment
@@ -25,15 +26,15 @@ public class AppointmentsController(IAppointmentsService service,
             if (!validationResult.IsValid)
             {
                 var error = string.Join(',', validationResult.Errors.Select(x => x.ErrorMessage));
-                
-                return BadRequest(new GeneralResponse() {Success = false, Error = error});
+
+                return BadRequest(new GeneralResponse { Success = false, Error = error });
             }
-            
+
             var response = await service.AddAppointment(appointmentDto);
-            
+
             if (!response.Success)
                 return BadRequest(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -42,7 +43,7 @@ public class AppointmentsController(IAppointmentsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Get all appointments
     //GET /api/appointments
     [HttpGet("")]
@@ -51,7 +52,7 @@ public class AppointmentsController(IAppointmentsService service,
         try
         {
             var response = await service.GetAllAppointments();
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -60,7 +61,7 @@ public class AppointmentsController(IAppointmentsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Get appointment by id
     //GET /api/appointments/{id}
     [HttpGet("{id}")]
@@ -69,10 +70,10 @@ public class AppointmentsController(IAppointmentsService service,
         try
         {
             var response = await service.GetAppointmentById(id);
-            
+
             if (!response.Success)
                 return NotFound(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -81,11 +82,11 @@ public class AppointmentsController(IAppointmentsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Update appointment by id
     //PUT /api/appointments/{id}
     [HttpPut("{id}")]
-    public async Task<ActionResult<GeneralResponse>> UpdateAppointment(int id, 
+    public async Task<ActionResult<GeneralResponse>> UpdateAppointment(int id,
         UpsertAppointmentDto appointmentDto)
     {
         try
@@ -95,9 +96,9 @@ public class AppointmentsController(IAppointmentsService service,
             if (!validationResult.IsValid)
             {
                 var error = string.Join(',', validationResult.Errors.Select(x => x.ErrorMessage));
-                return BadRequest(new GeneralResponse() {Success = false, Error = error});
+                return BadRequest(new GeneralResponse { Success = false, Error = error });
             }
-            
+
             var response = await service.UpdateAppointment(id, appointmentDto);
 
             if (!response.Success)
@@ -106,7 +107,7 @@ public class AppointmentsController(IAppointmentsService service,
                     return NotFound(response);
                 return BadRequest(response);
             }
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -115,7 +116,7 @@ public class AppointmentsController(IAppointmentsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Delete appointment by id
     //DELETE /api/appointments/{id}
     [HttpDelete("{id}")]
@@ -124,10 +125,10 @@ public class AppointmentsController(IAppointmentsService service,
         try
         {
             var response = await service.DeleteAppointment(id);
-            
+
             if (!response.Success)
                 return NotFound(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)

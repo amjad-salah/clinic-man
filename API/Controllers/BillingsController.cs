@@ -12,7 +12,8 @@ namespace API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class BillingsController(IBillingsService service,
+public class BillingsController(
+    IBillingsService service,
     IValidator<UpsertBillingDto> validator,
     IValidator<UpsertBillingItemDto> itemValidator,
     IValidator<UpsertPaymentDto> paymentValidator) : ControllerBase
@@ -29,15 +30,15 @@ public class BillingsController(IBillingsService service,
             if (!validation.IsValid)
             {
                 var error = string.Join(',', validation.Errors.Select(error => error.ErrorMessage));
-                
-                return BadRequest(new GeneralResponse() {Success = false, Error = error});
+
+                return BadRequest(new GeneralResponse { Success = false, Error = error });
             }
-            
+
             var response = await service.AddBilling(billing);
-            
+
             if (!response.Success)
                 return BadRequest(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -46,7 +47,7 @@ public class BillingsController(IBillingsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Get all billings
     //GET /api/billings
     [HttpGet("")]
@@ -55,7 +56,7 @@ public class BillingsController(IBillingsService service,
         try
         {
             var response = await service.GetBillings();
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -64,7 +65,7 @@ public class BillingsController(IBillingsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Get billing by id
     //GET /api/billings/{id}
     [HttpGet("{id}")]
@@ -73,10 +74,10 @@ public class BillingsController(IBillingsService service,
         try
         {
             var response = await service.GetBillingById(id);
-            
+
             if (!response.Success)
                 return NotFound(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -85,7 +86,7 @@ public class BillingsController(IBillingsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Update billing by id
     //PUT /api/billings/{id}
     [HttpPut("{id}")]
@@ -98,19 +99,19 @@ public class BillingsController(IBillingsService service,
             if (!validation.IsValid)
             {
                 var error = string.Join(',', validation.Errors.Select(error => error.ErrorMessage));
-                return BadRequest(new GeneralResponse() {Success = false, Error = error});
+                return BadRequest(new GeneralResponse { Success = false, Error = error });
             }
-            
+
             var response = await service.UpdateBilling(id, billing);
 
             if (!response.Success)
             {
                 if (response.Error == "Billing not found")
                     return NotFound(response);
-                
+
                 return BadRequest(response);
             }
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -119,7 +120,7 @@ public class BillingsController(IBillingsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Delete billing by id
     //DELETE /api/billings/{id}
     [HttpDelete("{id}")]
@@ -128,10 +129,10 @@ public class BillingsController(IBillingsService service,
         try
         {
             var response = await service.DeleteBilling(id);
-            
+
             if (!response.Success)
                 return NotFound(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -140,7 +141,7 @@ public class BillingsController(IBillingsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Add item to billing
     //POST /api/billings/{id}/items
     [HttpPost("{id}/items")]
@@ -153,14 +154,14 @@ public class BillingsController(IBillingsService service,
             if (!validation.IsValid)
             {
                 var error = string.Join(',', validation.Errors.Select(error => error.ErrorMessage));
-                return BadRequest(new GeneralResponse() {Success = false, Error = error});
+                return BadRequest(new GeneralResponse { Success = false, Error = error });
             }
-            
+
             var response = await service.AddBillingItem(id, item);
-            
+
             if (!response.Success)
                 return BadRequest(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -169,7 +170,7 @@ public class BillingsController(IBillingsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Delete item from billing
     //Delete /api/billings/{id}/items/{itemId}
     [HttpDelete("{id}/items/{itemId}")]
@@ -178,10 +179,10 @@ public class BillingsController(IBillingsService service,
         try
         {
             var response = await service.DeleteItem(itemId);
-            
+
             if (!response.Success)
                 return NotFound(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -190,7 +191,7 @@ public class BillingsController(IBillingsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Add payment to billing
     //POST /api/billings/{id}/payments
     [HttpPost("{id}/payments")]
@@ -203,14 +204,14 @@ public class BillingsController(IBillingsService service,
             if (!validation.IsValid)
             {
                 var error = string.Join(',', validation.Errors.Select(error => error.ErrorMessage));
-                return BadRequest(new GeneralResponse() {Success = false, Error = error});
+                return BadRequest(new GeneralResponse { Success = false, Error = error });
             }
-            
+
             var response = await service.AddBillingPayment(id, payment);
-            
+
             if (!response.Success)
                 return BadRequest(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -219,7 +220,7 @@ public class BillingsController(IBillingsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Delete payment from billing
     //DELETE /api/billings/{id}/payments/{paymentId}
     [HttpDelete("{id}/payments/{paymentId}")]
@@ -228,10 +229,10 @@ public class BillingsController(IBillingsService service,
         try
         {
             var response = await service.DeletePayment(paymentId);
-            
+
             if (!response.Success)
                 return NotFound(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)

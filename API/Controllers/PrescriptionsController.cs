@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using API.Services.Prescriptions;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +9,8 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PrescriptionsController(IPrescriptionsService service,
+public class PrescriptionsController(
+    IPrescriptionsService service,
     IValidator<UpsertPrescriptionDto> validator) : ControllerBase
 {
     //Add new prescription
@@ -26,15 +26,15 @@ public class PrescriptionsController(IPrescriptionsService service,
             if (!validationResult.IsValid)
             {
                 var error = string.Join(',', validationResult.Errors.Select(x => x.ErrorMessage));
-                
-                return BadRequest(new GeneralResponse() {Success = false, Error = error});
+
+                return BadRequest(new GeneralResponse { Success = false, Error = error });
             }
-            
+
             var response = await service.AddPrescription(prescriptionDto);
-            
+
             if (!response.Success)
                 return BadRequest(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -43,7 +43,7 @@ public class PrescriptionsController(IPrescriptionsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Get all prescriptions
     //GET /api/prescriptions
     [HttpGet("")]
@@ -60,7 +60,7 @@ public class PrescriptionsController(IPrescriptionsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Get prescription by id
     //GET /api/prescriptions/{id}
     [HttpGet("{id}")]
@@ -69,10 +69,10 @@ public class PrescriptionsController(IPrescriptionsService service,
         try
         {
             var response = await service.GetPrescription(id);
-            
+
             if (!response.Success)
                 return NotFound(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -81,12 +81,12 @@ public class PrescriptionsController(IPrescriptionsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Update prescription by id
     //PUT /api/prescriptions/{id}
     [HttpPut("{id}")]
     [Authorize(Roles = "Doctor")]
-    public async Task<ActionResult<GeneralResponse>> UpdatePrescription(int id, 
+    public async Task<ActionResult<GeneralResponse>> UpdatePrescription(int id,
         UpsertPrescriptionDto prescriptionDto)
     {
         try
@@ -96,19 +96,19 @@ public class PrescriptionsController(IPrescriptionsService service,
             if (!validationResult.IsValid)
             {
                 var error = string.Join(", ", validationResult.Errors.Select(x => x.ErrorMessage));
-                return BadRequest(new GeneralResponse() {Success = false, Error = error});
+                return BadRequest(new GeneralResponse { Success = false, Error = error });
             }
-            
+
             var response = await service.UpdatePrescription(id, prescriptionDto);
 
             if (!response.Success)
             {
                 if (response.Error == "Prescription not found")
                     return NotFound(response);
-                
+
                 return BadRequest(response);
             }
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -117,7 +117,7 @@ public class PrescriptionsController(IPrescriptionsService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Delete prescription by id
     //DELETE /api/prescriptions/{id}
     [HttpDelete("{id}")]
@@ -127,10 +127,10 @@ public class PrescriptionsController(IPrescriptionsService service,
         try
         {
             var response = await service.DeletePrescription(id);
-            
+
             if (!response.Success)
                 return NotFound(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
