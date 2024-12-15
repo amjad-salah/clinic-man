@@ -170,6 +170,27 @@ public class BillingsController(IBillingsService service,
         }
     }
     
+    //Delete item from billing
+    //Delete /api/billings/{id}/items/{itemId}
+    [HttpDelete("{id}/items/{itemId}")]
+    public async Task<ActionResult<GeneralResponse>> DeleteBillingItem(int id, int itemId)
+    {
+        try
+        {
+            var response = await service.DeleteItem(itemId);
+            
+            if (!response.Success)
+                return NotFound(response);
+            
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return Problem("Internal server error, try again later", statusCode: 500);
+        }
+    }
+    
     //Add payment to billing
     //POST /api/billings/{id}/payments
     [HttpPost("{id}/payments")]
@@ -189,6 +210,27 @@ public class BillingsController(IBillingsService service,
             
             if (!response.Success)
                 return BadRequest(response);
+            
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return Problem("Internal server error, try again later", statusCode: 500);
+        }
+    }
+    
+    //Delete payment from billing
+    //DELETE /api/billings/{id}/payments/{paymentId}
+    [HttpDelete("{id}/payments/{paymentId}")]
+    public async Task<ActionResult<GeneralResponse>> DeleteBillingPayment(int id, int paymentId)
+    {
+        try
+        {
+            var response = await service.DeletePayment(paymentId);
+            
+            if (!response.Success)
+                return NotFound(response);
             
             return Ok(response);
         }

@@ -118,6 +118,27 @@ public class BillingsService(AppDbContext context) : IBillingsService
         return new GeneralResponse() {Success = true};
     }
 
+    public async Task<GeneralResponse> DeleteItem(int id)
+    {
+        var existItem = await context.BillItems.FindAsync(id);
+        
+        if (existItem == null)
+            return new GeneralResponse() {Success = false, Error = "Item not found"};
+        
+        var billing = await context.Billings.FindAsync(existItem.BillingId);
+
+        if (billing != null)
+        {
+            billing.SubTotal -= existItem.Total;
+            billing.Total = billing.SubTotal + (billing.SubTotal * billing.Tax / 100);
+        }
+        
+        context.BillItems.Remove(existItem);
+        await context.SaveChangesAsync();
+        
+        return new GeneralResponse() {Success = true};
+    }
+
     public async Task<GeneralResponse> AddBillingPayment(int id, UpsertPaymentDto payment)
     {
         var existBilling = await context.Billings.FindAsync(id);
@@ -135,6 +156,27 @@ public class BillingsService(AppDbContext context) : IBillingsService
         if (existBilling.RemainingBalance == 0)
             existBilling.Status = BillStatus.Paid;
         
+        await context.SaveChangesAsync();
+        
+        return new GeneralResponse() {Success = true};
+    }
+
+    public async Task<GeneralResponse> DeletePayment(int id)
+    {
+        var existPayment = await context.Payments.FindAsync(id);
+        
+        if (existPayment == null)
+            return new GeneralResponse() {Success = false, Error = "Payment not found"};
+        
+        var billing = await context.Billings.FindAsync(existPayment.BillingId);
+
+        if (billing != null)
+        {
+            billing.PaidAmount -= existPayment.Amount;
+            billing.RemainingBalance = billing.Total - billing.PaidAmount;
+        }
+        
+        context.Payments.Remove(existPayment);
         await context.SaveChangesAsync();
         
         return new GeneralResponse() {Success = true};

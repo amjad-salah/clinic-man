@@ -13,5 +13,7 @@ public interface IBillingsService
     Task<GeneralResponse> UpdateBilling(int id, UpsertBillingDto billing);
     Task<GeneralResponse> DeleteBilling(int id);
     Task<GeneralResponse> AddBillingItem(int id, UpsertBillingItemDto item);
+    Task<GeneralResponse> DeleteItem(int id);
     Task<GeneralResponse> AddBillingPayment(int id, UpsertPaymentDto payment);
+    Task<GeneralResponse> DeletePayment(int id);
 }
