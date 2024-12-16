@@ -10,7 +10,8 @@ namespace API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(Roles = "Support")]
-public class SuppliersController(ISuppliersService service,
+public class SuppliersController(
+    ISuppliersService service,
     IValidator<UpsertSupplierDto> validator) : ControllerBase
 {
     //Add new supplier
@@ -25,15 +26,15 @@ public class SuppliersController(ISuppliersService service,
             if (!validation.IsValid)
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
-                
-                return BadRequest(new GeneralResponse() {Success = false, Error = error});
+
+                return BadRequest(new GeneralResponse { Success = false, Error = error });
             }
-            
+
             var response = await service.AddSupplier(supplier);
-            
+
             if (!response.Success)
                 return BadRequest(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -42,7 +43,7 @@ public class SuppliersController(ISuppliersService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Get all suppliers
     //GET /api/suppliers
     [HttpGet("")]
@@ -51,7 +52,7 @@ public class SuppliersController(ISuppliersService service,
         try
         {
             var response = await service.GetSuppliers();
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -60,7 +61,7 @@ public class SuppliersController(ISuppliersService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Get supplier by id
     //GET /api/suppliers/{id}
     [HttpGet("{id}")]
@@ -69,10 +70,10 @@ public class SuppliersController(ISuppliersService service,
         try
         {
             var response = await service.GetSupplierById(id);
-            
+
             if (!response.Success)
                 return NotFound(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -81,7 +82,7 @@ public class SuppliersController(ISuppliersService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Update supplier by id
     //PUT /api/suppliers/{id}
     [HttpPut("{id}")]
@@ -94,19 +95,19 @@ public class SuppliersController(ISuppliersService service,
             if (!validation.IsValid)
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
-                return BadRequest(new GeneralResponse() {Success = false, Error = error});
+                return BadRequest(new GeneralResponse { Success = false, Error = error });
             }
-            
+
             var response = await service.UpdateSupplier(id, supplier);
 
             if (!response.Success)
             {
                 if (response.Error == "Supplier not found")
                     return NotFound(response);
-                
+
                 return BadRequest(response);
             }
-            
+
             return Ok(response);
         }
         catch (Exception e)
@@ -115,7 +116,7 @@ public class SuppliersController(ISuppliersService service,
             return Problem("Internal server error, try again later", statusCode: 500);
         }
     }
-    
+
     //Delete supplier by id
     //DELETE /api/suppliers/{id}
     [HttpDelete("{id}")]
@@ -124,10 +125,10 @@ public class SuppliersController(ISuppliersService service,
         try
         {
             var response = await service.DeleteSupplier(id);
-            
+
             if (!response.Success)
                 return NotFound(response);
-            
+
             return Ok(response);
         }
         catch (Exception e)

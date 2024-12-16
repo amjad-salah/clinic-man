@@ -1,5 +1,6 @@
 using Models;
 using Models.DTOs.InventoryLogs;
+
 namespace API.Services.InventoryLogs;
 
 public interface IInventoryLogsService

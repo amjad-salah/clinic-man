@@ -12,7 +12,6 @@ using API.Services.Patients;
 using API.Services.Prescriptions;
 using API.Services.Suppliers;
 using API.Services.Users;
-using API.Validations;
 using API.Validations.Appointments;
 using API.Validations.BillingItems;
 using API.Validations.Billings;
@@ -91,7 +90,7 @@ builder.Services.AddScoped<ILabTestsService, LabTestsService>();
 builder.Services.AddScoped<IBillingsService, BillingsService>();
 builder.Services.AddScoped<IInventoriesService, InventoriesService>();
 builder.Services.AddScoped<ISuppliersService, SuppliersService>();
-builder.Services.AddScoped<IInventoryLogsService, IInventoryLogsService>();
+builder.Services.AddScoped<IInventoryLogsService, InventoryLogsService>();
 
 //Validations
 builder.Services.AddScoped<IValidator<LoginRequestDto>, UserLoginValidation>();
