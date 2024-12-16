@@ -9,4 +9,6 @@ public class Supplier : BaseEntity
     [MaxLength(255)] public string ContactInfo { get; set; } = string.Empty;
 
     public string Address { get; set; } = string.Empty;
+
+    public virtual List<InventoryLog>? Logs { get; set; }
 }

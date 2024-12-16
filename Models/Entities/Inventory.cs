@@ -9,4 +9,6 @@ public class Inventory : BaseEntity
     public int Quantity { get; set; }
     public int MinQuantity { get; set; }
     public DateOnly ExpirationDate { get; set; }
+    
+    public virtual List<InventoryLog>? Logs { get; set; }
 }

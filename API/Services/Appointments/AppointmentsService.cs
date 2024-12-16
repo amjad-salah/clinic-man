@@ -30,6 +30,7 @@ public class AppointmentsService(AppDbContext context) : IAppointmentsService
             .ThenInclude(d => d!.User)
             .Include(a => a.Diagnoses)
             .Include(a => a.Prescriptions)
+            .Include(a => a.Tests)
             .FirstOrDefaultAsync(a => a.Id == id);
 
         return appointment == null
