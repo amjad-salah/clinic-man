@@ -20,7 +20,7 @@ public class UsersController(
     //POST /api/users/login
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<ActionResult<GeneralResponse>> Login(LoginRequestDto loginRequest)
+    public async Task<ActionResult<LoginResponseDto>> Login(LoginRequestDto loginRequest)
     {
         try
         {
@@ -31,7 +31,7 @@ public class UsersController(
                 var error = string.Join(", ", validation.Errors.Select(error =>
                     error.ErrorMessage));
 
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new LoginResponseDto { Success = false, Error = error });
             }
 
             var response = await service.Login(loginRequest.Email, loginRequest.Password);

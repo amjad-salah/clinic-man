@@ -1,11 +1,11 @@
 using Models;
 using Models.DTOs.Users;
 
-namespace API.Services.Users;
+namespace Frontend.Services.Users;
 
 public interface IUsersService
 {
-    Task<LoginResponseDto> Login(string email, string password);
+    Task<LoginResponseDto> Login(LoginRequestDto request);
     Task<GeneralResponse> GetUsers();
     Task<GeneralResponse> GetUserById(int id);
     Task<GeneralResponse> AddUser(AddUserDto userDto);

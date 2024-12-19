@@ -1,0 +1,24 @@
+@page "/login"
+<PageTitle>Login</PageTitle>
+
+<div class="row justify-content-center align-items-center">
+    <div class="col-md-5">
+        <div class="card card-body p-4">
+            <h4 class="mb-2">تسجيل الدخول</h4>
+            <hr />
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger">
+                    @errorMessage
+                </div>
+            }
+            <EditForm Model="LoginModel" OnSubmit="SubmitAsync" FormName="Login">
+                <label class="mb-1 form-label">البريد الإلكتروني</label>
+                <InputText type="email" @bind-Value="LoginModel.Email" class="form-control mb-3"/>
+                <label class="mb-1 form-label">كلمة المرور</label>
+                <InputText type="password" @bind-Value="LoginModel.Password" class="form-control mb-3"/>
+                <button type="submit" class="btn btn-primary mb-3">دخول</button>
+            </EditForm>
+        </div>
+    </div>
+</div>

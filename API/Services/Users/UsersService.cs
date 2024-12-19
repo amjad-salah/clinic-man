@@ -16,21 +16,21 @@ public class UsersService(
     AppDbContext context,
     IConfiguration configuration) : IUsersService
 {
-    public async Task<GeneralResponse> Login(string email, string password)
+    public async Task<LoginResponseDto> Login(string email, string password)
     {
         var user = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
 
         if (user == null)
-            return new GeneralResponse { Success = false, Error = "Invalid credentials" };
+            return new LoginResponseDto { Success = false, Error = "Invalid credentials" };
 
         var passwordMatch = BCrypt.Net.BCrypt.Verify(password, user.Password);
 
         if (!passwordMatch)
-            return new GeneralResponse { Success = false, Error = "Invalid credentials" };
+            return new LoginResponseDto { Success = false, Error = "Invalid credentials" };
 
         var token = GenerateToken(user);
 
-        return new GeneralResponse { Success = true, Data = new { user.FullName, user.Email, Token = token } };
+        return new LoginResponseDto { Success = true, Token = token};
     }
 
     public async Task<GeneralResponse> GetUsers()

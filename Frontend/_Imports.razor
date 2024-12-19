@@ -8,3 +8,8 @@
 @using Microsoft.JSInterop
 @using Frontend
 @using Frontend.Layout
+@using Frontend.Services.Users
+@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager NavManager
+@inject IUsersService UsersService
+@inject AuthenticationStateProvider AuthState
