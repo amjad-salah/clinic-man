@@ -6,9 +6,9 @@ namespace API.Services.Users;
 public interface IUsersService
 {
     Task<LoginResponseDto> Login(string email, string password);
-    Task<GeneralResponse> GetUsers();
-    Task<GeneralResponse> GetUserById(int id);
-    Task<GeneralResponse> AddUser(AddUserDto userDto);
-    Task<GeneralResponse> UpdateUser(int id, UpdateUserDto userDto);
-    Task<GeneralResponse> DeleteUser(int id);
+    Task<UsersResponseDto> GetUsers();
+    Task<UsersResponseDto> GetUserById(int id);
+    Task<UsersResponseDto> AddUser(AddUserDto userDto);
+    Task<UsersResponseDto> UpdateUser(int id, UpdateUserDto userDto);
+    Task<UsersResponseDto> DeleteUser(int id);
 }

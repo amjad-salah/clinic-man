@@ -8,12 +8,14 @@
     <AuthorizeView>
         <Authorized>
             <ul class="sidebar-nav">
-                <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
-                        <i class="lni lni-user-4"></i>
-                        <span>المستخدمين</span>
-                    </a>
-                </li>
+                @if(context.User.IsInRole("Admin")) {
+                    <li class="sidebar-item">
+                        <a href="users" class="sidebar-link">
+                            <i class="lni lni-user-4"></i>
+                            <span>المستخدمين</span>
+                        </a>
+                    </li>
+                }
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link">
                         <i class="lni lni-user-4"></i>

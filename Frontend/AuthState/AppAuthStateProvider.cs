@@ -37,7 +37,6 @@ public class AppAuthStateProvider(ILocalStorageService localStorageService) : Au
         if (string.IsNullOrEmpty(token))
             return (null, null);
         
-        Console.WriteLine(token);
         var handler = new JwtSecurityTokenHandler();
         var jwtToken = handler.ReadJwtToken(token);
         

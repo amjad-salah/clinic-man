@@ -33,32 +33,32 @@ public class UsersService(
         return new LoginResponseDto { Success = true, Token = token};
     }
 
-    public async Task<GeneralResponse> GetUsers()
+    public async Task<UsersResponseDto> GetUsers()
     {
         var users = await context.Users.AsNoTracking().ProjectToType<UserDto>().ToListAsync();
 
-        return new GeneralResponse { Success = true, Data = users };
+        return new UsersResponseDto { Success = true, Users = users };
     }
 
-    public async Task<GeneralResponse> GetUserById(int id)
+    public async Task<UsersResponseDto> GetUserById(int id)
     {
         var user = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
 
         if (user == null)
-            return new GeneralResponse { Success = false, Error = "User not found" };
+            return new UsersResponseDto { Success = false, Error = "User not found" };
 
         var userDto = user.Adapt<UserDto>();
 
-        return new GeneralResponse { Success = true, Data = userDto };
+        return new UsersResponseDto { Success = true, User = userDto };
     }
 
-    public async Task<GeneralResponse> AddUser(AddUserDto userDto)
+    public async Task<UsersResponseDto> AddUser(AddUserDto userDto)
     {
         var existUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u =>
             u.Email == userDto.Email);
 
         if (existUser != null)
-            return new GeneralResponse { Success = false, Error = "User already exists" };
+            return new UsersResponseDto { Success = false, Error = "User already exists" };
 
         var newUser = userDto.Adapt<User>();
 
@@ -66,22 +66,22 @@ public class UsersService(
         newUser.Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true, Data = new { newUser.Id } };
+        return new UsersResponseDto { Success = true, User = newUser.Adapt<UserDto>() };
     }
 
-    public async Task<GeneralResponse> UpdateUser(int id, UpdateUserDto userDto)
+    public async Task<UsersResponseDto> UpdateUser(int id, UpdateUserDto userDto)
     {
         var existUser = await context.Users.FindAsync(id);
 
         if (existUser == null)
-            return new GeneralResponse { Success = false, Error = "User not found" };
+            return new UsersResponseDto { Success = false, Error = "User not found" };
 
         if (existUser.Email != userDto.Email)
         {
             var emailUser = await context.Users.FirstOrDefaultAsync(u => u.Email == userDto.Email);
 
             if (emailUser != null)
-                return new GeneralResponse { Success = false, Error = "User already exists" };
+                return new UsersResponseDto { Success = false, Error = "User already exists" };
         }
 
         existUser.Email = userDto.Email;
@@ -90,20 +90,20 @@ public class UsersService(
 
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new UsersResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> DeleteUser(int id)
+    public async Task<UsersResponseDto> DeleteUser(int id)
     {
         var user = await context.Users.FindAsync(id);
 
         if (user == null)
-            return new GeneralResponse { Success = false, Error = "User not found" };
+            return new UsersResponseDto { Success = false, Error = "User not found" };
 
         context.Users.Remove(user);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new UsersResponseDto { Success = true };
     }
 
     private string GenerateToken(User user)
