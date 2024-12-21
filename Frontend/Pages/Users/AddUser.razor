@@ -25,7 +25,7 @@
                 <InputSelect @bind-Value="model.Role" class="form-select mb-3">
                     @foreach (var role in Enum.GetValues(typeof(UserRole)))
                     {
-                        <option value="@role.GetHashCode()">@role</option>
+                        <option value="@role">@role</option>
                     }
                 </InputSelect>
                 <button type="submit" class="btn btn-primary mb-3">إضافة</button>
