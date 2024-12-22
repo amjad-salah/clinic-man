@@ -5,7 +5,9 @@
     <h3 class="text-center mb-2">المستخدمين</h3>
     <hr class="mb-3" />
 
-    <a class="btn btn-primary border-2 mb-5" href="/users/add">أضافة مستخدم</a>
+    <a class="btn btn-primary border-2 mb-5" href="/users/add">
+        <i class="lni lni-plus mr-2"></i>أضافة
+    </a>
     @if (Users.Count > 0)
     {
         <table class="table table-hover table-striped">
@@ -25,12 +27,12 @@
                         <td>@user.Email</td>
                         <td>@Enum.GetName(user.Role)</td>
                         <td>
-                            <a href="/users/edit/" class="btn btn-primary mx-3">
+                            <button @onclick="() => EditUser(user.Id)" class="btn btn-primary btn-sm mx-3" title="تعديل">
                                 <i class="lni lni-pen-to-square"></i>
-                            </a>
-                            <a href="/users/delete/" class="btn btn-danger">
+                            </button>
+                            <button @onclick="() => DeleteUser(user.Id)" class="btn btn-danger btn-sm" title="حذف">
                                 <i class="lni lni-trash-3"></i>
-                            </a>
+                            </button>
                         </td>
                     </tr>
                 }

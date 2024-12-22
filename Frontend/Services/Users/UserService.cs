@@ -34,35 +34,61 @@ public class UserService(HttpClient httpClient,
             result = (await response.Content.ReadFromJsonAsync<UsersResponseDto>())!;
             return result;
         }
-        else
-        {
-            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-            {
-                result.Success = false;
-                result.Error = "الرجاء تسجيل الدخول";
-                
-                return result;
-            }
 
-            if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
-            {
-                result.Success = false;
-                result.Error = "ليس لديك الصلاحية لمعاينة هذه الصفحة";
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            result.Success = false;
+            result.Error = "الرجاء تسجيل الدخول";
                 
-                return result;
-            }
-            
-            result = (await response.Content.ReadFromJsonAsync<UsersResponseDto>())!;
             return result;
         }
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+        {
+            result.Success = false;
+            result.Error = "ليس لديك الصلاحية لمعاينة هذه الصفحة";
+                
+            return result;
+        }
+            
+        result = (await response.Content.ReadFromJsonAsync<UsersResponseDto>())!;
+        return result;
     }
 
     public async Task<UsersResponseDto> GetUserById(int id)
     {
-        var response = await httpClient.GetAsync( $"/api/users/{id}");
-        var result = await response.Content.ReadFromJsonAsync<UsersResponseDto>();
+        UsersResponseDto result = new();
         
-        return result!;
+        var token = await localStorageService.GetItemAsync<string>("auth");
+        
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        
+        var response = await httpClient.GetAsync($"/api/users/{id}");
+        
+        if (response.IsSuccessStatusCode)
+        {
+            result = (await response.Content.ReadFromJsonAsync<UsersResponseDto>())!;
+            return result;
+        }
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            result.Success = false;
+            result.Error = "الرجاء تسجيل الدخول";
+                
+            return result;
+        }
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+        {
+            result.Success = false;
+            result.Error = "ليس لديك الصلاحية لمعاينة هذه الصفحة";
+                
+            return result;
+        }
+            
+        result = (await response.Content.ReadFromJsonAsync<UsersResponseDto>())!;
+        return result;
     }
 
     public async Task<UsersResponseDto> AddUser(AddUserDto userDto)
@@ -74,47 +100,102 @@ public class UserService(HttpClient httpClient,
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         
         var response = await httpClient.PostAsJsonAsync("/api/users", userDto);
+        
         if (response.IsSuccessStatusCode)
         {
             result = (await response.Content.ReadFromJsonAsync<UsersResponseDto>())!;
             return result;
         }
-        else
-        {
-            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-            {
-                result.Success = false;
-                result.Error = "الرجاء تسجيل الدخول";
-                
-                return result;
-            }
 
-            if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
-            {
-                result.Success = false;
-                result.Error = "ليس لديك الصلاحية لمعاينة هذه الصفحة";
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            result.Success = false;
+            result.Error = "الرجاء تسجيل الدخول";
                 
-                return result;
-            }
-            
-            result = (await response.Content.ReadFromJsonAsync<UsersResponseDto>())!;
             return result;
         }
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+        {
+            result.Success = false;
+            result.Error = "ليس لديك الصلاحية لمعاينة هذه الصفحة";
+                
+            return result;
+        }
+            
+        result = (await response.Content.ReadFromJsonAsync<UsersResponseDto>())!;
+        return result;
     }
 
     public async Task<UsersResponseDto> UpdateUser(int id, UpdateUserDto userDto)
     {
-        var response = await httpClient.PutAsJsonAsync($"/api/users/{id}", userDto);
-        var result = await response.Content.ReadFromJsonAsync<UsersResponseDto>();
+        UsersResponseDto result = new();
         
-        return result!;
+        var token = await localStorageService.GetItemAsync<string>("auth");
+        
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        
+        var response = await httpClient.PutAsJsonAsync($"/api/users/{id}", userDto);
+        
+        if (response.IsSuccessStatusCode)
+        {
+            result = (await response.Content.ReadFromJsonAsync<UsersResponseDto>())!;
+            return result;
+        }
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            result.Success = false;
+            result.Error = "الرجاء تسجيل الدخول";
+                
+            return result;
+        }
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+        {
+            result.Success = false;
+            result.Error = "ليس لديك الصلاحية لمعاينة هذه الصفحة";
+                
+            return result;
+        }
+            
+        result = (await response.Content.ReadFromJsonAsync<UsersResponseDto>())!;
+        return result;
     }
 
     public async Task<UsersResponseDto> DeleteUser(int id)
     {
-        var response = await httpClient.DeleteAsync($"/api/users/{id}");
-        var result = await response.Content.ReadFromJsonAsync<UsersResponseDto>();
+        UsersResponseDto result = new();
         
-        return result!;
+        var token = await localStorageService.GetItemAsync<string>("auth");
+        
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        
+        var response = await httpClient.DeleteAsync($"/api/users/{id}");
+        
+        if (response.IsSuccessStatusCode)
+        {
+            result = (await response.Content.ReadFromJsonAsync<UsersResponseDto>())!;
+            return result;
+        }
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            result.Success = false;
+            result.Error = "الرجاء تسجيل الدخول";
+                
+            return result;
+        }
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+        {
+            result.Success = false;
+            result.Error = "ليس لديك الصلاحية لمعاينة هذه الصفحة";
+                
+            return result;
+        }
+            
+        result = (await response.Content.ReadFromJsonAsync<UsersResponseDto>())!;
+        return result;
     }
 }
