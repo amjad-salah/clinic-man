@@ -1,11 +1,10 @@
-using Models;
 using Models.DTOs.Doctors;
 
-namespace API.Services.Doctors;
+namespace Frontend.Services.Doctors;
 
-public interface IDoctorService
+public interface IDoctorsService
 {
-    Task<DoctorResponseDto> GetDoctors();
+    Task<DoctorResponseDto?> GetDoctors();
     Task<DoctorResponseDto> GetDoctorById(int id);
     Task<DoctorResponseDto> AddDoctor(UpsertDoctorDto doctor);
     Task<DoctorResponseDto> UpdateDoctor(int id, UpsertDoctorDto doctor);

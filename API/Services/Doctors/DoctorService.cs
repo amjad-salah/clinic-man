@@ -9,31 +9,32 @@ namespace API.Services.Doctors;
 
 public class DoctorService(AppDbContext context) : IDoctorService
 {
-    public async Task<GeneralResponse> GetDoctors()
+    public async Task<DoctorResponseDto> GetDoctors()
     {
         var doctors = await context.Doctors.AsNoTracking()
             .Include(d => d.User)
             .ProjectToType<DoctorDto>().ToListAsync();
 
-        return new GeneralResponse { Success = true, Data = doctors };
+        return new DoctorResponseDto { Success = true, Doctors = doctors };
     }
 
-    public async Task<GeneralResponse> GetDoctorById(int id)
+    public async Task<DoctorResponseDto> GetDoctorById(int id)
     {
         var doctor = await context.Doctors.AsNoTracking()
             .Include(d => d.User)
             .Include(d => d.Schedules)
+            .Include(d => d.Appointments)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (doctor == null)
-            return new GeneralResponse { Success = false, Error = "Doctor not found." };
+            return new DoctorResponseDto { Success = false, Error = "Doctor not found." };
 
         var doc = doctor.Adapt<DoctorDetailsDto>();
 
-        return new GeneralResponse { Success = true, Data = doc };
+        return new DoctorResponseDto { Success = true, Doctor = doc };
     }
 
-    public async Task<GeneralResponse> AddDoctor(UpsertDoctorDto doctor)
+    public async Task<DoctorResponseDto> AddDoctor(UpsertDoctorDto doctor)
     {
         var user = await context.Users.AsNoTracking().FirstOrDefaultAsync(
             u => u.Id == doctor.UserId);
@@ -42,7 +43,7 @@ public class DoctorService(AppDbContext context) : IDoctorService
             d => d.PhoneNo == doctor.PhoneNo || d.UserId == doctor.UserId);
 
         if (existDoc != null || user == null)
-            return new GeneralResponse
+            return new DoctorResponseDto
             {
                 Success = false,
                 Error = "Doctor with this phone number already exist, or user not found."
@@ -52,12 +53,12 @@ public class DoctorService(AppDbContext context) : IDoctorService
         context.Doctors.Add(newDoc);
         await context.SaveChangesAsync();
 
-        var doc = newDoc.Adapt<DoctorDto>();
+        var doc = newDoc.Adapt<DoctorDetailsDto>();
 
-        return new GeneralResponse { Success = true, Data = doc };
+        return new DoctorResponseDto { Success = true, Doctor = doc };
     }
 
-    public async Task<GeneralResponse> UpdateDoctor(int id, UpsertDoctorDto doctor)
+    public async Task<DoctorResponseDto> UpdateDoctor(int id, UpsertDoctorDto doctor)
     {
         var user = await context.Users.AsNoTracking().FirstOrDefaultAsync(
             u => u.Id == doctor.UserId);
@@ -65,7 +66,7 @@ public class DoctorService(AppDbContext context) : IDoctorService
         var existDoc = await context.Doctors.FindAsync(id);
 
         if (existDoc == null)
-            return new GeneralResponse { Success = false, Error = "Doctor not found." };
+            return new DoctorResponseDto { Success = false, Error = "Doctor not found." };
 
         if (existDoc.PhoneNo != doctor.PhoneNo || existDoc.UserId != doctor.UserId)
         {
@@ -73,7 +74,7 @@ public class DoctorService(AppDbContext context) : IDoctorService
                 d => d.PhoneNo == doctor.PhoneNo || d.UserId == doctor.UserId);
 
             if (conflictDoc != null || user is not { Role: UserRole.Doctor })
-                return new GeneralResponse
+                return new DoctorResponseDto
                 {
                     Success = false,
                     Error = "Doctor with this phone number already exist, or user not found."
@@ -85,19 +86,19 @@ public class DoctorService(AppDbContext context) : IDoctorService
         existDoc.Specialization = doctor.Specialization;
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new DoctorResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> DeleteDoctor(int id)
+    public async Task<DoctorResponseDto> DeleteDoctor(int id)
     {
         var doctor = await context.Doctors.FindAsync(id);
 
         if (doctor == null)
-            return new GeneralResponse { Success = false, Error = "Doctor not found." };
+            return new DoctorResponseDto { Success = false, Error = "Doctor not found." };
 
         context.Doctors.Remove(doctor);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new DoctorResponseDto { Success = true };
     }
 }

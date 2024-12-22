@@ -1,3 +1,9 @@
 namespace Models.DTOs.Doctors;
 
-public record UpsertDoctorDto(int UserId, string PhoneNo, string Specialization);
+public class UpsertDoctorDto
+{
+    public int UserId { get; set; }
+    public string PhoneNo { get; set; }
+    public string Specialization { get; set; }
+    
+}

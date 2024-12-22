@@ -1,9 +1,12 @@
+using Models.DTOs.Appointments;
 using Models.DTOs.DoctorSchedules;
 
 namespace Models.DTOs.Doctors;
 
-public record DoctorDetailsDto(
-    string PhoneNo,
-    string Specialization,
-    UserDoctorDto User,
-    List<DoctorScheduleDto> Schedules);
+public class DoctorDetailsDto
+{
+    public UserDoctorDto User { get; set; }
+    public string Specialization { get; set; }
+    public List<DoctorScheduleDto> Schedules { get; set; }
+    public List<AppointmentDto> Appointments { get; set; }
+}
