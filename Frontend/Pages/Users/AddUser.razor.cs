@@ -11,7 +11,7 @@ public partial class AddUser : ComponentBase
 
     private async Task Submit()
     {
-        var result = await UsersService.AddUser(model);
+        var result = await usersService.AddUser(model);
 
         if (!result.Success) 
         {

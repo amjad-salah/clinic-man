@@ -2,9 +2,10 @@ using Models.DTOs.Users;
 
 namespace Models.DTOs.Doctors;
 
-public record DoctorDto(
-    int Id,
-    int UserId,
-    string PhoneNo,
-    string Specialization,
-    UserDto User);
+public class DoctorDto
+{
+    public int Id { get; set; }
+    public string PhoneNo { get; set; }
+    public string Specialization { get; set; }
+    public UserDoctorDto? User { get; set; }
+}

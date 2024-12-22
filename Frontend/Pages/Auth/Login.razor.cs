@@ -11,7 +11,7 @@ public partial class Login : ComponentBase
 
     private async Task SubmitAsync()
     {
-        var result = await UsersService.Login(LoginModel);
+        var result = await usersService.Login(LoginModel);
 
         if (!result.Success)
         {

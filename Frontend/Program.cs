@@ -1,6 +1,7 @@
 using Blazored.LocalStorage;
 using Frontend;
 using Frontend.AuthState;
+using Frontend.Services.Doctors;
 using Frontend.Services.Users;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -16,5 +17,6 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<AuthenticationStateProvider, AppAuthStateProvider>();
 builder.Services.AddScoped<IUsersService, UserService>();
+builder.Services.AddScoped<IDoctorsService, DoctorsService>();
 
 await builder.Build().RunAsync();

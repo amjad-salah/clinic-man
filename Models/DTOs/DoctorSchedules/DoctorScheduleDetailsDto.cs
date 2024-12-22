@@ -6,7 +6,6 @@ namespace Models.DTOs.DoctorSchedules;
 
 public record DoctorScheduleDetailsDto
 {
-    public int Id { get; set; }
     public int DoctorId { get; set; }
     public DayOfWeek Day { get; set; }
 
@@ -16,5 +15,5 @@ public record DoctorScheduleDetailsDto
     [JsonConverter(typeof(TimeOnlyConverter))]
     public TimeOnly EndTime { get; set; }
 
-    public DoctorDto Doctor { get; set; }
+    public DoctorDto? Doctor { get; set; }
 }

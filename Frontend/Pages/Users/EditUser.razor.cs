@@ -15,7 +15,7 @@ namespace Frontend.Pages.Users
 
         protected override async Task OnInitializedAsync()
         {
-            var result = await UsersService.GetUserById(Id);
+            var result = await usersService.GetUserById(Id);
 
             if (!result.Success)
             {
@@ -29,7 +29,7 @@ namespace Frontend.Pages.Users
 
         private async Task Submit()
         {
-            var result = await UsersService.UpdateUser(Id,
+            var result = await usersService.UpdateUser(Id,
                 new UpdateUserDto()
                 {
                     Email = _user!.Email,

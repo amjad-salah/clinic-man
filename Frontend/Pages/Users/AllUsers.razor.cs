@@ -10,7 +10,7 @@ public partial class AllUsers : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await UsersService.GetUsers();
+        var result = await usersService.GetUsers();
 
         if (!result!.Success)
         {
@@ -24,7 +24,7 @@ public partial class AllUsers : ComponentBase
 
     private async Task DeleteUser(int userId)
     {
-        var result = await UsersService.DeleteUser(userId);
+        var result = await usersService.DeleteUser(userId);
 
         if (!result!.Success)
         {
