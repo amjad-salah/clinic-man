@@ -1,4 +1,3 @@
-@using System.Security.Claims
 <aside id="sidebar" class="expand">
     <div class="d-flex">
         <div class="sidebar-logo">
@@ -8,7 +7,8 @@
     <AuthorizeView>
         <Authorized>
             <ul class="sidebar-nav">
-                @if(context.User.IsInRole("Admin")) {
+                @if (context.User.IsInRole("Admin"))
+                {
                     <li class="sidebar-item">
                         <a href="users" class="sidebar-link">
                             <i class="lni lni-user-4"></i>
@@ -23,7 +23,8 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" data-bs-target="#auth"
+                    <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse"
+                       data-bs-target="#auth"
                        aria-expanded="false" aria-controls="auth">
                         <i class="lni lni-user-4"></i>
                         <span>المستخدمين</span>
@@ -42,7 +43,7 @@
                 <span class="text-white mx-5">
                     @context.User.Identity!.Name
                 </span>
-                <br />
+                <br/>
                 <a href="logout" class="sidebar-link">
                     <i class="lni lni-exit"></i>
                     <span>خروج</span>
