@@ -8,7 +8,15 @@ export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5000/api",
+    prepareHeaders: (headers) => {
+      // @ts-ignore
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      if (user) {
+        headers.set("Authorization", "Bearer " + user.token);
+      }
+    },
   }),
   endpoints: (builder) => ({}),
-  tagTypes: [],
+  tagTypes: ["Users"],
 });

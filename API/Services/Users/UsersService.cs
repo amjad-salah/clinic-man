@@ -30,7 +30,7 @@ public class UsersService(
 
         var token = GenerateToken(user);
 
-        return new LoginResponseDto { Success = true, Token = token};
+        return new LoginResponseDto { Success = true, Token = token, FullName = user.FullName, Role = user.Role };
     }
 
     public async Task<UsersResponseDto> GetUsers()
