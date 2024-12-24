@@ -23,7 +23,7 @@ const Login = () => {
     }
   }, [user, navigate]);
 
-  const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+  const loginHandler = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const res = await login({ email, password }).unwrap();
@@ -47,7 +47,7 @@ const Login = () => {
   return (
     <div className="row align-items-center justify-content-center">
       <div className="col-md-5">
-        <div className="card card-body p-4">
+        <div className="card card-body p-4 shadow">
           <h4 className="mb-2">تسجيل الدخول</h4>
           <hr className="mb-3" />
           <form onSubmit={loginHandler}>

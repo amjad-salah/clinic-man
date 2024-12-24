@@ -14,8 +14,11 @@ import { Provider } from "react-redux";
 import Home from "./components/Home.tsx";
 import store from "./app/store.ts";
 import PrivateRoute from "./components/PrivateRoute.tsx";
+
 import Login from "./features/users/Login.tsx";
 import UsersList from "./features/users/UsersList.tsx";
+import AddUser from "./features/users/AddUser.tsx";
+import EditUser from "./features/users/EditUser.tsx";
 
 //Routes
 const router = createBrowserRouter(
@@ -25,7 +28,11 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       {/*Private Routes*/}
       <Route path="/" element={<PrivateRoute />}>
-        <Route path="/users" element={<UsersList />} />
+        <Route path="/users">
+          <Route path="/users" index={true} element={<UsersList />} />
+          <Route path="/users/add" element={<AddUser />} />
+          <Route path="/users/edit/:id" element={<EditUser />} />
+        </Route>
       </Route>
     </Route>,
   ),
