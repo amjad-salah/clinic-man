@@ -51,7 +51,7 @@ public class UsersController(
     //Add new user
     //POST /api/users
     [HttpPost("")]
-    public async Task<ActionResult<GeneralResponse>> AddUser(AddUserDto addUserDto)
+    public async Task<ActionResult<UsersResponseDto>> AddUser(AddUserDto addUserDto)
     {
         try
         {
@@ -61,7 +61,7 @@ public class UsersController(
             {
                 var error = string.Join(", ", validation.Errors.Select(e => e.ErrorMessage));
 
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new UsersResponseDto { Success = false, Error = error });
             }
 
             var response = await service.AddUser(addUserDto);
@@ -81,7 +81,7 @@ public class UsersController(
     //Get all users
     //GET /api/users
     [HttpGet("")]
-    public async Task<ActionResult<GeneralResponse>> GetAllUsers()
+    public async Task<ActionResult<UsersResponseDto>> GetAllUsers()
     {
         try
         {
@@ -99,7 +99,7 @@ public class UsersController(
     //Get user by id
     //GET /api/users/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<GeneralResponse>> GetUserById(int id)
+    public async Task<ActionResult<UsersResponseDto>> GetUserById(int id)
     {
         try
         {
@@ -120,7 +120,7 @@ public class UsersController(
     //Update user by id
     //PUT /api/users/{id}
     [HttpPut("{id}")]
-    public async Task<ActionResult<GeneralResponse>> UpdateUser(int id, UpdateUserDto updateUserDto)
+    public async Task<ActionResult<UsersResponseDto>> UpdateUser(int id, UpdateUserDto updateUserDto)
     {
         try
         {
@@ -130,7 +130,7 @@ public class UsersController(
             {
                 var error = string.Join(", ", validation.Errors.Select(e => e.ErrorMessage));
 
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new UsersResponseDto { Success = false, Error = error });
             }
 
             var response = await service.UpdateUser(id, updateUserDto);
@@ -152,7 +152,7 @@ public class UsersController(
     //Delete user by id
     //DELETE /api/users/{id}
     [HttpDelete("{id}")]
-    public async Task<ActionResult<GeneralResponse>> DeleteUser(int id)
+    public async Task<ActionResult<UsersResponseDto>> DeleteUser(int id)
     {
         try
         {

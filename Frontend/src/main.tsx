@@ -19,6 +19,8 @@ import Login from "./features/users/Login.tsx";
 import UsersList from "./features/users/UsersList.tsx";
 import AddUser from "./features/users/AddUser.tsx";
 import EditUser from "./features/users/EditUser.tsx";
+import DoctorsList from "./features/doctors/DoctorsList.tsx";
+import AddDoctor from "./features/doctors/AddDoctor.tsx";
 
 //Routes
 const router = createBrowserRouter(
@@ -32,6 +34,11 @@ const router = createBrowserRouter(
           <Route path="/users" index={true} element={<UsersList />} />
           <Route path="/users/add" element={<AddUser />} />
           <Route path="/users/edit/:id" element={<EditUser />} />
+        </Route>
+
+        <Route path="/doctors">
+          <Route path="/doctors" index={true} element={<DoctorsList />} />
+          <Route path="/doctors/add" index={true} element={<AddDoctor />} />
         </Route>
       </Route>
     </Route>,

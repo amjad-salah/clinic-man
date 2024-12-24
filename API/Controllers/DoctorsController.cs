@@ -16,7 +16,7 @@ public class DoctorsController(
 {
     [HttpPost("")]
     [Authorize(Roles = "Admin, Manager")]
-    public async Task<ActionResult<GeneralResponse>> AddDoctor(UpsertDoctorDto doctor)
+    public async Task<ActionResult<DoctorResponseDto>> AddDoctor(UpsertDoctorDto doctor)
     {
         try
         {
@@ -26,7 +26,7 @@ public class DoctorsController(
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
 
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new DoctorResponseDto { Success = false, Error = error });
             }
 
             var response = await service.AddDoctor(doctor);
@@ -43,7 +43,7 @@ public class DoctorsController(
     }
 
     [HttpGet("")]
-    public async Task<ActionResult<GeneralResponse>> GetDoctors()
+    public async Task<ActionResult<DoctorResponseDto>> GetDoctors()
     {
         try
         {
@@ -59,7 +59,7 @@ public class DoctorsController(
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<GeneralResponse>> GetDoctor(int id)
+    public async Task<ActionResult<DoctorResponseDto>> GetDoctor(int id)
     {
         try
         {
@@ -79,7 +79,7 @@ public class DoctorsController(
 
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin, Manager")]
-    public async Task<ActionResult<GeneralResponse>> UpdateDoctor(int id, UpsertDoctorDto doctor)
+    public async Task<ActionResult<DoctorResponseDto>> UpdateDoctor(int id, UpsertDoctorDto doctor)
     {
         try
         {
@@ -88,7 +88,7 @@ public class DoctorsController(
             if (!validation.IsValid)
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new DoctorResponseDto { Success = false, Error = error });
             }
 
             var response = await service.UpdateDoctor(id, doctor);
@@ -109,7 +109,7 @@ public class DoctorsController(
 
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin, Manager")]
-    public async Task<ActionResult<GeneralResponse>> DeleteDoctor(int id)
+    public async Task<ActionResult<DoctorResponseDto>> DeleteDoctor(int id)
     {
         try
         {
