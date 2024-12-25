@@ -9,7 +9,7 @@ namespace API.Services.DoctorSchedules;
 
 public class DoctorSchedulesService(AppDbContext context) : IDoctorSchedulesService
 {
-    public async Task<GeneralResponse> GetSchedules()
+    public async Task<ScheduleResponseDto> GetSchedules()
     {
         var schedules = await context.DoctorSchedules
             .Include(s => s.Doctor)
@@ -17,10 +17,10 @@ public class DoctorSchedulesService(AppDbContext context) : IDoctorSchedulesServ
             .ProjectToType<DoctorScheduleDetailsDto>()
             .AsNoTracking().ToListAsync();
 
-        return new GeneralResponse { Success = true, Data = schedules };
+        return new ScheduleResponseDto { Success = true, Schedules = schedules };
     }
 
-    public async Task<GeneralResponse> GetScheduleById(int id)
+    public async Task<ScheduleResponseDto> GetScheduleById(int id)
     {
         var schedule = await context.DoctorSchedules
             .Include(s => s.Doctor)
@@ -28,26 +28,26 @@ public class DoctorSchedulesService(AppDbContext context) : IDoctorSchedulesServ
             .AsNoTracking().FirstOrDefaultAsync(s => s.Id == id);
 
         return schedule == null
-            ? new GeneralResponse { Success = false, Error = "Schedule not found" }
-            : new GeneralResponse { Success = true, Data = schedule.Adapt<DoctorScheduleDetailsDto>() };
+            ? new ScheduleResponseDto { Success = false, Error = "Schedule not found" }
+            : new ScheduleResponseDto { Success = true, Schedule = schedule.Adapt<DoctorScheduleDetailsDto>() };
     }
 
-    public async Task<GeneralResponse> AddSchedule(UpsertDoctorScheduleDto scheduleDto)
+    public async Task<ScheduleResponseDto> AddSchedule(UpsertDoctorScheduleDto scheduleDto)
     {
         var newSchedule = scheduleDto.Adapt<DoctorSchedule>();
 
         context.DoctorSchedules.Add(newSchedule);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true, Data = new { newSchedule.Id } };
+        return new ScheduleResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> UpdateSchedule(int id, UpsertDoctorScheduleDto scheduleDto)
+    public async Task<ScheduleResponseDto> UpdateSchedule(int id, UpsertDoctorScheduleDto scheduleDto)
     {
         var schedule = await context.DoctorSchedules.FindAsync(id);
 
         if (schedule == null)
-            return new GeneralResponse { Success = false, Error = "Schedule not found" };
+            return new ScheduleResponseDto { Success = false, Error = "Schedule not found" };
 
         schedule.DoctorId = scheduleDto.DoctorId;
         schedule.Day = scheduleDto.Day;
@@ -56,19 +56,19 @@ public class DoctorSchedulesService(AppDbContext context) : IDoctorSchedulesServ
 
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new ScheduleResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> DeleteSchedule(int id)
+    public async Task<ScheduleResponseDto> DeleteSchedule(int id)
     {
         var schedule = await context.DoctorSchedules.FindAsync(id);
 
         if (schedule == null)
-            return new GeneralResponse { Success = false, Error = "Schedule not found" };
+            return new ScheduleResponseDto { Success = false, Error = "Schedule not found" };
 
         context.DoctorSchedules.Remove(schedule);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new ScheduleResponseDto { Success = true };
     }
 }

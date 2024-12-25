@@ -5,9 +5,9 @@ namespace API.Services.DoctorSchedules;
 
 public interface IDoctorSchedulesService
 {
-    Task<GeneralResponse> GetSchedules();
-    Task<GeneralResponse> GetScheduleById(int id);
-    Task<GeneralResponse> AddSchedule(UpsertDoctorScheduleDto scheduleDto);
-    Task<GeneralResponse> UpdateSchedule(int id, UpsertDoctorScheduleDto scheduleDto);
-    Task<GeneralResponse> DeleteSchedule(int id);
+    Task<ScheduleResponseDto> GetSchedules();
+    Task<ScheduleResponseDto> GetScheduleById(int id);
+    Task<ScheduleResponseDto> AddSchedule(UpsertDoctorScheduleDto scheduleDto);
+    Task<ScheduleResponseDto> UpdateSchedule(int id, UpsertDoctorScheduleDto scheduleDto);
+    Task<ScheduleResponseDto> DeleteSchedule(int id);
 }

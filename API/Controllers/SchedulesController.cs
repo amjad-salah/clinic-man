@@ -18,7 +18,7 @@ public class SchedulesController(
     //POST /api/schedules
     [HttpPost]
     [Authorize(Roles = "Admin, Manager")]
-    public async Task<ActionResult<DoctorScheduleDto>> AddSchedule(UpsertDoctorScheduleDto scheduleDto)
+    public async Task<ActionResult<ScheduleResponseDto>> AddSchedule(UpsertDoctorScheduleDto scheduleDto)
     {
         try
         {
@@ -28,7 +28,7 @@ public class SchedulesController(
             {
                 var error = string.Join(',', validate.Errors.Select(x => x.ErrorMessage));
 
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new ScheduleResponseDto { Success = false, Error = error });
             }
 
             var response = await service.AddSchedule(scheduleDto);
@@ -85,7 +85,7 @@ public class SchedulesController(
     //PUT /api/schedules/{id}
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin, Manager")]
-    public async Task<ActionResult<GeneralResponse>> UpdateSchedule(int id, UpsertDoctorScheduleDto scheduleDto)
+    public async Task<ActionResult<ScheduleResponseDto>> UpdateSchedule(int id, UpsertDoctorScheduleDto scheduleDto)
     {
         try
         {
@@ -94,7 +94,7 @@ public class SchedulesController(
             if (!validate.IsValid)
             {
                 var error = string.Join(',', validate.Errors.Select(x => x.ErrorMessage));
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new ScheduleResponseDto { Success = false, Error = error });
             }
 
             var response = await service.UpdateSchedule(id, scheduleDto);
@@ -115,7 +115,7 @@ public class SchedulesController(
     //DELETE /api/schedules/{id}
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin, Manager")]
-    public async Task<ActionResult<GeneralResponse>> DeleteSchedule(int id)
+    public async Task<ActionResult<ScheduleResponseDto>> DeleteSchedule(int id)
     {
         try
         {
