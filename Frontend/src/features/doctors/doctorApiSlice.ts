@@ -4,7 +4,6 @@ import {
   DoctorResponseDto,
   UpdateDoctorDto,
 } from "../../Types/Doctors.ts";
-import { BaseQueryArg } from "@reduxjs/toolkit/query";
 
 const DOCTORS_URL = "/doctors";
 

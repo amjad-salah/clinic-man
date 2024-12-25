@@ -5,6 +5,7 @@ import {
 import Loader from "../../components/Loader.tsx";
 import { FaRegEdit } from "react-icons/fa";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { BsInfoCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -29,7 +30,7 @@ const DoctorsList = () => {
     }
   };
 
-  let content: JSX.Element = <div></div>;
+  let content = <div></div>;
 
   if (isError) {
     console.error(error);
@@ -78,6 +79,12 @@ const DoctorsList = () => {
                 <td>{doctor.phoneNo}</td>
                 <td>{doctor.specialization}</td>
                 <td>
+                  <Link
+                    to={`/doctors/${doctor.id}`}
+                    className="btn btn-success btn-sm me-2"
+                  >
+                    <BsInfoCircle />
+                  </Link>
                   <Link
                     to={`/doctors/edit/${doctor.id}`}
                     className="btn btn-primary btn-sm me-2"

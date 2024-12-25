@@ -65,13 +65,13 @@ public class DoctorService(AppDbContext context) : IDoctorService
 
         var existDoc = await context.Doctors.FindAsync(id);
 
-        if (existDoc == null)
-            return new DoctorResponseDto { Success = false, Error = "Doctor not found." };
+        if (existDoc == null || user == null)
+            return new DoctorResponseDto { Success = false, Error = "Doctor not found, or user not found." };
 
         if (existDoc.PhoneNo != doctor.PhoneNo || existDoc.UserId != doctor.UserId)
         {
             var conflictDoc = await context.Doctors.AsNoTracking().FirstOrDefaultAsync(
-                d => d.PhoneNo == doctor.PhoneNo || d.UserId == doctor.UserId);
+                d => d.PhoneNo == doctor.PhoneNo);
 
             if (conflictDoc != null || user is not { Role: UserRole.Doctor })
                 return new DoctorResponseDto

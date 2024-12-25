@@ -5,6 +5,7 @@ namespace Models.DTOs.Doctors;
 
 public class DoctorDetailsDto
 {
+    public int UserId { get; set; }
     public UserDoctorDto User { get; set; }
     public string Specialization { get; set; }
     public string PhoneNo { get; set; }

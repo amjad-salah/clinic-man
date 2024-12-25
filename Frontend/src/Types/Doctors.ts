@@ -13,6 +13,7 @@ export type DoctorDetailsDto = {
   phoneNo: string;
   specialization: string;
   user: UserDoctorDto;
+  userId: number;
   //schedules?: ScheduleDto[];
   //appointments: AppointmentDto[];
 };

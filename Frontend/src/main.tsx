@@ -21,6 +21,8 @@ import AddUser from "./features/users/AddUser.tsx";
 import EditUser from "./features/users/EditUser.tsx";
 import DoctorsList from "./features/doctors/DoctorsList.tsx";
 import AddDoctor from "./features/doctors/AddDoctor.tsx";
+import DoctorDetails from "./features/doctors/DoctorDetails.tsx";
+import UpdateDoctor from "./features/doctors/UpdateDoctor.tsx";
 
 //Routes
 const router = createBrowserRouter(
@@ -38,7 +40,13 @@ const router = createBrowserRouter(
 
         <Route path="/doctors">
           <Route path="/doctors" index={true} element={<DoctorsList />} />
+          <Route path="/doctors/:id" index={true} element={<DoctorDetails />} />
           <Route path="/doctors/add" index={true} element={<AddDoctor />} />
+          <Route
+            path="/doctors/edit/:id"
+            index={true}
+            element={<UpdateDoctor />}
+          />
         </Route>
       </Route>
     </Route>,

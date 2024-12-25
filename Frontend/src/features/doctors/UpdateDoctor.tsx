@@ -1,43 +1,64 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../app/hooks.ts";
-import { useAddDoctorMutation } from "./doctorApiSlice.ts";
+import {
+  useGetDoctorByIdQuery,
+  useUpdateDoctorMutation,
+} from "./doctorApiSlice.ts";
 import { useGetAllUsersQuery } from "../users/usersApiSlice.ts";
-import { clearCredentials } from "../users/authSlice.ts";
-import { toast } from "react-toastify";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoMdReturnRight } from "react-icons/io";
-import { UserRole } from "../../Types/UserType.ts";
+import React, { useEffect, useState } from "react";
+import { useAppDispatch } from "../../app/hooks.ts";
+import { toast } from "react-toastify";
+import { clearCredentials } from "../users/authSlice.ts";
+import { UserDto, UserRole } from "../../Types/UserType.ts";
 
-const AddDoctor = () => {
+const UpdateDoctor = () => {
+  const { id } = useParams();
+
+  const { data, isSuccess } = useGetDoctorByIdQuery(parseInt(id!));
+
+  // @ts-ignore
+  const {
+    data: usersData,
+    isSuccess: usersIsSuccess,
+    error: usersError,
+  } = useGetAllUsersQuery();
+  const [updateDoctor] = useUpdateDoctorMutation();
+
   const [userId, setUserId] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [specialization, setSpecialization] = useState("");
 
-  // @ts-ignore
-  const { data, isSuccess, error } = useGetAllUsersQuery();
-  const [addDoctor] = useAddDoctorMutation();
-
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
+    if (isSuccess) {
+      setUserId(data!.doctor!.userId.toString());
+      setPhoneNo(data!.doctor!.phoneNo);
+      setSpecialization(data!.doctor!.specialization);
+    }
+
     // @ts-ignore
-    if (error && (error.status === 401 || error.status === 403)) {
+    if (
+      usersError &&
+      (usersError.status === 401 || usersError.status === 403)
+    ) {
       dispatch(clearCredentials());
       navigate("/login");
     }
-  }, [error, navigate, dispatch]);
+  }, [isSuccess, data, usersError, dispatch, navigate]);
 
-  const handleAddDoctor = async (e: React.FormEvent) => {
+  const handleUpdateDoctor = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await addDoctor({
+      const res = await updateDoctor({
+        id: parseInt(id!),
         userId: parseInt(userId),
         phoneNo,
         specialization,
       }).unwrap();
 
-      toast.success("تمت إضافة الطبيب بنجاح");
+      toast.success("تمت تعديل الطبيب بنجاح");
       navigate("/doctors");
     } catch (e) {
       console.log(e);
@@ -62,7 +83,7 @@ const AddDoctor = () => {
           <div className="card card-body shadow">
             <h4 className="mb-2">إضافة طبيب</h4>
             <hr className="mb-3" />
-            <form onSubmit={handleAddDoctor}>
+            <form onSubmit={handleUpdateDoctor}>
               <div className="mb-3">
                 <label htmlFor="userId" className="form-label">
                   المستخدم
@@ -73,8 +94,8 @@ const AddDoctor = () => {
                   className="form-select"
                   onChange={(e) => setUserId(e.target.value)}
                 >
-                  {isSuccess &&
-                    data
+                  {usersIsSuccess &&
+                    usersData
                       .users!.filter((user) => user.role === UserRole.Doctor)
                       .map((user) => (
                         <option key={user.id} value={user.id}>
@@ -109,7 +130,7 @@ const AddDoctor = () => {
               </div>
               <div className="mb-3">
                 <button type="submit" className="btn btn-primary">
-                  إضافة
+                  حفظ
                 </button>
               </div>
             </form>
@@ -120,4 +141,4 @@ const AddDoctor = () => {
   );
 };
 
-export default AddDoctor;
+export default UpdateDoctor;
