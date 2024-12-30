@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const UsersList = () => {
-  // @ts-ignore
   const { data, isSuccess, isError, error, isLoading } = useGetAllUsersQuery();
   const [deleteUser] = useDeleteUserMutation();
 

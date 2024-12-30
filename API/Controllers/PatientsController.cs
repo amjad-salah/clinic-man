@@ -17,7 +17,7 @@ public class PatientsController(
     //Add new patient
     //POST /api/patients
     [HttpPost("")]
-    public async Task<ActionResult<GeneralResponse>> AddPatient(UpsertPatientDto request)
+    public async Task<ActionResult<PatientResponseDto>> AddPatient(UpsertPatientDto request)
     {
         try
         {
@@ -27,7 +27,7 @@ public class PatientsController(
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
 
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new PatientResponseDto { Success = false, Error = error });
             }
 
             var response = await service.CreatePatient(request);
@@ -47,7 +47,7 @@ public class PatientsController(
     //Get all patients
     //GET /api/patients
     [HttpGet("")]
-    public async Task<ActionResult<GeneralResponse>> GetAllPatients()
+    public async Task<ActionResult<PatientResponseDto>> GetAllPatients()
     {
         try
         {
@@ -65,7 +65,7 @@ public class PatientsController(
     //Get patient by id
     //GET /api/patients/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<GeneralResponse>> GetPatientById(int id)
+    public async Task<ActionResult<PatientResponseDto>> GetPatientById(int id)
     {
         try
         {
@@ -87,7 +87,7 @@ public class PatientsController(
     //PUT /api/patients
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin, Manager, Doctor, Nurse")]
-    public async Task<ActionResult<GeneralResponse>> UpdatePatient(int id, UpsertPatientDto request)
+    public async Task<ActionResult<PatientResponseDto>> UpdatePatient(int id, UpsertPatientDto request)
     {
         try
         {
@@ -96,7 +96,7 @@ public class PatientsController(
             if (!validation.IsValid)
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new PatientResponseDto { Success = false, Error = error });
             }
 
             var response = await service.UpdatePatient(id, request);
@@ -122,7 +122,7 @@ public class PatientsController(
     //DELETE /api/patients/{id}
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin, Manager, Doctor, Nurse")]
-    public async Task<ActionResult<GeneralResponse>> DeletePatient(int id)
+    public async Task<ActionResult<PatientResponseDto>> DeletePatient(int id)
     {
         try
         {

@@ -9,32 +9,34 @@ namespace API.Services.Patients;
 
 public class PatientsService(AppDbContext context) : IPatientsService
 {
-    public async Task<GeneralResponse> GetPatients()
+    public async Task<PatientResponseDto> GetPatients()
     {
         var patients = await context.Patients.AsNoTracking()
             .ProjectToType<PatientDto>()
             .ToListAsync();
 
-        return new GeneralResponse { Success = true, Data = patients };
+        return new PatientResponseDto { Success = true, Patients = patients };
     }
 
-    public async Task<GeneralResponse> GetPatientById(int id)
+    public async Task<PatientResponseDto> GetPatientById(int id)
     {
         var patient = await context.Patients.AsNoTracking()
+            .Include(p => p.Appointments)
+            .Include(p => p.Diagnoses)
             .FirstOrDefaultAsync(p => p.Id == id);
 
         return patient == null
-            ? new GeneralResponse { Success = false, Error = "Patient not found" }
-            : new GeneralResponse { Success = true, Data = patient.Adapt<PatientDetailsDto>() };
+            ? new PatientResponseDto { Success = false, Error = "Patient not found" }
+            : new PatientResponseDto { Success = true, Patient = patient.Adapt<PatientDetailsDto>() };
     }
 
-    public async Task<GeneralResponse> CreatePatient(UpsertPatientDto patient)
+    public async Task<PatientResponseDto> CreatePatient(UpsertPatientDto patient)
     {
         var existingPatient = await context.Patients.AsNoTracking().FirstOrDefaultAsync(
             p => p.PhoneNo == patient.PhoneNo);
 
         if (existingPatient != null)
-            return new GeneralResponse
+            return new PatientResponseDto
             {
                 Success = false,
                 Error = "Patient with this phone number already exists"
@@ -43,15 +45,15 @@ public class PatientsService(AppDbContext context) : IPatientsService
         context.Patients.Add(patient.Adapt<Patient>());
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true, Data = patient.Adapt<PatientDto>() };
+        return new PatientResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> UpdatePatient(int id, UpsertPatientDto patient)
+    public async Task<PatientResponseDto> UpdatePatient(int id, UpsertPatientDto patient)
     {
         var existingPatient = await context.Patients.FindAsync(id);
 
         if (existingPatient == null)
-            return new GeneralResponse { Success = false, Error = "Patient not found" };
+            return new PatientResponseDto { Success = false, Error = "Patient not found" };
 
         if (existingPatient.PhoneNo != patient.PhoneNo)
         {
@@ -59,7 +61,7 @@ public class PatientsService(AppDbContext context) : IPatientsService
                 .FirstOrDefaultAsync(p => p.PhoneNo == patient.PhoneNo);
 
             if (existingPhone != null)
-                return new GeneralResponse
+                return new PatientResponseDto
                 {
                     Success = false,
                     Error = "Patient with this phone number already exists"
@@ -76,19 +78,19 @@ public class PatientsService(AppDbContext context) : IPatientsService
 
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new PatientResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> DeletePatient(int id)
+    public async Task<PatientResponseDto> DeletePatient(int id)
     {
         var patient = await context.Patients.FindAsync(id);
 
         if (patient == null)
-            return new GeneralResponse { Success = false, Error = "Patient not found" };
+            return new PatientResponseDto { Success = false, Error = "Patient not found" };
 
         context.Patients.Remove(patient);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new PatientResponseDto { Success = true };
     }
 }

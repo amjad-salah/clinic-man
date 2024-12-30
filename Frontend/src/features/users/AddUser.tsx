@@ -12,7 +12,7 @@ const AddUser = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState(0);
+  const [role, setRole] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -23,7 +23,7 @@ const AddUser = () => {
         fullName,
         email,
         password,
-        role,
+        role: parseInt(role),
       }).unwrap();
 
       toast.success("تمت إضافة المستخدم بنجاح");
@@ -96,8 +96,11 @@ const AddUser = () => {
                   value={role}
                   id="role"
                   className="form-select"
-                  onChange={(e) => setRole(parseInt(e.target.value))}
+                  onChange={(e) => setRole(e.target.value)}
                 >
+                  <option value="" selected disabled>
+                    اختر الصلاحية
+                  </option>
                   {(Object.keys(UserRole) as Array<keyof typeof UserRole>).map(
                     (key) => (
                       <option key={key} value={key}>

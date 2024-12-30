@@ -20,7 +20,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    getAllUsers: builder.query<UsersResponseDto, null>({
+    getAllUsers: builder.query<UsersResponseDto, void>({
       query: () => `${USERS_URL}`,
       providesTags: ["Users"],
     }),

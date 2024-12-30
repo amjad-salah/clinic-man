@@ -73,6 +73,9 @@ const AddDoctor = () => {
                   className="form-select"
                   onChange={(e) => setUserId(e.target.value)}
                 >
+                  <option value="" selected disabled>
+                    إختر المستخدم
+                  </option>
                   {isSuccess &&
                     data
                       .users!.filter((user) => user.role === UserRole.Doctor)

@@ -9,7 +9,7 @@ const SCHEDULES_URL = "/schedules";
 
 const schedulesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAllSchedules: builder.query<ScheduleResponseDto, null>({
+    getAllSchedules: builder.query<ScheduleResponseDto, void>({
       query: () => `${SCHEDULES_URL}`,
       providesTags: ["Schedules"],
     }),

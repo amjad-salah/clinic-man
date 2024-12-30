@@ -26,6 +26,9 @@ import UpdateDoctor from "./features/doctors/UpdateDoctor.tsx";
 import SchedulesList from "./features/doctorScheduls/SchedulesList.tsx";
 import AddSchedule from "./features/doctorScheduls/AddSchedule.tsx";
 import UpdateSchedule from "./features/doctorScheduls/UpdateSchedule.tsx";
+import PatientsList from "./features/patients/PatientsList.tsx";
+import AddPatient from "./features/patients/AddPatient.tsx";
+import PatientDetails from "./features/patients/PatientDetails.tsx";
 
 //Routes
 const router = createBrowserRouter(
@@ -55,6 +58,12 @@ const router = createBrowserRouter(
           <Route path="/schedules" index={true} element={<SchedulesList />} />
           <Route path="/schedules/add" element={<AddSchedule />} />
           <Route path="/schedules/edit/:id" element={<UpdateSchedule />} />
+        </Route>
+        <Route path="/patients">
+          <Route path="/patients" index={true} element={<PatientsList />} />
+          <Route path="/patients/add" element={<AddPatient />} />
+          <Route path="/patients/:id" element={<PatientDetails />} />
+          {/*<Route path="/patients/edit/:id" element={<UpdatePatient />} />*/}
         </Route>
       </Route>
     </Route>,

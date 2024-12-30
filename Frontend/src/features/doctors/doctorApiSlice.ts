@@ -9,7 +9,7 @@ const DOCTORS_URL = "/doctors";
 
 export const doctorsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAllDoctors: builder.query<DoctorResponseDto, null>({
+    getAllDoctors: builder.query<DoctorResponseDto, void>({
       query: () => `${DOCTORS_URL}`,
       providesTags: ["Doctors"],
     }),

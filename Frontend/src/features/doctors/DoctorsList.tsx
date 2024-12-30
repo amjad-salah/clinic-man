@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const DoctorsList = () => {
-  // @ts-ignore
   const { data, isSuccess, isLoading, isError, error } =
     useGetAllDoctorsQuery();
 

@@ -1,13 +1,13 @@
-import { useGetDoctorByIdQuery } from "./doctorApiSlice.ts";
+import { useGetPatientQuery } from "./patientsApiSlice.ts";
 import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/Loader.tsx";
 import { IoMdReturnRight } from "react-icons/io";
-import { DayOfWeek } from "../../Types/DoctorSchedules.ts";
+import { Gender } from "../../Types/Patients.ts";
 
-const DoctorDetails = () => {
+const PatientDetails = () => {
   const { id } = useParams();
 
-  const { data, isSuccess, isError, isLoading, error } = useGetDoctorByIdQuery(
+  const { data, isSuccess, isError, isLoading, error } = useGetPatientQuery(
     parseInt(id!),
   );
 
@@ -39,7 +39,7 @@ const DoctorDetails = () => {
   if (isSuccess) {
     content = (
       <>
-        <Link to="/doctors" className="btn btn-dark mb-5">
+        <Link to="/patients" className="btn btn-dark mb-5">
           <IoMdReturnRight />
         </Link>
         <div className="row justify-content-center h-100">
@@ -47,56 +47,39 @@ const DoctorDetails = () => {
             <div className="card card-body p-4 shadow h-100">
               <p>
                 <span className="fw-bold me-2">الإسم:</span>
-                {data?.doctor!.user.fullName}
+                {data?.patient!.fullName}
+              </p>
+              <p>
+                <span className="fw-bold me-2">العمر:</span>
+                {new Date().getFullYear() -
+                  new Date(data?.patient!.doB).getFullYear()}
+              </p>
+              <p>
+                <span className="fw-bold me-2">الجنس:</span>
+                {Gender[data?.patient!.gender]}
               </p>
               <p>
                 <span className="fw-bold me-2">رقم الهاتف:</span>
-                {data?.doctor!.phoneNo}
+                {data?.patient!.phoneNo}
               </p>
-              <p>
-                <span className="fw-bold me-2">التخصص:</span>
-                {data?.doctor!.specialization}
-              </p>
-              <h5 className="mb-2 mt-5">الجدولة</h5>
+              <h5 className="mb-2 mt-5">التشخيصات</h5>
               <hr className="mb-3" />
-              <div className="table-responsive">
-                <table className="table table-hover table-striped">
-                  <thead>
-                    <tr>
-                      <th>اليوم</th>
-                      <th>من</th>
-                      <th>إلى</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data?.doctor?.schedules!.map((schedule) => (
-                      <tr key={schedule.id}>
-                        <td>{DayOfWeek[schedule.day]}</td>
-                        <td>{schedule.startTime}</td>
-                        <td>{schedule.endTime}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
             </div>
           </div>
           <div className="col-md-8">
-            <h4 className="text-center mb-2">الحجوزات</h4>
-            <hr className="mb-5" />
+            <h5 className="mb-2 text-center">الحجوزات</h5>
+            <hr className="mb-3" />
             <table className="table table-hover table-striped shadow">
               <thead>
                 <tr>
                   <th>رقم الحجز</th>
-                  <th>إسم المريض</th>
+                  <th>إسم الطبيب</th>
                   <th>تاريخ الحجز</th>
                   <th>زمن الحجز</th>
-                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -113,4 +96,4 @@ const DoctorDetails = () => {
   return content;
 };
 
-export default DoctorDetails;
+export default PatientDetails;

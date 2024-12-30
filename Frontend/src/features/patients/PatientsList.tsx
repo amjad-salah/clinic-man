@@ -1,26 +1,26 @@
 import {
-  useGetAllSchedulesQuery,
-  useDeleteScheduleMutation,
-} from "./schedulesApiSlice.ts";
+  useGetPatientsQuery,
+  useDeletePatientMutation,
+} from "./patientsApiSlice.ts";
 import Loader from "../../components/Loader.tsx";
 import { FaRegEdit } from "react-icons/fa";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { BsInfoCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { DayOfWeek } from "../../Types/DoctorSchedules.ts";
+import { Gender } from "../../Types/Patients.ts";
 
-const SchedulesList = () => {
-  const { data, isSuccess, isLoading, isError, error } =
-    useGetAllSchedulesQuery();
+const PatientsList = () => {
+  const { data, isSuccess, isLoading, isError, error } = useGetPatientsQuery();
 
-  const [deleteSchedule] = useDeleteScheduleMutation();
+  const [deletePatient] = useDeletePatientMutation();
 
-  const handleDeleteSchedule = async (id: number) => {
-    const deleteConfirm = confirm("هل تريد مسح هذا الجدول؟");
+  const handleDeletePatient = async (id: number) => {
+    const deleteConfirm = confirm("هل تريد مسح هذا المريض؟");
 
     if (deleteConfirm) {
       try {
-        await deleteSchedule(id).unwrap();
+        await deletePatient(id).unwrap();
       } catch (e) {
         console.log(e);
         // @ts-ignore
@@ -57,39 +57,50 @@ const SchedulesList = () => {
   if (isSuccess) {
     content = (
       <>
-        <h4 className="text-center mb-2">جدولة الأطباء</h4>
+        <h4 className="text-center mb-2">المرضى</h4>
         <hr className="mb-3" />
-        <Link to="/schedules/add" className="btn btn-primary mb-4">
+        <Link to="/patients/add" className="btn btn-primary mb-5">
           إضافة
         </Link>
         <div className="table-responsive">
           <table className="table table-striped table-hover shadow">
             <thead>
               <tr>
-                <th>الطبيب</th>
-                <th>اليوم</th>
-                <th>زمن البداية</th>
-                <th>زمن النهاية</th>
+                <th>الاسم</th>
+                <th>الجنس</th>
+                <th>رقم الهاتف</th>
+                <th>العنوان</th>
+                <th>العمر</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {data?.schedules!.map((schedule) => (
-                <tr key={schedule.id}>
-                  <td>{schedule.doctor.user.fullName}</td>
-                  <td>{DayOfWeek[schedule.day]}</td>
-                  <td>{schedule.startTime}</td>
-                  <td>{schedule.endTime}</td>
+              {data?.patients!.map((patient) => (
+                <tr key={patient.id}>
+                  <td>{patient.fullName}</td>
+                  <td>{Gender[patient.gender]}</td>
+                  <td>{patient.phoneNo}</td>
+                  <td>{patient.address}</td>
+                  <td>
+                    {new Date().getFullYear() -
+                      new Date(patient.doB).getFullYear()}
+                  </td>
                   <td>
                     <Link
-                      to={`/schedules/edit/${schedule.id}`}
-                      className="btn btn-sm btn-primary me-2"
+                      to={`/patients/${patient.id}`}
+                      className="btn btn-success btn-sm me-2"
+                    >
+                      <BsInfoCircle />
+                    </Link>
+                    <Link
+                      to={`/patients/edit/${patient.id}`}
+                      className="btn btn-primary btn-sm me-2"
                     >
                       <FaRegEdit />
                     </Link>
                     <button
-                      onClick={() => handleDeleteSchedule(schedule.id)}
-                      className="btn btn-sm btn-danger"
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleDeletePatient(patient.id)}
                     >
                       <FaRegTrashAlt />
                     </button>
@@ -105,4 +116,4 @@ const SchedulesList = () => {
   return content;
 };
 
-export default SchedulesList;
+export default PatientsList;
