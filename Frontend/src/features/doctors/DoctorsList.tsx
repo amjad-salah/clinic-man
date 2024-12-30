@@ -63,7 +63,7 @@ const DoctorsList = () => {
         <Link to="/doctors/add" className="btn btn-primary mb-4">
           إضافة
         </Link>
-        <table className="table table-striped table-hover">
+        <table className="table table-striped table-hover shadow">
           <thead>
             <tr>
               <th>الإسم</th>

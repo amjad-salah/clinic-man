@@ -6,6 +6,7 @@ import { FaUsers } from "react-icons/fa6";
 import { FaClinicMedical } from "react-icons/fa";
 import { AiOutlineLogin, AiOutlineLogout } from "react-icons/ai";
 import { FaBookMedical } from "react-icons/fa";
+import { GrSchedule } from "react-icons/gr";
 import { Link } from "react-router-dom";
 const Navbar = () => {
   const dispatch = useAppDispatch();
@@ -40,6 +41,12 @@ const Navbar = () => {
               <Link to="doctors" className="sidebar-link">
                 <FaBookMedical />
                 <span className="ms-2">الأطباء</span>
+              </Link>
+            </li>
+            <li className="sidebar-item">
+              <Link to="schedules" className="sidebar-link">
+                <GrSchedule />
+                <span className="ms-2">جدولة الأطباء</span>
               </Link>
             </li>
             <li className="sidebar-item">

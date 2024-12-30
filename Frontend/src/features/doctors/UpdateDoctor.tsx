@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch } from "../../app/hooks.ts";
 import { toast } from "react-toastify";
 import { clearCredentials } from "../users/authSlice.ts";
-import { UserDto, UserRole } from "../../Types/UserType.ts";
+import { UserRole } from "../../Types/UserType.ts";
 
 const UpdateDoctor = () => {
   const { id } = useParams();

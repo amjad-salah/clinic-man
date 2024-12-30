@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/Loader.tsx";
 import { IoMdReturnRight } from "react-icons/io";
 import React from "react";
+import { DayOfWeek } from "../../Types/DoctorSchedules.ts";
 
 const DoctorDetails = () => {
   const { id } = useParams();
@@ -42,9 +43,9 @@ const DoctorDetails = () => {
         <Link to="/doctors" className="btn btn-dark mb-5">
           <IoMdReturnRight />
         </Link>
-        <div className="row justify-content-center align-items-center">
+        <div className="row justify-content-center h-100">
           <div className="col-md-4">
-            <div className="card card-body p-4 shadow">
+            <div className="card card-body p-4 shadow h-100">
               <p>
                 <span className="fw-bold me-2">الإسم:</span>
                 {data?.doctor!.user.fullName}
@@ -59,6 +60,26 @@ const DoctorDetails = () => {
               </p>
               <h5 className="mb-2 mt-5">الجدولة</h5>
               <hr className="mb-3" />
+              <div className="table-responsive">
+                <table className="table table-hover table-striped">
+                  <thead>
+                    <tr>
+                      <th>اليوم</th>
+                      <th>من</th>
+                      <th>إلى</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data?.doctor?.schedules!.map((schedule) => (
+                      <tr key={schedule.id}>
+                        <td>{DayOfWeek[schedule.day]}</td>
+                        <td>{schedule.startTime}</td>
+                        <td>{schedule.endTime}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
           <div className="col-md-8">

@@ -9,6 +9,7 @@ export type DoctorScheduleDto = {
 };
 
 export type DoctorScheduleDetailsDto = {
+  id: number;
   doctorId: number;
   day: DayOfWeek;
   startTime: string;
