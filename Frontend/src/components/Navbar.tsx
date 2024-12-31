@@ -8,6 +8,7 @@ import { AiOutlineLogin, AiOutlineLogout } from "react-icons/ai";
 import { FaBookMedical } from "react-icons/fa";
 import { GrSchedule } from "react-icons/gr";
 import { BiHealth } from "react-icons/bi";
+import { GrSchedules } from "react-icons/gr";
 import { Link } from "react-router-dom";
 const Navbar = () => {
   const dispatch = useAppDispatch();
@@ -54,6 +55,12 @@ const Navbar = () => {
               <Link to="patients" className="sidebar-link">
                 <BiHealth />
                 <span className="ms-2">المرضى</span>
+              </Link>
+            </li>
+            <li className="sidebar-item">
+              <Link to="appointments" className="sidebar-link">
+                <GrSchedules />
+                <span className="ms-2">المواعيد</span>
               </Link>
             </li>
             <li className="sidebar-item">

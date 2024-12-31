@@ -32,11 +32,11 @@ export type ScheduleResponseDto = {
 };
 
 export enum DayOfWeek {
-  Sunday,
-  Monday,
-  Tuesday,
-  Wednesday,
-  Thursday,
-  Friday,
-  Saturday,
+  الأحد,
+  الإثنين,
+  الثلاثاء,
+  الأربعاء,
+  الخميس,
+  الجمعة,
+  السبت,
 }

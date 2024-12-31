@@ -51,6 +51,6 @@ export type PatientResponseDto = {
 };
 
 export enum Gender {
-  Male,
-  Female,
+  ذكر,
+  أنثى,
 }

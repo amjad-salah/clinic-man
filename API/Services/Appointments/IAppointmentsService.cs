@@ -5,9 +5,9 @@ namespace API.Services.Appointments;
 
 public interface IAppointmentsService
 {
-    Task<GeneralResponse> GetAllAppointments();
-    Task<GeneralResponse> GetAppointmentById(int id);
-    Task<GeneralResponse> AddAppointment(UpsertAppointmentDto appointment);
-    Task<GeneralResponse> UpdateAppointment(int id, UpsertAppointmentDto appointment);
-    Task<GeneralResponse> DeleteAppointment(int id);
+    Task<AppointmentResponseDto> GetAllAppointments();
+    Task<AppointmentResponseDto> GetAppointmentById(int id);
+    Task<AppointmentResponseDto> AddAppointment(UpsertAppointmentDto appointment);
+    Task<AppointmentResponseDto> UpdateAppointment(int id, UpsertAppointmentDto appointment);
+    Task<AppointmentResponseDto> DeleteAppointment(int id);
 }

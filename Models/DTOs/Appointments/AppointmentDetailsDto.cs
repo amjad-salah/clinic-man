@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Text.Json.Serialization;
 using Models.DTOs.Diagnoses;
 using Models.DTOs.Doctors;
+using Models.DTOs.LabTests;
 using Models.DTOs.Patients;
 using Models.DTOs.Prescriptions;
 using Models.Entities;
@@ -26,4 +27,5 @@ public class AppointmentDetailsDto
     public DoctorDto Doctor { get; set; }
     public List<DiagnoseDto>? Diagnoses { get; set; }
     public List<PrescriptionDto>? Prescriptions { get; set; }
+    public List<UpsertLabTestDto>? Tests { get; set; }
 }

@@ -17,7 +17,7 @@ public class AppointmentsController(
     //Add new appointment
     //POST /api/appointments
     [HttpPost("")]
-    public async Task<ActionResult<GeneralResponse>> AddAppointment(UpsertAppointmentDto appointmentDto)
+    public async Task<ActionResult<AppointmentResponseDto>> AddAppointment(UpsertAppointmentDto appointmentDto)
     {
         try
         {
@@ -27,7 +27,7 @@ public class AppointmentsController(
             {
                 var error = string.Join(',', validationResult.Errors.Select(x => x.ErrorMessage));
 
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new AppointmentResponseDto { Success = false, Error = error });
             }
 
             var response = await service.AddAppointment(appointmentDto);
@@ -47,7 +47,7 @@ public class AppointmentsController(
     //Get all appointments
     //GET /api/appointments
     [HttpGet("")]
-    public async Task<ActionResult<GeneralResponse>> GetAppointments()
+    public async Task<ActionResult<AppointmentResponseDto>> GetAppointments()
     {
         try
         {
@@ -65,7 +65,7 @@ public class AppointmentsController(
     //Get appointment by id
     //GET /api/appointments/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<GeneralResponse>> GetAppointment(int id)
+    public async Task<ActionResult<AppointmentResponseDto>> GetAppointment(int id)
     {
         try
         {
@@ -86,7 +86,7 @@ public class AppointmentsController(
     //Update appointment by id
     //PUT /api/appointments/{id}
     [HttpPut("{id}")]
-    public async Task<ActionResult<GeneralResponse>> UpdateAppointment(int id,
+    public async Task<ActionResult<AppointmentResponseDto>> UpdateAppointment(int id,
         UpsertAppointmentDto appointmentDto)
     {
         try
@@ -96,7 +96,7 @@ public class AppointmentsController(
             if (!validationResult.IsValid)
             {
                 var error = string.Join(',', validationResult.Errors.Select(x => x.ErrorMessage));
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new AppointmentResponseDto { Success = false, Error = error });
             }
 
             var response = await service.UpdateAppointment(id, appointmentDto);
@@ -120,7 +120,7 @@ public class AppointmentsController(
     //Delete appointment by id
     //DELETE /api/appointments/{id}
     [HttpDelete("{id}")]
-    public async Task<ActionResult<GeneralResponse>> DeleteAppointment(int id)
+    public async Task<ActionResult<AppointmentResponseDto>> DeleteAppointment(int id)
     {
         try
         {
