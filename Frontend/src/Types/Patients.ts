@@ -1,3 +1,5 @@
+import { AppointmentDto } from "./Appointments.ts";
+
 export type PatientDto = {
   id: number;
   fullName: string;
@@ -18,7 +20,7 @@ export type PatientDetailsDto = {
   address: string;
   email: string | null;
   allergies: string;
-  // appointments: AppointmentDto[];
+  appointments: AppointmentDto[];
   // diagnoses: DiagnosisDto[];
 };
 
@@ -47,7 +49,7 @@ export type PatientResponseDto = {
   success: boolean;
   error: string | null;
   patients: PatientDto[] | null;
-  patient: PatientDto | null;
+  patient: PatientDetailsDto | null;
 };
 
 export enum Gender {

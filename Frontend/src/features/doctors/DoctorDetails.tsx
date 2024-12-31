@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/Loader.tsx";
 import { IoMdReturnRight } from "react-icons/io";
 import { DayOfWeek } from "../../Types/DoctorSchedules.ts";
+import moment from "moment";
+import { AppointmentStatus } from "../../Types/Appointments.ts";
 
 const DoctorDetails = () => {
   const { id } = useParams();
@@ -95,13 +97,19 @@ const DoctorDetails = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
+                {data?.doctor?.appointments
+                  .filter(
+                    (appointment) =>
+                      appointment.status == AppointmentStatus.مقرر,
+                  )
+                  .map((appointment) => (
+                    <tr>
+                      <td>{appointment.id}</td>
+                      <td>{appointment.patient.fullName}</td>
+                      <td>{moment(appointment.date).format("YYYY/MM/DD")}</td>
+                      <td>{appointment.time}</td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

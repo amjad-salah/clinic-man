@@ -1,4 +1,5 @@
 import { DoctorScheduleDto } from "./DoctorSchedules.ts";
+import { AppointmentDto } from "./Appointments.ts";
 
 type UserDoctorDto = {
   fullName: string;
@@ -17,7 +18,7 @@ export type DoctorDetailsDto = {
   user: UserDoctorDto;
   userId: number;
   schedules?: DoctorScheduleDto[];
-  //appointments: AppointmentDto[];
+  appointments: AppointmentDto[];
 };
 
 export type AddDoctorDto = {
