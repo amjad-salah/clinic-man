@@ -24,10 +24,10 @@ const UpdateTest = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      setTestName(data!.test!.testName);
-      setStatus(data!.test!.status.toString());
-      setResult(data!.test!.result);
-      setDescription(data!.test!.description!);
+      setTestName(data?.test!.testName);
+      setStatus(data?.test!.status.toString());
+      setResult(data?.test!.result);
+      setDescription(data?.test!.description!);
     }
     // @ts-ignore
     if (error && (error.status === 401 || error.status === 403)) {
@@ -47,7 +47,7 @@ const UpdateTest = () => {
         status: parseInt(status),
         result,
         description,
-      });
+      }).unwrap();
 
       toast.success("تمت تعديل الفحص بنجاح");
       navigate(`/labtests`);
@@ -60,7 +60,7 @@ const UpdateTest = () => {
         navigate("/login");
       }
       // @ts-ignore
-      toast.error(e.data.error);
+      toast.error(e.data!.error);
     }
   };
 

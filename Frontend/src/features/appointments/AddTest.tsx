@@ -41,7 +41,7 @@ const AddTest = () => {
         status: parseInt(status),
         result,
         description,
-      });
+      }).unwrap();
       toast.success("تمت إضافة الفحص بنجاح");
       navigate(`/appointments/${id}`);
     } catch (e) {
