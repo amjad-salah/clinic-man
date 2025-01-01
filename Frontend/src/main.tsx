@@ -37,6 +37,8 @@ import AddTest from "./features/appointments/AddTest.tsx";
 import TestsList from "./features/labTests/TestsList.tsx";
 import TestDetails from "./features/labTests/TestDetails.tsx";
 import UpdateTest from "./features/labTests/UpdateTest.tsx";
+import DiagnosesList from "./features/diganoses/DiagnosesList.tsx";
+import AddDiagnose from "./features/appointments/AddDiagnose.tsx";
 
 //Routes
 const router = createBrowserRouter(
@@ -85,6 +87,10 @@ const router = createBrowserRouter(
           <Route path="/appointments/add" element={<AddAppointment />} />
           <Route path="/appointments/:id" element={<AppointmentDetails />} />
           <Route path="/appointments/:id/add-test" element={<AddTest />} />
+          <Route
+            path="/appointments/:id/add-diagnose"
+            element={<AddDiagnose />}
+          />
           {/*<Route*/}
           {/*  path="/appointments/edit/:id"*/}
           {/*  element={<UpdateAppointment />}*/}
@@ -95,6 +101,10 @@ const router = createBrowserRouter(
           <Route path="/labtests" index={true} element={<TestsList />} />
           <Route path="/labtests/:id" element={<TestDetails />} />
           <Route path="/labtests/edit/:id" element={<UpdateTest />} />
+        </Route>
+
+        <Route path="/diagnoses">
+          <Route path="/diagnoses" index={true} element={<DiagnosesList />} />
         </Route>
       </Route>
     </Route>,

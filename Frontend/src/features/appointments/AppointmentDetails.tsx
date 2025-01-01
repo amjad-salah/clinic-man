@@ -77,18 +77,29 @@ const AppointmentDetails = () => {
               <div className="d-flex justify-content-between">
                 <h6 className="mb-2">التشخيص</h6>
                 <Link
-                  to={`/appointments/${id}/add-test`}
+                  to={`/appointments/${id}/add-diagnose`}
                   className="btn btn-primary btn-sm"
                 >
                   إضافة
                 </Link>
               </div>
               <hr className="mb-3" />
-              {/*<ul>*/}
-              {/*  {data?.appointment!.diagnoses.map((diagnosis) => (*/}
-              {/*    <li key={diagnosis.id}>{diagnosis.name}</li>*/}
-              {/*  ))}*/}
-              {/*</ul>*/}
+              <table className="table table-striped table-hover table-sm">
+                <thead>
+                  <tr>
+                    <th>رقم الحجز</th>
+                    <th>التشخيص</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data?.appointment!.diagnoses!.map((diagnose) => (
+                    <tr>
+                      <td>{diagnose.appointmentId}</td>
+                      <td>{diagnose.diagnosis}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
 
               <div className="d-flex justify-content-between">
                 <h6 className="mb-2">الفحوصات</h6>

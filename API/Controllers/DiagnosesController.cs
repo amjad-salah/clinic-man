@@ -18,7 +18,7 @@ public class DiagnosesController(
     //POST /api/diagnoses
     [HttpPost("")]
     [Authorize(Roles = "Doctor")]
-    public async Task<ActionResult<GeneralResponse>> AddDiagnose(UpsertDiagnoseDto diagnoseDto)
+    public async Task<ActionResult<DiganoseResponseDto>> AddDiagnose(UpsertDiagnoseDto diagnoseDto)
     {
         try
         {
@@ -28,7 +28,7 @@ public class DiagnosesController(
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
 
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new DiganoseResponseDto { Success = false, Error = error });
             }
 
             var response = await service.AddDiagnose(diagnoseDto);
@@ -48,7 +48,7 @@ public class DiagnosesController(
     //Get All Diagnoses
     //GET /api/diagnoses
     [HttpGet("")]
-    public async Task<ActionResult<GeneralResponse>> GetDiagnoses()
+    public async Task<ActionResult<DiganoseResponseDto>> GetDiagnoses()
     {
         try
         {
@@ -66,7 +66,7 @@ public class DiagnosesController(
     //Get diagnose by id
     //GET /api/diagnoses/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<GeneralResponse>> GetDiagnose(int id)
+    public async Task<ActionResult<DiganoseResponseDto>> GetDiagnose(int id)
     {
         try
         {
@@ -88,7 +88,7 @@ public class DiagnosesController(
     //PUT /api/diagnoses/{id}
     [HttpPut("{id}")]
     [Authorize(Roles = "Doctor")]
-    public async Task<ActionResult<GeneralResponse>> UpdateDiagnose(int id, UpsertDiagnoseDto diagnoseDto)
+    public async Task<ActionResult<DiganoseResponseDto>> UpdateDiagnose(int id, UpsertDiagnoseDto diagnoseDto)
     {
         try
         {
@@ -97,7 +97,7 @@ public class DiagnosesController(
             if (!validation.IsValid)
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new DiganoseResponseDto { Success = false, Error = error });
             }
 
             var response = await service.UpdateDiagnose(id, diagnoseDto);
@@ -123,7 +123,7 @@ public class DiagnosesController(
     //DELETE /api/diagnoses/{id}
     [HttpDelete("{id}")]
     [Authorize(Roles = "Doctor")]
-    public async Task<ActionResult<GeneralResponse>> DeleteDiagnose(int id)
+    public async Task<ActionResult<DiganoseResponseDto>> DeleteDiagnose(int id)
     {
         try
         {

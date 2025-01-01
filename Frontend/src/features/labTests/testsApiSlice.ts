@@ -23,7 +23,7 @@ const testsApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["LabTests"],
+      invalidatesTags: ["LabTests", "Appointments"],
     }),
     updateTest: builder.mutation<TestResponseDto, UpdateLabTestDto>({
       query: (data) => ({
@@ -31,14 +31,14 @@ const testsApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["LabTests"],
+      invalidatesTags: ["LabTests", "Appointments"],
     }),
     deleteTest: builder.mutation<TestResponseDto, number>({
       query: (id) => ({
         url: `${TESTS_URL}/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["LabTests"],
+      invalidatesTags: ["LabTests", "Appointments"],
     }),
   }),
 });

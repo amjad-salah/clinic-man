@@ -9,7 +9,7 @@ namespace API.Services.Diagnoses;
 
 public class DiagnosesService(AppDbContext context) : IDiagnosesService
 {
-    public async Task<GeneralResponse> GetDiagnoses()
+    public async Task<DiganoseResponseDto> GetDiagnoses()
     {
         var diagnoses = await context.Diagnoses.AsNoTracking()
             .Include(d => d.Appointment)
@@ -17,10 +17,10 @@ public class DiagnosesService(AppDbContext context) : IDiagnosesService
             .ProjectToType<DiagnoseDetailsDto>()
             .ToListAsync();
 
-        return new GeneralResponse { Success = true, Data = diagnoses };
+        return new DiganoseResponseDto { Success = true, Diagnoses = diagnoses };
     }
 
-    public async Task<GeneralResponse> GetDiagnoseById(int id)
+    public async Task<DiganoseResponseDto> GetDiagnoseById(int id)
     {
         var diagnose = await context.Diagnoses.AsNoTracking()
             .Include(d => d.Appointment)
@@ -28,18 +28,18 @@ public class DiagnosesService(AppDbContext context) : IDiagnosesService
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (diagnose == null)
-            return new GeneralResponse { Success = false, Error = "Diagnoses Not Found" };
+            return new DiganoseResponseDto { Success = false, Error = "Diagnoses Not Found" };
 
-        return new GeneralResponse { Success = true, Data = diagnose.Adapt<DiagnoseDetailsDto>() };
+        return new DiganoseResponseDto { Success = true, Diagnose = diagnose.Adapt<DiagnoseDetailsDto>() };
     }
 
-    public async Task<GeneralResponse> AddDiagnose(UpsertDiagnoseDto diagnose)
+    public async Task<DiganoseResponseDto> AddDiagnose(UpsertDiagnoseDto diagnose)
     {
         var existAppointment = await context.Appointments.AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == diagnose.AppointmentId);
 
         if (existAppointment == null)
-            return new GeneralResponse { Success = false, Error = "Appointment Not Found" };
+            return new DiganoseResponseDto { Success = false, Error = "Appointment Not Found" };
 
         var newDiagnose = diagnose.Adapt<Diagnose>();
         newDiagnose.PatientId = existAppointment.PatientId;
@@ -47,15 +47,15 @@ public class DiagnosesService(AppDbContext context) : IDiagnosesService
         context.Diagnoses.Add(newDiagnose);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true, Data = diagnose };
+        return new DiganoseResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> UpdateDiagnose(int id, UpsertDiagnoseDto diagnose)
+    public async Task<DiganoseResponseDto> UpdateDiagnose(int id, UpsertDiagnoseDto diagnose)
     {
         var existDiagnose = await context.Diagnoses.FindAsync(id);
 
         if (existDiagnose == null)
-            return new GeneralResponse { Success = false, Error = "Diagnoses Not Found" };
+            return new DiganoseResponseDto { Success = false, Error = "Diagnoses Not Found" };
 
         if (existDiagnose.AppointmentId != diagnose.AppointmentId)
         {
@@ -63,7 +63,7 @@ public class DiagnosesService(AppDbContext context) : IDiagnosesService
                 .FirstOrDefaultAsync(x => x.Id == diagnose.AppointmentId);
 
             if (existAppointment == null)
-                return new GeneralResponse { Success = false, Error = "Appointment Not Found" };
+                return new DiganoseResponseDto { Success = false, Error = "Appointment Not Found" };
 
             existDiagnose.PatientId = existAppointment.PatientId;
             existDiagnose.AppointmentId = existAppointment.Id;
@@ -73,19 +73,19 @@ public class DiagnosesService(AppDbContext context) : IDiagnosesService
 
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new DiganoseResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> DeleteDiagnose(int id)
+    public async Task<DiganoseResponseDto> DeleteDiagnose(int id)
     {
         var diagnose = await context.Diagnoses.FindAsync(id);
 
         if (diagnose == null)
-            return new GeneralResponse { Success = false, Error = "Diagnoses Not Found" };
+            return new DiganoseResponseDto { Success = false, Error = "Diagnoses Not Found" };
 
         context.Diagnoses.Remove(diagnose);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new DiganoseResponseDto { Success = true };
     }
 }

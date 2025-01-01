@@ -1,4 +1,5 @@
 import { AppointmentDto } from "./Appointments.ts";
+import { DiagnoseDto } from "./Diagnoses.ts";
 
 export type PatientDto = {
   id: number;
@@ -21,7 +22,7 @@ export type PatientDetailsDto = {
   email: string | null;
   allergies: string;
   appointments: AppointmentDto[];
-  // diagnoses: DiagnosisDto[];
+  diagnoses: DiagnoseDto[];
 };
 
 export type AddPatientDto = {

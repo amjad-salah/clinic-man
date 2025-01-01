@@ -5,9 +5,9 @@ namespace API.Services.Diagnoses;
 
 public interface IDiagnosesService
 {
-    Task<GeneralResponse> GetDiagnoses();
-    Task<GeneralResponse> GetDiagnoseById(int id);
-    Task<GeneralResponse> AddDiagnose(UpsertDiagnoseDto diagnose);
-    Task<GeneralResponse> UpdateDiagnose(int id, UpsertDiagnoseDto diagnose);
-    Task<GeneralResponse> DeleteDiagnose(int id);
+    Task<DiganoseResponseDto> GetDiagnoses();
+    Task<DiganoseResponseDto> GetDiagnoseById(int id);
+    Task<DiganoseResponseDto> AddDiagnose(UpsertDiagnoseDto diagnose);
+    Task<DiganoseResponseDto> UpdateDiagnose(int id, UpsertDiagnoseDto diagnose);
+    Task<DiganoseResponseDto> DeleteDiagnose(int id);
 }

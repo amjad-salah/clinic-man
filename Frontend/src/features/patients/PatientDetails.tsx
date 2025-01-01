@@ -64,14 +64,30 @@ const PatientDetails = () => {
                 <span className="fw-bold me-2">رقم الهاتف:</span>
                 {data?.patient!.phoneNo}
               </p>
-              <h5 className="mb-2 mt-5">التشخيصات</h5>
+              <h6 className="mb-2 mt-5">التشخيصات</h6>
               <hr className="mb-3" />
+              <table className="table table-striped table-hover table-sm">
+                <thead>
+                  <tr>
+                    <th>رقم الحجز</th>
+                    <th>التشخيص</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.patient?.diagnoses.map((diagnose) => (
+                    <tr>
+                      <td>{diagnose.appointmentId}</td>
+                      <td>{diagnose.diagnosis}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
           <div className="col-md-8">
             <h5 className="mb-2 text-center">الحجوزات</h5>
             <hr className="mb-3" />
-            <table className="table table-hover table-striped shadow">
+            <table className="table table-hover table-striped table-sm shadow">
               <thead>
                 <tr>
                   <th>رقم الحجز</th>
