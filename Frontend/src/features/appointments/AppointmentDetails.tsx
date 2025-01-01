@@ -74,7 +74,15 @@ const AppointmentDetails = () => {
         <div className="row">
           <div className="col-md-6">
             <div className="card card-body p-4 mb-5 shadow">
-              <h5 className="mb-2 text-center">التشخيص</h5>
+              <div className="d-flex justify-content-between">
+                <h6 className="mb-2">التشخيص</h6>
+                <Link
+                  to={`/appointments/${id}/add-test`}
+                  className="btn btn-primary btn-sm"
+                >
+                  إضافة
+                </Link>
+              </div>
               <hr className="mb-3" />
               {/*<ul>*/}
               {/*  {data?.appointment!.diagnoses.map((diagnosis) => (*/}
@@ -82,18 +90,45 @@ const AppointmentDetails = () => {
               {/*  ))}*/}
               {/*</ul>*/}
 
-              <h5 className="mb-2 text-center">الفحوصات</h5>
+              <div className="d-flex justify-content-between">
+                <h6 className="mb-2">الفحوصات</h6>
+                <Link
+                  to={`/appointments/${id}/add-test`}
+                  className="btn btn-primary btn-sm"
+                >
+                  إضافة
+                </Link>
+              </div>
               <hr className="mb-3" />
-              {/*<ul>*/}
-              {/*  {data?.appointment!.diagnoses.map((diagnosis) => (*/}
-              {/*    <li key={diagnosis.id}>{diagnosis.name}</li>*/}
-              {/*  ))}*/}
-              {/*</ul>*/}
+              <table className="table table-striped table-sm">
+                <thead>
+                  <tr>
+                    <th>الفحص</th>
+                    <th>النتيجة</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data?.appointment!.tests!.map((test) => (
+                    <tr key={test.id}>
+                      <td>{test.testName}</td>
+                      <td>{test.result}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
           <div className="col-md-6">
             <div className="card card-body p-4 mb-5 shadow">
-              <h5 className="mb-2 text-center">العلاج</h5>
+              <div className="d-flex justify-content-between">
+                <h6 className="mb-2">العلاج</h6>
+                <Link
+                  to={`/appointments/${id}/add-test`}
+                  className="btn btn-primary btn-sm"
+                >
+                  إضافة
+                </Link>
+              </div>
               <hr className="mb-3" />
               {/*<ul>*/}
               {/*  {data?.appointment!.medicines.map((medicine) => (*/}

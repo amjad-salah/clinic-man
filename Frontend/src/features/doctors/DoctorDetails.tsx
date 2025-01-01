@@ -93,7 +93,6 @@ const DoctorDetails = () => {
                   <th>إسم المريض</th>
                   <th>تاريخ الحجز</th>
                   <th>زمن الحجز</th>
-                  <th></th>
                 </tr>
               </thead>
               <tbody>

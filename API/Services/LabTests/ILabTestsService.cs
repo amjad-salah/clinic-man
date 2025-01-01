@@ -5,9 +5,9 @@ namespace API.Services.LabTests;
 
 public interface ILabTestsService
 {
-    Task<GeneralResponse> GetTests();
-    Task<GeneralResponse> GetTestById(int id);
-    Task<GeneralResponse> CreateTest(UpsertLabTestDto test);
-    Task<GeneralResponse> UpdateTest(int id, UpsertLabTestDto test);
-    Task<GeneralResponse> DeleteTest(int id);
+    Task<LabTestResponseDto> GetTests();
+    Task<LabTestResponseDto> GetTestById(int id);
+    Task<LabTestResponseDto> CreateTest(UpsertLabTestDto test);
+    Task<LabTestResponseDto> UpdateTest(int id, UpsertLabTestDto test);
+    Task<LabTestResponseDto> DeleteTest(int id);
 }

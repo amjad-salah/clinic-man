@@ -11,7 +11,5 @@ public class UpsertLabTestDto
     public string Result { get; set; }
     public TestStatus Status { get; set; }
     public int PatientId { get; set; }
-    public PatientDto? Patient { get; set; }
     public int AppointmentId { get; set; }
-    public AppointmentDto? Appointment { get; set; }
 }

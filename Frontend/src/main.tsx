@@ -33,7 +33,10 @@ import UpdatePatient from "./features/patients/UpdatePatient.tsx";
 import AppointmentsList from "./features/appointments/AppointmentsList.tsx";
 import AddAppointment from "./features/appointments/AddAppointment.tsx";
 import AppointmentDetails from "./features/appointments/AppointmentDetails.tsx";
-import UpdateAppointment from "./features/appointments/UpdateAppointment.tsx";
+import AddTest from "./features/appointments/AddTest.tsx";
+import TestsList from "./features/labTests/TestsList.tsx";
+import TestDetails from "./features/labTests/TestDetails.tsx";
+import UpdateTest from "./features/labTests/UpdateTest.tsx";
 
 //Routes
 const router = createBrowserRouter(
@@ -59,17 +62,20 @@ const router = createBrowserRouter(
             element={<UpdateDoctor />}
           />
         </Route>
+
         <Route path="/schedules">
           <Route path="/schedules" index={true} element={<SchedulesList />} />
           <Route path="/schedules/add" element={<AddSchedule />} />
           <Route path="/schedules/edit/:id" element={<UpdateSchedule />} />
         </Route>
+
         <Route path="/patients">
           <Route path="/patients" index={true} element={<PatientsList />} />
           <Route path="/patients/add" element={<AddPatient />} />
           <Route path="/patients/:id" element={<PatientDetails />} />
           <Route path="/patients/edit/:id" element={<UpdatePatient />} />
         </Route>
+
         <Route path="/appointments">
           <Route
             path="/appointments"
@@ -78,10 +84,17 @@ const router = createBrowserRouter(
           />
           <Route path="/appointments/add" element={<AddAppointment />} />
           <Route path="/appointments/:id" element={<AppointmentDetails />} />
-          <Route
-            path="/appointments/edit/:id"
-            element={<UpdateAppointment />}
-          />
+          <Route path="/appointments/:id/add-test" element={<AddTest />} />
+          {/*<Route*/}
+          {/*  path="/appointments/edit/:id"*/}
+          {/*  element={<UpdateAppointment />}*/}
+          {/*/>*/}
+        </Route>
+
+        <Route path="/labtests">
+          <Route path="/labtests" index={true} element={<TestsList />} />
+          <Route path="/labtests/:id" element={<TestDetails />} />
+          <Route path="/labtests/edit/:id" element={<UpdateTest />} />
         </Route>
       </Route>
     </Route>,

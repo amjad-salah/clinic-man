@@ -1,5 +1,6 @@
 import { PatientDto } from "./Patients.ts";
 import { DoctorDto } from "./Doctors.ts";
+import { LabTestDetailsDto } from "./LabTests.ts";
 
 export enum AppointmentStatus {
   مقرر,
@@ -29,6 +30,7 @@ export type AppointmentDetailsDto = {
   doctorId: number;
   patient: PatientDto;
   doctor: DoctorDto;
+  tests: LabTestDetailsDto[] | null;
 };
 
 export type AddAppointmentDto = {

@@ -84,7 +84,7 @@ const PatientDetails = () => {
                 {data.patient?.appointments.map((appointment) => (
                   <tr>
                     <td>{appointment.id}</td>
-                    <td>{appointment.doctor.user.fullName}</td>
+                    <td>{appointment.doctor.user!.fullName}</td>
                     <td>{moment(appointment.date).format("YYYY/MM/DD")}</td>
                     <td>{appointment.time}</td>
                   </tr>

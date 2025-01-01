@@ -89,12 +89,12 @@ const AppointmentsList = () => {
                     >
                       <BsInfoCircle />
                     </Link>
-                    <Link
-                      to={`/appointments/edit/${appointment.id}`}
-                      className="btn btn-primary btn-sm me-2"
-                    >
-                      <FaRegEdit />
-                    </Link>
+                    {/*<Link*/}
+                    {/*  to={`/appointments/edit/${appointment.id}`}*/}
+                    {/*  className="btn btn-primary btn-sm me-2"*/}
+                    {/*>*/}
+                    {/*  <FaRegEdit />*/}
+                    {/*</Link>*/}
                     <button
                       className="btn btn-danger btn-sm"
                       onClick={() => handleDeleteAppointment(appointment.id)}

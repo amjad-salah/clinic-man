@@ -23,7 +23,8 @@ public class DoctorService(AppDbContext context) : IDoctorService
         var doctor = await context.Doctors.AsNoTracking()
             .Include(d => d.User)
             .Include(d => d.Schedules)
-            .Include(d => d.Appointments)
+            .Include(d => d.Appointments)!
+            .ThenInclude(a => a.Patient)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (doctor == null)

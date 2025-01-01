@@ -9,7 +9,7 @@ public class LabTest : BaseEntity
 
     public string? Description { get; set; }
     public string Result { get; set; } = string.Empty;
-    public TestStatus Status { get; set; } = TestStatus.Ordered;
+    public TestStatus Status { get; set; } = TestStatus.Pending;
     public int PatientId { get; set; }
 
     [ForeignKey("PatientId")] public virtual Patient? Patient { get; set; }
@@ -21,7 +21,7 @@ public class LabTest : BaseEntity
 
 public enum TestStatus
 {
-    Ordered,
+    Pending,
     Completed,
     Cancelled
 }

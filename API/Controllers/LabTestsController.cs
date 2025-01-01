@@ -17,7 +17,7 @@ public class LabTestsController(
     //Add new Test
     //POST /api/labtests
     [HttpPost("")]
-    public async Task<ActionResult<GeneralResponse>> AddTest(UpsertLabTestDto test)
+    public async Task<ActionResult<LabTestResponseDto>> AddTest(UpsertLabTestDto test)
     {
         try
         {
@@ -27,7 +27,7 @@ public class LabTestsController(
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
 
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new LabTestResponseDto { Success = false, Error = error });
             }
 
             var response = await service.CreateTest(test);
@@ -47,7 +47,7 @@ public class LabTestsController(
     //Get All Tests
     //GET /api/labtests
     [HttpGet("")]
-    public async Task<ActionResult<GeneralResponse>> GetTests()
+    public async Task<ActionResult<LabTestResponseDto>> GetTests()
     {
         try
         {
@@ -65,7 +65,7 @@ public class LabTestsController(
     //Get test by id
     //GET /api/labtests/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<GeneralResponse>> GetTest(int id)
+    public async Task<ActionResult<LabTestResponseDto>> GetTest(int id)
     {
         try
         {
@@ -86,7 +86,7 @@ public class LabTestsController(
     //Update test by id
     //PUT /api/labtests/{id}
     [HttpPut("{id}")]
-    public async Task<ActionResult<GeneralResponse>> UpdateTest(int id, UpsertLabTestDto test)
+    public async Task<ActionResult<LabTestResponseDto>> UpdateTest(int id, UpsertLabTestDto test)
     {
         try
         {
@@ -95,20 +95,17 @@ public class LabTestsController(
             if (!validation.IsValid)
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new LabTestResponseDto { Success = false, Error = error });
             }
 
             var response = await service.UpdateTest(id, test);
 
-            if (!response.Success)
-            {
-                if (response.Error == "Test not found")
-                    return NotFound(response);
+            if (response.Success) return Ok(response);
+            if (response.Error == "Test not found")
+                return NotFound(response);
 
-                return BadRequest(response);
-            }
+            return BadRequest(response);
 
-            return Ok(response);
         }
         catch (Exception e)
         {
@@ -120,7 +117,7 @@ public class LabTestsController(
     //Delete test by id
     //DELETE /api/labtests/{id}
     [HttpDelete("{id}")]
-    public async Task<ActionResult<GeneralResponse>> DeleteTest(int id)
+    public async Task<ActionResult<LabTestResponseDto>> DeleteTest(int id)
     {
         try
         {

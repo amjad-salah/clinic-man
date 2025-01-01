@@ -21,7 +21,9 @@ public class PatientsService(AppDbContext context) : IPatientsService
     public async Task<PatientResponseDto> GetPatientById(int id)
     {
         var patient = await context.Patients.AsNoTracking()
-            .Include(p => p.Appointments)
+            .Include(p => p.Appointments)!
+            .ThenInclude(a =>a.Doctor)
+            .ThenInclude(d => d!.User)
             .Include(p => p.Diagnoses)
             .FirstOrDefaultAsync(p => p.Id == id);
 
