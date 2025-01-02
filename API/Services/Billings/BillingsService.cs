@@ -11,7 +11,7 @@ namespace API.Services.Billings;
 
 public class BillingsService(AppDbContext context) : IBillingsService
 {
-    public async Task<GeneralResponse> GetBillings()
+    public async Task<BillingResponseDto> GetBillings()
     {
         var billings = await context.Billings.OrderByDescending(b => b.Date)
             .AsNoTracking()
@@ -20,10 +20,10 @@ public class BillingsService(AppDbContext context) : IBillingsService
             .ProjectToType<BillingDto>()
             .ToListAsync();
 
-        return new GeneralResponse { Success = true, Data = billings };
+        return new BillingResponseDto { Success = true, Billings = billings };
     }
 
-    public async Task<GeneralResponse> GetBillingById(int id)
+    public async Task<BillingResponseDto> GetBillingById(int id)
     {
         var billing = await context.Billings.AsNoTracking()
             .Include(b => b.Appointment)
@@ -33,97 +33,107 @@ public class BillingsService(AppDbContext context) : IBillingsService
             .FirstOrDefaultAsync(b => b.Id == id);
 
         if (billing == null)
-            return new GeneralResponse { Success = false, Error = "Billing not found" };
+            return new BillingResponseDto { Success = false, Error = "Billing not found" };
 
-        return new GeneralResponse { Success = true, Data = billing.Adapt<BillingDetailsDto>() };
+        return new BillingResponseDto { Success = true, Billing = billing.Adapt<BillingDetailsDto>() };
     }
 
-    public async Task<GeneralResponse> AddBilling(UpsertBillingDto billing)
+    public async Task<BillingResponseDto> AddBilling(UpsertBillingDto billing)
     {
         var existAppointment = await context.Appointments.AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == billing.AppointmentId);
 
         if (existAppointment == null)
-            return new GeneralResponse { Success = false, Error = "Appointment not found" };
+            return new BillingResponseDto { Success = false, Error = "Appointment not found" };
 
-        billing.PatientId = existAppointment.PatientId;
-        billing.Status = BillStatus.Pending;
-
+        
         var newBilling = billing.Adapt<Billing>();
+        newBilling.PatientId = existAppointment.PatientId;
+        newBilling.SubTotal = 0;
+        newBilling.Total = 0;
+        newBilling.PaidAmount = 0;
+        newBilling.RemainingBalance = 0;
+        newBilling.Status = BillStatus.Pending;
+        
         context.Billings.Add(newBilling);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true, Data = newBilling };
+        return new BillingResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> UpdateBilling(int id, UpsertBillingDto billing)
-    {
-        var existBilling = await context.Billings.FindAsync(id);
+    // public async Task<BillingResponseDto> UpdateBilling(int id, UpsertBillingDto billing)
+    // {
+    //     var existBilling = await context.Billings.FindAsync(id);
+    //
+    //     if (existBilling == null)
+    //         return new BillingResponseDto { Success = false, Error = "Billing not found" };
+    //
+    //     if (existBilling.AppointmentId != billing.AppointmentId)
+    //     {
+    //         var existAppointment = await context.Appointments.AsNoTracking()
+    //             .FirstOrDefaultAsync(a => a.Id == existBilling.AppointmentId);
+    //
+    //         if (existAppointment == null)
+    //             return new BillingResponseDto { Success = false, Error = "Appointment not found" };
+    //
+    //         existBilling.PatientId = existAppointment.PatientId;
+    //         existBilling.AppointmentId = existAppointment.Id;
+    //     }
+    //
+    //     existBilling.Date = billing.Date;
+    //
+    //     if (existBilling.Tax != billing.Tax && existBilling.Total != 0)
+    //     {
+    //         existBilling.Tax = billing.Tax;
+    //         existBilling.Total = billing.SubTotal + billing.SubTotal * existBilling.Tax / 100;
+    //     }
+    //
+    //     await context.SaveChangesAsync();
+    //
+    //     return new BillingResponseDto { Success = true };
+    // }
 
-        if (existBilling == null)
-            return new GeneralResponse { Success = false, Error = "Billing not found" };
-
-        if (existBilling.AppointmentId != billing.AppointmentId)
-        {
-            var existAppointment = await context.Appointments.AsNoTracking()
-                .FirstOrDefaultAsync(a => a.Id == existBilling.AppointmentId);
-
-            if (existAppointment == null)
-                return new GeneralResponse { Success = false, Error = "Appointment not found" };
-
-            existBilling.PatientId = existAppointment.PatientId;
-            existBilling.AppointmentId = existAppointment.Id;
-        }
-
-        existBilling.Date = billing.Date;
-
-        if (existBilling.Tax != billing.Tax && existBilling.Total != 0)
-        {
-            existBilling.Tax = billing.Tax;
-            existBilling.Total = billing.SubTotal + billing.SubTotal * existBilling.Tax / 100;
-        }
-
-        await context.SaveChangesAsync();
-
-        return new GeneralResponse { Success = true };
-    }
-
-    public async Task<GeneralResponse> DeleteBilling(int id)
+    public async Task<BillingResponseDto> DeleteBilling(int id)
     {
         var billing = await context.Billings.FindAsync(id);
 
         if (billing == null)
-            return new GeneralResponse { Success = false, Error = "Billing not found" };
+            return new BillingResponseDto { Success = false, Error = "Billing not found" };
 
         context.Billings.Remove(billing);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new BillingResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> AddBillingItem(int id, UpsertBillingItemDto item)
+    public async Task<BillingResponseDto> AddBillingItem(int id, UpsertBillingItemDto item)
     {
         var existBilling = await context.Billings.FindAsync(id);
 
         if (existBilling == null || existBilling.Status == BillStatus.Paid)
-            return new GeneralResponse { Success = false, Error = "Billing not found or billing is already paid" };
+            return new BillingResponseDto { Success = false, Error = "Billing not found or billing is already paid" };
+        
+        var newItem = item.Adapt<BillItem>();
+        
+        newItem.Total = item.Quantity * item.UnitPrice;
 
-        context.BillItems.Add(item.Adapt<BillItem>());
+        context.BillItems.Add(newItem);
 
-        existBilling.SubTotal += item.Total;
+        existBilling.SubTotal += newItem.Total;
         existBilling.Total = existBilling.SubTotal + existBilling.SubTotal * existBilling.Tax / 100;
+        existBilling.RemainingBalance = existBilling.Total - existBilling.PaidAmount;
 
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new BillingResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> DeleteItem(int id)
+    public async Task<BillingResponseDto> DeleteItem(int id)
     {
         var existItem = await context.BillItems.FindAsync(id);
 
         if (existItem == null)
-            return new GeneralResponse { Success = false, Error = "Item not found" };
+            return new BillingResponseDto { Success = false, Error = "Item not found" };
 
         var billing = await context.Billings.FindAsync(existItem.BillingId);
 
@@ -131,29 +141,32 @@ public class BillingsService(AppDbContext context) : IBillingsService
         {
             billing.SubTotal -= existItem.Total;
             billing.Total = billing.SubTotal + billing.SubTotal * billing.Tax / 100;
+            billing.RemainingBalance = billing.Total - billing.PaidAmount;
         }
 
         context.BillItems.Remove(existItem);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new BillingResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> AddBillingPayment(int id, UpsertPaymentDto payment)
+    public async Task<BillingResponseDto> AddBillingPayment(int id, UpsertPaymentDto payment)
     {
         var existBilling = await context.Billings.FindAsync(id);
 
         if (existBilling == null || existBilling.Status == BillStatus.Paid)
-            return new GeneralResponse
+            return new BillingResponseDto
             {
                 Success = false,
                 Error = "Billing not found or billing is already paid"
             };
+        
+        var newPayment = payment.Adapt<Payment>();
+        newPayment.Date = DateOnly.FromDateTime(DateTime.UtcNow);
+        
+        context.Payments.Add(newPayment);
 
-        payment.Date = DateOnly.FromDateTime(DateTime.UtcNow);
-        context.Payments.Add(payment.Adapt<Payment>());
-
-        existBilling.PaidAmount += payment.Amount;
+        existBilling.PaidAmount += newPayment.Amount;
         existBilling.RemainingBalance = existBilling.Total - existBilling.PaidAmount;
 
         if (existBilling.RemainingBalance == 0)
@@ -161,15 +174,15 @@ public class BillingsService(AppDbContext context) : IBillingsService
 
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new BillingResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> DeletePayment(int id)
+    public async Task<BillingResponseDto> DeletePayment(int id)
     {
         var existPayment = await context.Payments.FindAsync(id);
 
         if (existPayment == null)
-            return new GeneralResponse { Success = false, Error = "Payment not found" };
+            return new BillingResponseDto { Success = false, Error = "Payment not found" };
 
         var billing = await context.Billings.FindAsync(existPayment.BillingId);
 
@@ -182,6 +195,6 @@ public class BillingsService(AppDbContext context) : IBillingsService
         context.Payments.Remove(existPayment);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new BillingResponseDto { Success = true };
     }
 }

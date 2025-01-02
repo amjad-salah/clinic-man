@@ -7,13 +7,13 @@ namespace API.Services.Billings;
 
 public interface IBillingsService
 {
-    Task<GeneralResponse> GetBillings();
-    Task<GeneralResponse> GetBillingById(int id);
-    Task<GeneralResponse> AddBilling(UpsertBillingDto billing);
-    Task<GeneralResponse> UpdateBilling(int id, UpsertBillingDto billing);
-    Task<GeneralResponse> DeleteBilling(int id);
-    Task<GeneralResponse> AddBillingItem(int id, UpsertBillingItemDto item);
-    Task<GeneralResponse> DeleteItem(int id);
-    Task<GeneralResponse> AddBillingPayment(int id, UpsertPaymentDto payment);
-    Task<GeneralResponse> DeletePayment(int id);
+    Task<BillingResponseDto> GetBillings();
+    Task<BillingResponseDto> GetBillingById(int id);
+    Task<BillingResponseDto> AddBilling(UpsertBillingDto billing);
+    // Task<BillingResponseDto> UpdateBilling(int id, UpsertBillingDto billing);
+    Task<BillingResponseDto> DeleteBilling(int id);
+    Task<BillingResponseDto> AddBillingItem(int id, UpsertBillingItemDto item);
+    Task<BillingResponseDto> DeleteItem(int id);
+    Task<BillingResponseDto> AddBillingPayment(int id, UpsertPaymentDto payment);
+    Task<BillingResponseDto> DeletePayment(int id);
 }

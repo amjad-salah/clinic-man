@@ -12,6 +12,8 @@ import { GrSchedules } from "react-icons/gr";
 import { GiTestTubes } from "react-icons/gi";
 import { LiaDiagnosesSolid } from "react-icons/lia";
 import { GiMedicines } from "react-icons/gi";
+import { FaMoneyBill } from "react-icons/fa";
+import { MdOutlineInventory2 } from "react-icons/md";
 import { Link } from "react-router-dom";
 const Navbar = () => {
   const dispatch = useAppDispatch();
@@ -82,6 +84,18 @@ const Navbar = () => {
               <Link to="prescriptions" className="sidebar-link">
                 <GiMedicines />
                 <span className="ms-2">الوصفات</span>
+              </Link>
+            </li>
+            <li className="sidebar-item">
+              <Link to="bills" className="sidebar-link">
+                <FaMoneyBill />
+                <span className="ms-2">الفواتير</span>
+              </Link>
+            </li>
+            <li className="sidebar-item">
+              <Link to="inventories" className="sidebar-link">
+                <MdOutlineInventory2 />
+                <span className="ms-2">المخزون</span>
               </Link>
             </li>
             <li className="sidebar-item">
