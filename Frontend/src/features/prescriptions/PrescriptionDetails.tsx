@@ -1,15 +1,14 @@
-import { useGetTestByIdQuery } from "./testsApiSlice.ts";
+import { useGetPrescriptionByIdQuery } from "./prescriptionsApiSlice.ts";
 import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/Loader.tsx";
 import { IoMdReturnRight } from "react-icons/io";
 import { TestStatus } from "../../Types/LabTests.ts";
 
-const TestDetails = () => {
+const PrescriptionDetails = () => {
   const { id } = useParams();
 
-  const { data, isSuccess, isLoading, isError, error } = useGetTestByIdQuery(
-    parseInt(id!),
-  );
+  const { data, isSuccess, isLoading, isError, error } =
+    useGetPrescriptionByIdQuery(Number(id));
 
   let content = <div></div>;
 
@@ -42,46 +41,46 @@ const TestDetails = () => {
         <Link to="/labtests" className="btn btn-primary mb-5">
           <IoMdReturnRight />
         </Link>
-        <h4 className="text-center mb-2">تفاصيل فحص</h4>
+        <h4 className="text-center mb-2">تفاصيل وصفة طبية</h4>
         <hr className="mb-5" />
         <div className="card card-body p-4">
           <div className="row mb-4">
             <div className="col-md-4">
               <p>
-                <span className="fw-bold me-2">الفحص:</span>
-                {data?.test?.testName}
-              </p>
-            </div>
-            <div className="col-md-4">
-              <p>
                 <span className="fw-bold me-2">رقم الحجز:</span>
-                {data?.test?.appointmentId}
+                {data?.prescription?.appointmentId}
               </p>
             </div>
             <div className="col-md-4">
               <p>
-                <span className="fw-bold me-2">الحالة:</span>
-                {TestStatus[data?.test?.status!]}
+                <span className="fw-bold me-2">إسم المريض:</span>
+                {data?.prescription?.patient.fullName}
+              </p>
+            </div>
+            <div className="col-md-4">
+              <p>
+                <span className="fw-bold me-2">إسم الدواء:</span>
+                {data?.prescription?.medicationName}
               </p>
             </div>
           </div>
           <div className="row">
             <div className="col-md-4">
               <p>
-                <span className="fw-bold me-2">المريض:</span>
-                {data?.test?.patient.fullName}
+                <span className="fw-bold me-2">الجرعة:</span>
+                {data?.prescription?.dosage}
               </p>
             </div>
             <div className="col-md-4">
               <p>
-                <span className="fw-bold me-2">الوصف:</span>
-                {data?.test?.description}
+                <span className="fw-bold me-2">التكرار:</span>
+                {data?.prescription?.frequency}
               </p>
             </div>
             <div className="col-md-4">
               <p>
-                <span className="fw-bold me-2">النتيجة:</span>
-                {data?.test?.result}
+                <span className="fw-bold me-2">المدة:</span>
+                {data?.prescription?.duration}
               </p>
             </div>
           </div>
@@ -93,4 +92,4 @@ const TestDetails = () => {
   return content;
 };
 
-export default TestDetails;
+export default PrescriptionDetails;

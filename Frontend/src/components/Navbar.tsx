@@ -11,6 +11,7 @@ import { BiHealth } from "react-icons/bi";
 import { GrSchedules } from "react-icons/gr";
 import { GiTestTubes } from "react-icons/gi";
 import { LiaDiagnosesSolid } from "react-icons/lia";
+import { GiMedicines } from "react-icons/gi";
 import { Link } from "react-router-dom";
 const Navbar = () => {
   const dispatch = useAppDispatch();
@@ -75,6 +76,12 @@ const Navbar = () => {
               <Link to="diagnoses" className="sidebar-link">
                 <LiaDiagnosesSolid />
                 <span className="ms-2">التشحيص</span>
+              </Link>
+            </li>
+            <li className="sidebar-item">
+              <Link to="prescriptions" className="sidebar-link">
+                <GiMedicines />
+                <span className="ms-2">الوصفات</span>
               </Link>
             </li>
             <li className="sidebar-item">

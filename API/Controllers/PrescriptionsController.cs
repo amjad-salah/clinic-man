@@ -17,7 +17,7 @@ public class PrescriptionsController(
     //POST /api/prescriptions
     [HttpPost("")]
     [Authorize(Roles = "Doctor")]
-    public async Task<ActionResult<GeneralResponse>> AddPrescription(UpsertPrescriptionDto prescriptionDto)
+    public async Task<ActionResult<PrescriptionResponseDto>> AddPrescription(UpsertPrescriptionDto prescriptionDto)
     {
         try
         {
@@ -27,7 +27,7 @@ public class PrescriptionsController(
             {
                 var error = string.Join(',', validationResult.Errors.Select(x => x.ErrorMessage));
 
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new PrescriptionResponseDto { Success = false, Error = error });
             }
 
             var response = await service.AddPrescription(prescriptionDto);
@@ -47,7 +47,7 @@ public class PrescriptionsController(
     //Get all prescriptions
     //GET /api/prescriptions
     [HttpGet("")]
-    public async Task<ActionResult<GeneralResponse>> GetPrescriptions()
+    public async Task<ActionResult<PrescriptionResponseDto>> GetPrescriptions()
     {
         try
         {
@@ -64,7 +64,7 @@ public class PrescriptionsController(
     //Get prescription by id
     //GET /api/prescriptions/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<GeneralResponse>> GetPrescription(int id)
+    public async Task<ActionResult<PrescriptionResponseDto>> GetPrescription(int id)
     {
         try
         {
@@ -86,7 +86,7 @@ public class PrescriptionsController(
     //PUT /api/prescriptions/{id}
     [HttpPut("{id}")]
     [Authorize(Roles = "Doctor")]
-    public async Task<ActionResult<GeneralResponse>> UpdatePrescription(int id,
+    public async Task<ActionResult<PrescriptionResponseDto>> UpdatePrescription(int id,
         UpsertPrescriptionDto prescriptionDto)
     {
         try
@@ -96,7 +96,7 @@ public class PrescriptionsController(
             if (!validationResult.IsValid)
             {
                 var error = string.Join(", ", validationResult.Errors.Select(x => x.ErrorMessage));
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new PrescriptionResponseDto { Success = false, Error = error });
             }
 
             var response = await service.UpdatePrescription(id, prescriptionDto);
@@ -122,7 +122,7 @@ public class PrescriptionsController(
     //DELETE /api/prescriptions/{id}
     [HttpDelete("{id}")]
     [Authorize(Roles = "Doctor")]
-    public async Task<ActionResult<GeneralResponse>> DeletePrescription(int id)
+    public async Task<ActionResult<PrescriptionResponseDto>> DeletePrescription(int id)
     {
         try
         {

@@ -5,9 +5,9 @@ namespace API.Services.Prescriptions;
 
 public interface IPrescriptionsService
 {
-    Task<GeneralResponse> GetPrescriptions();
-    Task<GeneralResponse> GetPrescription(int id);
-    Task<GeneralResponse> AddPrescription(UpsertPrescriptionDto prescription);
-    Task<GeneralResponse> UpdatePrescription(int id, UpsertPrescriptionDto prescription);
-    Task<GeneralResponse> DeletePrescription(int id);
+    Task<PrescriptionResponseDto> GetPrescriptions();
+    Task<PrescriptionResponseDto> GetPrescription(int id);
+    Task<PrescriptionResponseDto> AddPrescription(UpsertPrescriptionDto prescription);
+    Task<PrescriptionResponseDto> UpdatePrescription(int id, UpsertPrescriptionDto prescription);
+    Task<PrescriptionResponseDto> DeletePrescription(int id);
 }

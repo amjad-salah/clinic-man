@@ -1,24 +1,24 @@
-import { useAddTestMutation } from "../labTests/testsApiSlice.ts";
+import { useAddPrescriptionMutation } from "../prescriptions/prescriptionsApiSlice.ts";
 import { useGetAppointmentByIdQuery } from "./appointmentsApiSlice.ts";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../app/hooks.ts";
 import { clearCredentials } from "../users/authSlice.ts";
 import { toast } from "react-toastify";
 import { IoMdReturnRight } from "react-icons/io";
-import { TestStatus } from "../../Types/LabTests.ts";
 import React, { useEffect, useState } from "react";
+import { TestStatus } from "../../Types/LabTests.ts";
 
-const AddTest = () => {
+const AddPrescription = () => {
   const { id } = useParams();
 
   const { data, isSuccess, error } = useGetAppointmentByIdQuery(parseInt(id!));
 
-  const [addTest] = useAddTestMutation();
+  const [addPrescription] = useAddPrescriptionMutation();
 
-  const [testName, setTestName] = useState("");
-  const [status, setStatus] = useState("");
-  const [result, setResult] = useState("");
-  const [description, setDescription] = useState("");
+  const [medicationName, setMedicationName] = useState("");
+  const [dosage, setDosage] = useState("");
+  const [frequency, setFrequency] = useState("");
+  const [duration, setDuration] = useState("");
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -31,18 +31,18 @@ const AddTest = () => {
     }
   }, [error, navigate, dispatch]);
 
-  const handleAddTest = async (e: React.FormEvent) => {
+  const handleAddPrescription = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await addTest({
+      const res = await addPrescription({
         appointmentId: data!.appointment!.id,
         patientId: data!.appointment!.patientId,
-        testName,
-        status: parseInt(status),
-        result,
-        description,
+        medicationName,
+        dosage,
+        frequency,
+        duration,
       }).unwrap();
-      toast.success("تمت إضافة الفحص بنجاح");
+      toast.success("تمت إضافة الوصفة الطبية بنجاح");
       navigate(`/appointments/${id}`);
     } catch (e) {
       console.log(e);
@@ -65,63 +65,55 @@ const AddTest = () => {
       <div className="row align-items-center justify-content-center">
         <div className="col-md-8">
           <div className="card card-body shadow">
-            <h4 className="mb-2">إضافة فحص</h4>
+            <h4 className="mb-2">إضافة وصفة طبية</h4>
             <hr className="mb-3" />
-            <form onSubmit={handleAddTest}>
+            <form onSubmit={handleAddPrescription}>
               <div className="mb-3">
-                <label htmlFor="testName" className="form-label">
-                  إسم الفحص
+                <label htmlFor="medicationName" className="form-label">
+                  إسم الدواء
                 </label>
                 <input
                   type="text"
-                  id="testName"
-                  value={testName}
+                  id="medicationName"
+                  value={medicationName}
                   className="form-control"
-                  onChange={(e) => setTestName(e.target.value)}
+                  onChange={(e) => setMedicationName(e.target.value)}
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="description" className="form-label">
-                  وصف الفحص
+                <label htmlFor="dosage" className="form-label">
+                  الجرعة
                 </label>
                 <input
                   type="text"
-                  id="description"
-                  value={description}
+                  id="dosage"
+                  value={dosage}
                   className="form-control"
-                  onChange={(e) => setDescription(e.target.value)}
+                  onChange={(e) => setDosage(e.target.value)}
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="status">حالة الفحص</label>
-                <select
-                  value={status}
-                  id="status"
-                  className="form-select"
-                  onChange={(e) => setStatus(e.target.value)}
-                >
-                  <option value="" disabled selected>
-                    اختر الحالة
-                  </option>
-                  {(
-                    Object.keys(TestStatus) as Array<keyof typeof TestStatus>
-                  ).map((key) => (
-                    <option key={key} value={key}>
-                      {TestStatus[key]}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="result" className="form-label">
-                  النتيجة
+                <label htmlFor="frequency" className="form-label">
+                  التكرار
                 </label>
                 <input
                   type="text"
-                  id="result"
-                  value={result}
+                  id="frequency"
+                  value={frequency}
                   className="form-control"
-                  onChange={(e) => setResult(e.target.value)}
+                  onChange={(e) => setFrequency(e.target.value)}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="duration" className="form-label">
+                  المدة
+                </label>
+                <input
+                  type="text"
+                  id="duration"
+                  value={duration}
+                  className="form-control"
+                  onChange={(e) => setDuration(e.target.value)}
                 />
               </div>
               <div className="mb-3">
@@ -137,4 +129,4 @@ const AddTest = () => {
   );
 };
 
-export default AddTest;
+export default AddPrescription;

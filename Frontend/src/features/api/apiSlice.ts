@@ -26,5 +26,6 @@ export const apiSlice = createApi({
     "Appointments",
     "LabTests",
     "Diagnoses",
+    "Prescriptions",
   ],
 });
