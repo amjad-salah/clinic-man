@@ -4,6 +4,8 @@ import {
   TestResponseDto,
   UpdateLabTestDto,
 } from "../../Types/LabTests.ts";
+import { appointmentsApiSlice } from "../appointments/appointmentsApiSlice.ts";
+import { patientsApiSlice } from "../patients/patientsApiSlice.ts";
 
 const TESTS_URL = "/labtests";
 
@@ -23,7 +25,12 @@ const testsApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["LabTests", "Appointments"],
+      invalidatesTags: ["LabTests"],
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        if (await queryFulfilled) {
+          dispatch(appointmentsApiSlice.util.invalidateTags(["Appointments"]));
+        }
+      },
     }),
     updateTest: builder.mutation<TestResponseDto, UpdateLabTestDto>({
       query: (data) => ({
@@ -31,14 +38,24 @@ const testsApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["LabTests", "Appointments"],
+      invalidatesTags: ["LabTests"],
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        if (await queryFulfilled) {
+          dispatch(appointmentsApiSlice.util.invalidateTags(["Appointments"]));
+        }
+      },
     }),
     deleteTest: builder.mutation<TestResponseDto, number>({
       query: (id) => ({
         url: `${TESTS_URL}/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["LabTests", "Appointments"],
+      invalidatesTags: ["LabTests"],
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        if (await queryFulfilled) {
+          dispatch(appointmentsApiSlice.util.invalidateTags(["Appointments"]));
+        }
+      },
     }),
   }),
 });

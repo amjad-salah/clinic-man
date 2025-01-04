@@ -4,6 +4,8 @@ import {
   PrescriptionResponseDto,
   UpdatePrescriptionDto,
 } from "../../Types/Prescriptions.ts";
+import { appointmentsApiSlice } from "../appointments/appointmentsApiSlice.ts";
+import { patientsApiSlice } from "../patients/patientsApiSlice.ts";
 
 const PRESCRIPTIONS_URL = "/prescriptions";
 
@@ -29,6 +31,12 @@ const prescriptionsApiSlice = apiSlice.injectEndpoints({
         body,
       }),
       invalidatesTags: ["Prescriptions"],
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        if (await queryFulfilled) {
+          dispatch(appointmentsApiSlice.util.invalidateTags(["Appointments"]));
+          dispatch(patientsApiSlice.util.invalidateTags(["Patients"]));
+        }
+      },
     }),
     updatePrescription: builder.mutation<
       PrescriptionResponseDto,
@@ -40,6 +48,12 @@ const prescriptionsApiSlice = apiSlice.injectEndpoints({
         body,
       }),
       invalidatesTags: ["Prescriptions"],
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        if (await queryFulfilled) {
+          dispatch(appointmentsApiSlice.util.invalidateTags(["Appointments"]));
+          dispatch(patientsApiSlice.util.invalidateTags(["Patients"]));
+        }
+      },
     }),
     deletePrescription: builder.mutation<PrescriptionResponseDto, number>({
       query: (id) => ({
@@ -47,6 +61,12 @@ const prescriptionsApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
       invalidatesTags: ["Prescriptions"],
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        if (await queryFulfilled) {
+          dispatch(appointmentsApiSlice.util.invalidateTags(["Appointments"]));
+          dispatch(patientsApiSlice.util.invalidateTags(["Patients"]));
+        }
+      },
     }),
   }),
 });

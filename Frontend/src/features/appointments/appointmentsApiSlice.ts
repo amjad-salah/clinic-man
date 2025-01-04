@@ -8,7 +8,7 @@ import { BaseQueryArg } from "@reduxjs/toolkit/query";
 
 const APPOINTMENTS_URL = "/appointments";
 
-const appointmentsApiSlice = apiSlice.injectEndpoints({
+export const appointmentsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllAppointments: builder.query<AppointmentResponseDto, void>({
       query: () => APPOINTMENTS_URL,

@@ -58,7 +58,7 @@ public class BillingsService(AppDbContext context) : IBillingsService
         context.Billings.Add(newBilling);
         await context.SaveChangesAsync();
 
-        return new BillingResponseDto { Success = true };
+        return new BillingResponseDto { Success = true, Billing = newBilling.Adapt<BillingDetailsDto>()};
     }
 
     // public async Task<BillingResponseDto> UpdateBilling(int id, UpsertBillingDto billing)
