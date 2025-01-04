@@ -1,7 +1,7 @@
 import {
-  useGetAllAppointmentsQuery,
-  useDeleteAppointmentMutation,
-} from "./appointmentsApiSlice.ts";
+  useGetAllBillingsQuery,
+  useDeleteBillingItemMutation,
+} from "./billingsApiSlice.ts";
 import Loader from "../../components/Loader.tsx";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { BsInfoCircle } from "react-icons/bs";
@@ -9,17 +9,18 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
 
-const AppointmentsList = () => {
+const BillingsList = () => {
   const { data, isSuccess, isLoading, isError, error } =
-    useGetAllAppointmentsQuery();
-  const [deleteAppointment] = useDeleteAppointmentMutation();
+    useGetAllBillingsQuery();
 
-  const handleDeleteAppointment = async (id: number) => {
-    const deleteConfirm = confirm("هل تريد مسح هذا الموعد؟");
+  const [deleteBillingItem] = useDeleteBillingItemMutation();
+
+  const handleDeleteBillingItem = async (id: number) => {
+    const deleteConfirm = confirm("هل تريد مسح هذه الفاتورة؟");
 
     if (deleteConfirm) {
       try {
-        await deleteAppointment(id).unwrap();
+        await deleteBillingItem(id).unwrap();
       } catch (e) {
         console.log(e);
         // @ts-ignore
@@ -56,47 +57,43 @@ const AppointmentsList = () => {
   if (isSuccess) {
     content = (
       <>
-        <h4 className="text-center mb-2">المواعيد</h4>
+        <h4 className="text-center mb-2">الفواتير</h4>
         <hr className="mb-3" />
-        <Link to="/appointments/add" className="btn btn-primary mb-4">
+        <Link to="/bills/add" className="btn btn-primary mb-4">
           إضافة
         </Link>
         <div className="table-responsive">
-          <table className="table table-striped table-hover shadow">
+          <table className="table table-striped table-hover">
             <thead>
               <tr>
-                <th>رقم الحجز</th>
+                <th>رقم الفاتورة</th>
                 <th>التاريخ</th>
-                <th>الوقت</th>
-                <th>المريض</th>
-                <th>الطبيب</th>
+                <th>العميل</th>
+                <th>المبلغ</th>
+                <th>المبلغ المدفوع</th>
+                <th>المبلغ المتبقي</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {data?.appointments!.map((appointment) => (
-                <tr key={appointment.id}>
-                  <td>{appointment.id}</td>
-                  <td>{moment(appointment.date).format("YYYY/MM/DD")}</td>
-                  <td>{appointment.time}</td>
-                  <td>{appointment.patient.fullName}</td>
-                  <td>{appointment.doctor.user.fullName}</td>
+              {data?.billings!.map((billing) => (
+                <tr key={billing.id}>
+                  <td>{billing.id}</td>
+                  <td>{moment(billing.date).format("YYYY/MM/DD")}</td>
+                  <td>{billing.patient!.fullName}</td>
+                  <td>{billing.total}</td>
+                  <td>{billing.paidAmount}</td>
+                  <td>{billing.remainingBalance}</td>
                   <td>
                     <Link
-                      to={`/appointments/${appointment.id}`}
-                      className="btn btn-success btn-sm me-2"
+                      to={`/bills/${billing.id}`}
+                      className="btn btn-success me-2"
                     >
                       <BsInfoCircle />
                     </Link>
-                    {/*<Link*/}
-                    {/*  to={`/appointments/edit/${appointment.id}`}*/}
-                    {/*  className="btn btn-primary btn-sm me-2"*/}
-                    {/*>*/}
-                    {/*  <FaRegEdit />*/}
-                    {/*</Link>*/}
                     <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDeleteAppointment(appointment.id)}
+                      className="btn btn-danger"
+                      onClick={() => handleDeleteBillingItem(billing.id)}
                     >
                       <FaRegTrashAlt />
                     </button>
@@ -113,4 +110,4 @@ const AppointmentsList = () => {
   return content;
 };
 
-export default AppointmentsList;
+export default BillingsList;

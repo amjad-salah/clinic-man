@@ -2,6 +2,7 @@ import { apiSlice } from "../api/apiSlice.ts";
 import {
   AddBillingDto,
   AddBillingItemDto,
+  AddPaymentDto,
   BillingResponse,
   PaymentDto,
 } from "../../Types/Billings.ts";
@@ -52,7 +53,7 @@ const billingsApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Billings"],
     }),
 
-    addPayment: builder.mutation<BillingResponse, PaymentDto>({
+    addPayment: builder.mutation<BillingResponse, AddPaymentDto>({
       query: (data) => ({
         url: `${BILLINGS_URL}/${data.billingId}/payments`,
         method: "POST",

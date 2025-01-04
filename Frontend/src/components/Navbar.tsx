@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   return (
-    <aside id="sidebar" className="expand">
+    <aside id="sidebar" className="expand d-print-none">
       <div className="d-flex">
         <div className="sidebar-logo">
           <FaClinicMedical className="text-white" />

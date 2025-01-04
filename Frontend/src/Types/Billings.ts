@@ -35,7 +35,7 @@ export type BillingDetailsDto = {
   appointmentId: number;
   patient: PatientDto | null;
   appointment: AppointmentDto | null;
-  billingItems: BillingItemDto[];
+  billItems: BillingItemDto[];
   payments: PaymentDto[];
 };
 
@@ -46,6 +46,7 @@ export type AddBillingDto = {
 };
 
 export type BillingItemDto = {
+  id: number;
   billingId: number;
   description: string;
   quantity: number;
@@ -61,10 +62,16 @@ export type AddBillingItemDto = {
 };
 
 export type PaymentDto = {
+  id: number;
   billingId: number;
   amount: number;
   date: string;
   //transactionId: string;
+};
+
+export type AddPaymentDto = {
+  billingId: number;
+  amount: number;
 };
 
 export type BillingResponse = {

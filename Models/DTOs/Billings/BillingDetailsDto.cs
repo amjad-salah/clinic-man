@@ -19,6 +19,6 @@ public class BillingDetailsDto
     public int AppointmentId { get; set; }
     public AppointmentDto? Appointment { get; set; }
     public PatientDto? Patient { get; set; }
-    public List<BillingItemDto>? BillingItems { get; set; }
+    public List<BillingItemDto>? BillItems { get; set; }
     public List<PaymentDto>? Payments { get; set; }
 }

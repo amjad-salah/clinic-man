@@ -42,6 +42,9 @@ import AddDiagnose from "./features/appointments/AddDiagnose.tsx";
 import PrescriptionsList from "./features/prescriptions/PrescriptionsList.tsx";
 import PrescriptionDetails from "./features/prescriptions/PrescriptionDetails.tsx";
 import AddPrescription from "./features/appointments/AddPrescription.tsx";
+import BillingsList from "./features/billings/BillingsList.tsx";
+import AddBilling from "./features/billings/AddBilling.tsx";
+import BillingDetails from "./features/billings/BillingDetails.tsx";
 
 //Routes
 const router = createBrowserRouter(
@@ -120,6 +123,11 @@ const router = createBrowserRouter(
             element={<PrescriptionsList />}
           />
           <Route path="/prescriptions/:id" element={<PrescriptionDetails />} />
+        </Route>
+        <Route path="/bills">
+          <Route path="/bills" index={true} element={<BillingsList />} />
+          <Route path="/bills/add" element={<AddBilling />} />
+          <Route path="/bills/:id" element={<BillingDetails />} />
         </Route>
       </Route>
     </Route>,
