@@ -17,7 +17,7 @@ public class InvLogsController(
     //Add new log
     //POST /api/invlogs
     [HttpPost("")]
-    public async Task<ActionResult<GeneralResponse>> AddLog(UpsertInventoryLogDto log)
+    public async Task<ActionResult<InventoryLogResponseDto>> AddLog(UpsertInventoryLogDto log)
     {
         try
         {
@@ -47,7 +47,7 @@ public class InvLogsController(
     //Get all logs
     //GET /api/invlogs
     [HttpGet("")]
-    public async Task<ActionResult<GeneralResponse>> GetLogs()
+    public async Task<ActionResult<InventoryLogResponseDto>> GetLogs()
     {
         try
         {
@@ -65,7 +65,7 @@ public class InvLogsController(
     //Get log by id
     //GET /api/invlogs/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<GeneralResponse>> GetLog(int id)
+    public async Task<ActionResult<InventoryLogResponseDto>> GetLog(int id)
     {
         try
         {
@@ -86,7 +86,7 @@ public class InvLogsController(
     //Update log by id
     //PUT /api/invlogs/{id}
     [HttpPut("{id}")]
-    public async Task<ActionResult<GeneralResponse>> UpdateLog(int id, UpsertInventoryLogDto log)
+    public async Task<ActionResult<InventoryLogResponseDto>> UpdateLog(int id, UpsertInventoryLogDto log)
     {
         try
         {
@@ -121,7 +121,7 @@ public class InvLogsController(
     //Delete log by id
     //DELETE /api/invlogs/{id}
     [HttpDelete("{id}")]
-    public async Task<ActionResult<GeneralResponse>> DeleteLog(int id)
+    public async Task<ActionResult<InventoryLogResponseDto>> DeleteLog(int id)
     {
         try
         {

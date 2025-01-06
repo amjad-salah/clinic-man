@@ -9,48 +9,48 @@ namespace API.Services.Suppliers;
 
 public class SuppliersService(AppDbContext context) : ISuppliersService
 {
-    public async Task<GeneralResponse> GetSuppliers()
+    public async Task<SupplierResponseDto> GetSuppliers()
     {
         var suppliers = await context.Suppliers.AsNoTracking()
             .ProjectToType<SupplierDto>()
             .ToListAsync();
 
-        return new GeneralResponse { Success = true, Data = suppliers };
+        return new SupplierResponseDto { Success = true, Suppliers = suppliers };
     }
 
-    public async Task<GeneralResponse> GetSupplierById(int id)
+    public async Task<SupplierResponseDto> GetSupplierById(int id)
     {
         var supplier = await context.Suppliers.AsNoTracking()
             .Include(s => s.Logs)
             .FirstOrDefaultAsync(s => s.Id == id);
 
         if (supplier == null)
-            return new GeneralResponse { Success = false, Error = "Supplier not found" };
+            return new SupplierResponseDto { Success = false, Error = "Supplier not found" };
 
-        return new GeneralResponse { Success = true, Data = supplier.Adapt<SupplierDetailsDto>() };
+        return new SupplierResponseDto { Success = true, Supplier = supplier.Adapt<SupplierDetailsDto>() };
     }
 
-    public async Task<GeneralResponse> AddSupplier(UpsertSupplierDto supplier)
+    public async Task<SupplierResponseDto> AddSupplier(UpsertSupplierDto supplier)
     {
         var existSupplier = await context.Suppliers.AsNoTracking().FirstOrDefaultAsync(s => s.Name == supplier.Name);
 
         if (existSupplier != null)
-            return new GeneralResponse { Success = false, Error = "Supplier already exists" };
+            return new SupplierResponseDto { Success = false, Error = "Supplier already exists" };
 
         var newSupplier = supplier.Adapt<Supplier>();
 
         context.Suppliers.Add(newSupplier);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true, Data = newSupplier };
+        return new SupplierResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> UpdateSupplier(int id, UpsertSupplierDto supplier)
+    public async Task<SupplierResponseDto> UpdateSupplier(int id, UpsertSupplierDto supplier)
     {
         var existSupplier = await context.Suppliers.FindAsync(id);
 
         if (existSupplier == null)
-            return new GeneralResponse { Success = false, Error = "Supplier not found" };
+            return new SupplierResponseDto { Success = false, Error = "Supplier not found" };
 
         if (existSupplier.Name != supplier.Name)
         {
@@ -58,7 +58,7 @@ public class SuppliersService(AppDbContext context) : ISuppliersService
                 .FirstOrDefaultAsync(s => s.Name == supplier.Name);
 
             if (oldSupplier != null)
-                return new GeneralResponse { Success = false, Error = "Supplier already exists" };
+                return new SupplierResponseDto { Success = false, Error = "Supplier already exists" };
         }
 
         existSupplier.Name = supplier.Name;
@@ -67,19 +67,19 @@ public class SuppliersService(AppDbContext context) : ISuppliersService
 
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new SupplierResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> DeleteSupplier(int id)
+    public async Task<SupplierResponseDto> DeleteSupplier(int id)
     {
         var supplier = await context.Suppliers.FindAsync(id);
 
         if (supplier == null)
-            return new GeneralResponse { Success = false, Error = "Supplier not found" };
+            return new SupplierResponseDto { Success = false, Error = "Supplier not found" };
 
         context.Suppliers.Remove(supplier);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new SupplierResponseDto { Success = true };
     }
 }

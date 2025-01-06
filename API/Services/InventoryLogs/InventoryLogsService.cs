@@ -9,7 +9,7 @@ namespace API.Services.InventoryLogs;
 
 public class InventoryLogsService(AppDbContext context) : IInventoryLogsService
 {
-    public async Task<GeneralResponse> GetInventoryLogs()
+    public async Task<InventoryLogResponseDto> GetInventoryLogs()
     {
         var logs = await context.InventoryLogs.AsNoTracking()
             .OrderByDescending(l => l.CreatedAt)
@@ -18,10 +18,10 @@ public class InventoryLogsService(AppDbContext context) : IInventoryLogsService
             .ProjectToType<InventoryLogDto>()
             .ToListAsync();
 
-        return new GeneralResponse { Success = true, Data = logs };
+        return new InventoryLogResponseDto { Success = true, Logs = logs };
     }
 
-    public async Task<GeneralResponse> GetInventoryLogsById(int id)
+    public async Task<InventoryLogResponseDto> GetInventoryLogsById(int id)
     {
         var log = await context.InventoryLogs.AsNoTracking()
             .Include(l => l.Inventory)
@@ -29,32 +29,32 @@ public class InventoryLogsService(AppDbContext context) : IInventoryLogsService
             .FirstOrDefaultAsync(l => l.Id == id);
 
         if (log == null)
-            return new GeneralResponse { Success = false, Error = "Log not found" };
+            return new InventoryLogResponseDto { Success = false, Error = "Log not found" };
 
-        return new GeneralResponse { Success = true, Data = log.Adapt<InventoryLogDto>() };
+        return new InventoryLogResponseDto { Success = true, Log = log.Adapt<InventoryLogDto>() };
     }
 
-    public async Task<GeneralResponse> AddInventoryLog(UpsertInventoryLogDto log)
+    public async Task<InventoryLogResponseDto> AddInventoryLog(UpsertInventoryLogDto log)
     {
         var existInv = await context.Inventories.AsNoTracking()
             .FirstOrDefaultAsync(i => i.Id == log.InventoryId);
 
         if (existInv == null)
-            return new GeneralResponse { Success = false, Error = "Inventory not found" };
+            return new InventoryLogResponseDto { Success = false, Error = "Inventory not found" };
 
         if (existInv.Quantity < log.Quantity)
-            return new GeneralResponse { Success = false, Error = "Inventory is not enough" };
+            return new InventoryLogResponseDto { Success = false, Error = "Inventory is not enough" };
 
         if (log.Type == LogType.Insert)
         {
             if (!log.SupplierId.HasValue)
-                return new GeneralResponse { Success = false, Error = "Supplier is required" };
+                return new InventoryLogResponseDto { Success = false, Error = "Supplier is required" };
 
             var existSupplier = await context.Suppliers.AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == log.SupplierId);
 
             if (existSupplier == null)
-                return new GeneralResponse { Success = false, Error = "Supplier not found" };
+                return new InventoryLogResponseDto { Success = false, Error = "Supplier not found" };
 
             existInv.Quantity += log.Quantity;
         }
@@ -68,32 +68,32 @@ public class InventoryLogsService(AppDbContext context) : IInventoryLogsService
         context.InventoryLogs.Add(newLog);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true, Data = newLog };
+        return new InventoryLogResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> UpdateInventoryLog(int id, UpsertInventoryLogDto log)
+    public async Task<InventoryLogResponseDto> UpdateInventoryLog(int id, UpsertInventoryLogDto log)
     {
         var existLog = await context.InventoryLogs.FindAsync(id);
 
         if (existLog == null)
-            return new GeneralResponse { Success = false, Error = "Log not found" };
+            return new InventoryLogResponseDto { Success = false, Error = "Log not found" };
 
         var existInv = await context.Inventories.AsNoTracking()
             .FirstOrDefaultAsync(i => i.Id == log.InventoryId);
 
         if (existInv == null)
-            return new GeneralResponse { Success = false, Error = "Inventory not found" };
+            return new InventoryLogResponseDto { Success = false, Error = "Inventory not found" };
 
         if (log.Type == LogType.Insert && log.Type != existLog.Type)
         {
             if (!log.SupplierId.HasValue)
-                return new GeneralResponse { Success = false, Error = "Supplier is required" };
+                return new InventoryLogResponseDto { Success = false, Error = "Supplier is required" };
 
             var existSupplier = await context.Suppliers.AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == log.SupplierId);
 
             if (existSupplier == null)
-                return new GeneralResponse { Success = false, Error = "Supplier not found" };
+                return new InventoryLogResponseDto { Success = false, Error = "Supplier not found" };
         }
 
         if (log.Quantity != existLog.Quantity)
@@ -101,7 +101,7 @@ public class InventoryLogsService(AppDbContext context) : IInventoryLogsService
             var diff = existLog.Quantity - log.Quantity;
 
             if (diff < 0 && existInv.Quantity < IntPtr.Abs(diff))
-                return new GeneralResponse { Success = false, Error = "Inventory is not enough" };
+                return new InventoryLogResponseDto { Success = false, Error = "Inventory is not enough" };
 
             existLog.Quantity += diff;
         }
@@ -114,22 +114,22 @@ public class InventoryLogsService(AppDbContext context) : IInventoryLogsService
 
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new InventoryLogResponseDto { Success = true };
     }
 
-    public async Task<GeneralResponse> DeleteInventoryLog(int id)
+    public async Task<InventoryLogResponseDto> DeleteInventoryLog(int id)
     {
         var log = await context.InventoryLogs.FindAsync(id);
 
         if (log == null)
-            return new GeneralResponse { Success = false, Error = "Log not found" };
+            return new InventoryLogResponseDto { Success = false, Error = "Log not found" };
 
         var inventory = await context.Inventories.FindAsync(log.InventoryId);
 
         if (log.Type == LogType.Insert)
         {
             if (inventory!.Quantity < log.Quantity)
-                return new GeneralResponse { Success = false, Error = "Inventory is not enough" };
+                return new InventoryLogResponseDto { Success = false, Error = "Inventory is not enough" };
 
             inventory.Quantity -= log.Quantity;
         }
@@ -141,6 +141,6 @@ public class InventoryLogsService(AppDbContext context) : IInventoryLogsService
         context.InventoryLogs.Remove(log);
         await context.SaveChangesAsync();
 
-        return new GeneralResponse { Success = true };
+        return new InventoryLogResponseDto { Success = true };
     }
 }

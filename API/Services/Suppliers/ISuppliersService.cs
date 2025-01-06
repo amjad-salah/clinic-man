@@ -5,9 +5,9 @@ namespace API.Services.Suppliers;
 
 public interface ISuppliersService
 {
-    Task<GeneralResponse> GetSuppliers();
-    Task<GeneralResponse> GetSupplierById(int id);
-    Task<GeneralResponse> AddSupplier(UpsertSupplierDto supplier);
-    Task<GeneralResponse> UpdateSupplier(int id, UpsertSupplierDto supplier);
-    Task<GeneralResponse> DeleteSupplier(int id);
+    Task<SupplierResponseDto> GetSuppliers();
+    Task<SupplierResponseDto> GetSupplierById(int id);
+    Task<SupplierResponseDto> AddSupplier(UpsertSupplierDto supplier);
+    Task<SupplierResponseDto> UpdateSupplier(int id, UpsertSupplierDto supplier);
+    Task<SupplierResponseDto> DeleteSupplier(int id);
 }

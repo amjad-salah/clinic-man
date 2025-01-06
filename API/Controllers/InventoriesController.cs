@@ -17,7 +17,7 @@ public class InventoriesController(
     //Add new inventory
     //POST /api/inventories
     [HttpPost("")]
-    public async Task<ActionResult<GeneralResponse>> AddInventory(UpsertInventoryDto inventory)
+    public async Task<ActionResult<InventoryResponseDto>> AddInventory(UpsertInventoryDto inventory)
     {
         try
         {
@@ -27,7 +27,7 @@ public class InventoriesController(
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
 
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new InventoryResponseDto { Success = false, Error = error });
             }
 
             var response = await service.AddInventory(inventory);
@@ -47,7 +47,7 @@ public class InventoriesController(
     //Get all inventories
     //GET /api/inventories
     [HttpGet("")]
-    public async Task<ActionResult<GeneralResponse>> GetInventories()
+    public async Task<ActionResult<InventoryResponseDto>> GetInventories()
     {
         try
         {
@@ -65,7 +65,7 @@ public class InventoriesController(
     //Get inventory by id
     //GET /api/inventories/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<GeneralResponse>> GetInventory(int id)
+    public async Task<ActionResult<InventoryResponseDto>> GetInventory(int id)
     {
         try
         {
@@ -86,7 +86,7 @@ public class InventoriesController(
     //Update inventory by id
     //PUT /api/inventories/{id}
     [HttpPut("{id}")]
-    public async Task<ActionResult<GeneralResponse>> UpdateInventory(int id, UpsertInventoryDto inventory)
+    public async Task<ActionResult<InventoryResponseDto>> UpdateInventory(int id, UpsertInventoryDto inventory)
     {
         try
         {
@@ -96,7 +96,7 @@ public class InventoriesController(
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
 
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new InventoryResponseDto { Success = false, Error = error });
             }
 
             var response = await service.UpdateInventory(id, inventory);
@@ -121,7 +121,7 @@ public class InventoriesController(
     //Delete inventory by id
     //DELETE /api/inventories/{id}
     [HttpDelete("{id}")]
-    public async Task<ActionResult<GeneralResponse>> DeleteInventory(int id)
+    public async Task<ActionResult<InventoryResponseDto>> DeleteInventory(int id)
     {
         try
         {

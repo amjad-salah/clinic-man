@@ -5,9 +5,9 @@ namespace API.Services.Inventories;
 
 public interface IInventoriesService
 {
-    Task<GeneralResponse> GetInventories();
-    Task<GeneralResponse> GetInventoriesById(int id);
-    Task<GeneralResponse> AddInventory(UpsertInventoryDto inventory);
-    Task<GeneralResponse> UpdateInventory(int id, UpsertInventoryDto inventory);
-    Task<GeneralResponse> DeleteInventory(int id);
+    Task<InventoryResponseDto> GetInventories();
+    Task<InventoryResponseDto> GetInventoriesById(int id);
+    Task<InventoryResponseDto> AddInventory(UpsertInventoryDto inventory);
+    Task<InventoryResponseDto> UpdateInventory(int id, UpsertInventoryDto inventory);
+    Task<InventoryResponseDto> DeleteInventory(int id);
 }

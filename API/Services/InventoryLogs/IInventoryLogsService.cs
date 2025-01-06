@@ -5,9 +5,9 @@ namespace API.Services.InventoryLogs;
 
 public interface IInventoryLogsService
 {
-    Task<GeneralResponse> GetInventoryLogs();
-    Task<GeneralResponse> GetInventoryLogsById(int id);
-    Task<GeneralResponse> AddInventoryLog(UpsertInventoryLogDto log);
-    Task<GeneralResponse> UpdateInventoryLog(int id, UpsertInventoryLogDto log);
-    Task<GeneralResponse> DeleteInventoryLog(int id);
+    Task<InventoryLogResponseDto> GetInventoryLogs();
+    Task<InventoryLogResponseDto> GetInventoryLogsById(int id);
+    Task<InventoryLogResponseDto> AddInventoryLog(UpsertInventoryLogDto log);
+    Task<InventoryLogResponseDto> UpdateInventoryLog(int id, UpsertInventoryLogDto log);
+    Task<InventoryLogResponseDto> DeleteInventoryLog(int id);
 }

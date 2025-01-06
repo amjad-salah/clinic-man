@@ -17,7 +17,7 @@ public class SuppliersController(
     //Add new supplier
     //POST /api/suppliers
     [HttpPost("")]
-    public async Task<ActionResult<GeneralResponse>> AddSupplier(UpsertSupplierDto supplier)
+    public async Task<ActionResult<SupplierResponseDto>> AddSupplier(UpsertSupplierDto supplier)
     {
         try
         {
@@ -27,7 +27,7 @@ public class SuppliersController(
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
 
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new SupplierResponseDto { Success = false, Error = error });
             }
 
             var response = await service.AddSupplier(supplier);
@@ -47,7 +47,7 @@ public class SuppliersController(
     //Get all suppliers
     //GET /api/suppliers
     [HttpGet("")]
-    public async Task<ActionResult<GeneralResponse>> GetSuppliers()
+    public async Task<ActionResult<SupplierResponseDto>> GetSuppliers()
     {
         try
         {
@@ -65,7 +65,7 @@ public class SuppliersController(
     //Get supplier by id
     //GET /api/suppliers/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<GeneralResponse>> GetSupplier(int id)
+    public async Task<ActionResult<SupplierResponseDto>> GetSupplier(int id)
     {
         try
         {
@@ -86,7 +86,7 @@ public class SuppliersController(
     //Update supplier by id
     //PUT /api/suppliers/{id}
     [HttpPut("{id}")]
-    public async Task<ActionResult<GeneralResponse>> UpdateSupplier(int id, UpsertSupplierDto supplier)
+    public async Task<ActionResult<SupplierResponseDto>> UpdateSupplier(int id, UpsertSupplierDto supplier)
     {
         try
         {
@@ -95,7 +95,7 @@ public class SuppliersController(
             if (!validation.IsValid)
             {
                 var error = string.Join(",", validation.Errors.Select(x => x.ErrorMessage));
-                return BadRequest(new GeneralResponse { Success = false, Error = error });
+                return BadRequest(new SupplierResponseDto { Success = false, Error = error });
             }
 
             var response = await service.UpdateSupplier(id, supplier);
@@ -120,7 +120,7 @@ public class SuppliersController(
     //Delete supplier by id
     //DELETE /api/suppliers/{id}
     [HttpDelete("{id}")]
-    public async Task<ActionResult<GeneralResponse>> DeleteSupplier(int id)
+    public async Task<ActionResult<SupplierResponseDto>> DeleteSupplier(int id)
     {
         try
         {

@@ -87,12 +87,12 @@ const BillingsList = () => {
                   <td>
                     <Link
                       to={`/bills/${billing.id}`}
-                      className="btn btn-success me-2"
+                      className="btn btn-success btn-sm me-2"
                     >
                       <BsInfoCircle />
                     </Link>
                     <button
-                      className="btn btn-danger"
+                      className="btn btn-danger btn-sm"
                       onClick={() => handleDeleteBillingItem(billing.id)}
                     >
                       <FaRegTrashAlt />

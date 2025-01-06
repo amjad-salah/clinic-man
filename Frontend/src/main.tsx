@@ -45,6 +45,10 @@ import AddPrescription from "./features/appointments/AddPrescription.tsx";
 import BillingsList from "./features/billings/BillingsList.tsx";
 import AddBilling from "./features/billings/AddBilling.tsx";
 import BillingDetails from "./features/billings/BillingDetails.tsx";
+import InventoriesList from "./features/inventories/InventoriesList.tsx";
+import InventoryDetails from "./features/inventories/InventoryDetails.tsx";
+import SuppliersList from "./features/suppliers/SuppliersList.tsx";
+import SupplierDetails from "./features/suppliers/SupplierDetails.tsx";
 
 //Routes
 const router = createBrowserRouter(
@@ -129,6 +133,19 @@ const router = createBrowserRouter(
           <Route path="/bills/add" element={<AddBilling />} />
           <Route path="/bills/:id" element={<BillingDetails />} />
         </Route>
+        <Route path="/inventories">
+          <Route
+            path="/inventories"
+            index={true}
+            element={<InventoriesList />}
+          />
+        </Route>
+        <Route path="/inventories/:id" element={<InventoryDetails />} />
+      </Route>
+
+      <Route path="/suppliers">
+        <Route path="/suppliers" index={true} element={<SuppliersList />} />
+        <Route path="/suppliers/:id" element={<SupplierDetails />} />
       </Route>
     </Route>,
   ),

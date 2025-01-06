@@ -14,6 +14,8 @@ import { LiaDiagnosesSolid } from "react-icons/lia";
 import { GiMedicines } from "react-icons/gi";
 import { FaMoneyBill } from "react-icons/fa";
 import { MdOutlineInventory2 } from "react-icons/md";
+import { LuLogs } from "react-icons/lu";
+import { PiTruckTrailerBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 const Navbar = () => {
   const dispatch = useAppDispatch();
@@ -93,12 +95,6 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="sidebar-item">
-              <Link to="inventories" className="sidebar-link">
-                <MdOutlineInventory2 />
-                <span className="ms-2">المخزون</span>
-              </Link>
-            </li>
-            <li className="sidebar-item">
               <Link
                 to="#"
                 className="sidebar-link has-dropdown collapsed"
@@ -107,8 +103,8 @@ const Navbar = () => {
                 aria-expanded="false"
                 aria-controls="auth"
               >
-                <i className="lni lni-user-4"></i>
-                <span>المستخدمين</span>
+                <MdOutlineInventory2 />
+                <span className="ms-2">إدارة المخزن</span>
               </Link>
               <ul
                 id="auth"
@@ -116,9 +112,21 @@ const Navbar = () => {
                 data-bs-parent="#sidebar"
               >
                 <li className="sidebar-item">
+                  <Link to="inventories" className="sidebar-link">
+                    <MdOutlineInventory2 />
+                    <span className="ms-2">المخزون</span>
+                  </Link>
+                </li>
+                <li className="sidebar-item">
+                  <Link to="suppliers" className="sidebar-link">
+                    <PiTruckTrailerBold />
+                    <span className="ms-2">الموردون</span>
+                  </Link>
+                </li>
+                <li className="sidebar-item">
                   <Link to="#" className="sidebar-link">
-                    <i className="lni lni-user-4"></i>
-                    <span>المستخدمين</span>
+                    <LuLogs />
+                    <span className="ms-2">العمليات</span>
                   </Link>
                 </li>
               </ul>
