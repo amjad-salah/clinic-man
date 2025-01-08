@@ -41,7 +41,7 @@ const UpdateTestModal = ({ id }: UpdateTestProps) => {
       dispatch(clearCredentials());
       navigate("/login");
     }
-  }, [error, navigate, dispatch]);
+  }, [error, navigate, dispatch, data]);
 
   const handleUpdateTest = async (e: React.FormEvent) => {
     e.preventDefault();
