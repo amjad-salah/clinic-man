@@ -107,7 +107,8 @@ builder.Services.AddScoped<IValidator<UpsertBillingDto>, UpsertBillingValidation
 builder.Services.AddScoped<IValidator<UpsertBillingItemDto>, UpsertBillingItemValidation>();
 builder.Services.AddScoped<IValidator<UpsertPaymentDto>, UpsertPaymentValidation>();
 builder.Services.AddScoped<IValidator<UpsertInventoryDto>, UpsertInventoryValidation>();
-builder.Services.AddScoped<IValidator<UpsertInventoryLogDto>, UpsertInventoryLogValidation>();
+builder.Services.AddScoped<IValidator<AddInventoryDto>, AddInventoryValidation>();
+builder.Services.AddScoped<IValidator<UseInventoryDto>, UseInventoryValidation>();
 builder.Services.AddScoped<IValidator<UpsertSupplierDto>, UpsertSupplierValidation>();
 
 var app = builder.Build();

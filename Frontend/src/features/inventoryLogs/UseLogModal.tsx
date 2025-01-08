@@ -1,4 +1,4 @@
-import { useAddLogMutation } from "./inventoryLogsApiSlice.ts";
+import { useUsageLogMutation } from "./inventoryLogsApiSlice.ts";
 import { useGetAllInventoriesQuery } from "../inventories/inventoriesApiSlice.ts";
 import { useGetAllSuppliersQuery } from "../suppliers/suppliersApiSlice.ts";
 import React, { useState, useEffect } from "react";
@@ -8,12 +8,10 @@ import { toast } from "react-toastify";
 import { Modal } from "react-bootstrap";
 import { clearCredentials } from "../users/authSlice.ts";
 import Select from "react-select";
-import { LogType } from "../../Types/InventoryLogs.ts";
 import { SelectOptions } from "../../Types/Appointments.ts";
 
 const AddLogModal = () => {
   const [inventoryId, setInventoryId] = useState("");
-  const [supplierId, setSupplierId] = useState("");
   const [quantity, setQuantity] = useState("");
   const [description, setDescription] = useState("");
   const [show, setShow] = useState(false);
@@ -22,32 +20,18 @@ const AddLogModal = () => {
   const handleShow = () => setShow(true);
 
   const {
-    data: supplierData,
-    isSuccess: supplierSuccess,
-    error: supplierError,
-  } = useGetAllSuppliersQuery();
-
-  const {
     data: inventoryData,
     isSuccess: inventorySuccess,
     error: inventoryError,
   } = useGetAllInventoriesQuery();
 
-  const [addLog] = useAddLogMutation();
+  const [useLog] = useUsageLogMutation();
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     // @ts-ignore
-    if (
-      supplierError &&
-      (supplierError.status === 401 || supplierError.status === 403)
-    ) {
-      dispatch(clearCredentials());
-      navigate("/login");
-    }
-
     // @ts-ignore
     if (
       inventoryError &&
@@ -56,12 +40,11 @@ const AddLogModal = () => {
       dispatch(clearCredentials());
       navigate("/login");
     }
-  }, [supplierError, inventoryError, navigate, dispatch]);
+  }, [inventoryError, navigate, dispatch]);
 
-  const handleAddLog = async () => {
+  const handleUseLog = async () => {
     try {
-      await addLog({
-        supplierId: supplierId ? Number(supplierId) : null,
+      await useLog({
         inventoryId: Number(inventoryId),
         description: description,
         quantity: Number(quantity),
@@ -81,15 +64,7 @@ const AddLogModal = () => {
     }
   };
 
-  let suppliersOptions: SelectOptions[] = [];
   let inventoriesOptions: SelectOptions[] = [];
-
-  if (supplierSuccess) {
-    suppliersOptions = supplierData?.suppliers!.map((sup) => ({
-      value: sup.id.toString(),
-      label: sup.name,
-    }));
-  }
 
   if (inventorySuccess) {
     inventoriesOptions = inventoryData?.inventories!.map((inv) => ({
@@ -100,13 +75,13 @@ const AddLogModal = () => {
 
   return (
     <>
-      <button className="btn btn-primary mb-5" onClick={handleShow}>
-        إضافة
+      <button className="btn btn-success mb-5" onClick={handleShow}>
+        إستهلاك
       </button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>إضافة</Modal.Title>
+          <Modal.Title>إستهلاك</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="form-group mb-3">
@@ -117,16 +92,6 @@ const AddLogModal = () => {
               id="inventoryId"
               options={inventoriesOptions}
               onChange={(e) => setInventoryId(e!.value)}
-            />
-          </div>
-          <div className="form-group mb-3">
-            <label htmlFor="supplierId" className="form-label">
-              المورد
-            </label>
-            <Select
-              id="supplierId"
-              options={suppliersOptions}
-              onChange={(e) => setSupplierId(e!.value)}
             />
           </div>
           <div className="form-group mb-3">
@@ -155,7 +120,7 @@ const AddLogModal = () => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <button className="btn btn-primary" onClick={handleAddLog}>
+          <button className="btn btn-primary" onClick={handleUseLog}>
             إضافة
           </button>
         </Modal.Footer>

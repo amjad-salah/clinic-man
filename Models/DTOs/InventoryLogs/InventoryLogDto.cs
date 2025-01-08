@@ -6,6 +6,7 @@ namespace Models.DTOs.InventoryLogs;
 
 public class InventoryLogDto
 {
+    public int Id { get; set; }
     public int? SupplierId { get; set; }
     public int InventoryId { get; set; }
     public int Quantity { get; set; }

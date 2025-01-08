@@ -21,6 +21,7 @@ public class InventoriesService(AppDbContext context) : IInventoriesService
     {
         var inventory = await context.Inventories
             .Include(i => i.Logs)
+            .ThenInclude(l => l.Supplier)
             .FirstOrDefaultAsync(i => i.Id == id);
 
         if (inventory == null)
@@ -37,6 +38,7 @@ public class InventoriesService(AppDbContext context) : IInventoriesService
             return new InventoryResponseDto { Success = false, Error = "Inventory already exists" };
 
         var newInventory = inventory.Adapt<Inventory>();
+        newInventory.Quantity = 0;
 
         context.Inventories.Add(newInventory);
         await context.SaveChangesAsync();
@@ -60,7 +62,6 @@ public class InventoriesService(AppDbContext context) : IInventoriesService
         }
 
         existingInventory.Name = inventory.Name;
-        existingInventory.Quantity = inventory.Quantity;
         existingInventory.MinQuantity = inventory.MinQuantity;
         existingInventory.ExpirationDate = inventory.ExpirationDate;
 

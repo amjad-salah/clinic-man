@@ -22,6 +22,7 @@ public class SuppliersService(AppDbContext context) : ISuppliersService
     {
         var supplier = await context.Suppliers.AsNoTracking()
             .Include(s => s.Logs)
+            .ThenInclude(l => l.Inventory)
             .FirstOrDefaultAsync(s => s.Id == id);
 
         if (supplier == null)

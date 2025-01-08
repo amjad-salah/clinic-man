@@ -10,7 +10,6 @@ export type InventoryDto = {
 
 export type AddInventoryDto = {
   name: string;
-  quantity: number;
   minQuantity: number;
   expirationDate: string;
 };
@@ -18,7 +17,6 @@ export type AddInventoryDto = {
 export type UpdateInventoryDto = {
   id: number;
   name: string;
-  quantity: number;
   minQuantity: number;
   expirationDate: string;
 };

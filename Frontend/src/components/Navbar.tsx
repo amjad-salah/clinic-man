@@ -124,7 +124,7 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className="sidebar-item">
-                  <Link to="#" className="sidebar-link">
+                  <Link to="invlogs" className="sidebar-link">
                     <LuLogs />
                     <span className="ms-2">العمليات</span>
                   </Link>

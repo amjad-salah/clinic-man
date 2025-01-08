@@ -9,7 +9,6 @@ import moment from "moment";
 
 const AddInventoryModal = () => {
   const [name, setName] = useState("");
-  const [quantity, setQuantity] = useState("");
   const [minQuantity, setMinQuantity] = useState("");
   const [expirationData, setExpirationData] = useState("");
   const [show, setShow] = useState(false);
@@ -26,7 +25,6 @@ const AddInventoryModal = () => {
     try {
       await addInventory({
         name,
-        quantity: Number(quantity),
         minQuantity: Number(minQuantity),
         expirationDate: moment(expirationData).format("YYYY-MM-DD"),
       }).unwrap();
@@ -66,18 +64,6 @@ const AddInventoryModal = () => {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <div className="form-group mb-3">
-            <label htmlFor="quantity" className="form-label">
-              الكمية
-            </label>
-            <input
-              type="number"
-              className="form-control"
-              id="quantity"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
             />
           </div>
           <div className="form-group mb-3">

@@ -85,7 +85,7 @@ const InventoryDetails = () => {
             {data?.inventory!.logs!.map((log) => (
               <tr key={log.id}>
                 <td>{log.inventory!.name}</td>
-                <td>{log.supplier!.name}</td>
+                <td>{log.supplier?.name}</td>
                 <td>{LogType[log.type]}</td>
                 <td>{log.quantity}</td>
               </tr>

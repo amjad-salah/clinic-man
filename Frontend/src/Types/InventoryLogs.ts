@@ -20,16 +20,12 @@ export type InventoryLogDto = {
 export type AddInventoryLogDto = {
   inventoryId: number;
   supplierId: number | null;
-  type: LogType;
   quantity: number;
   description: string;
 };
 
-export type UpdateInventoryLogDto = {
-  id: number;
+export type UseInventoryLogDto = {
   inventoryId: number;
-  supplierId: number | null;
-  type: LogType;
   quantity: number;
   description: string;
 };

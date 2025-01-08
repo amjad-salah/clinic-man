@@ -49,6 +49,7 @@ import InventoriesList from "./features/inventories/InventoriesList.tsx";
 import InventoryDetails from "./features/inventories/InventoryDetails.tsx";
 import SuppliersList from "./features/suppliers/SuppliersList.tsx";
 import SupplierDetails from "./features/suppliers/SupplierDetails.tsx";
+import LogsList from "./features/inventoryLogs/LogsList.tsx";
 
 //Routes
 const router = createBrowserRouter(
@@ -146,6 +147,9 @@ const router = createBrowserRouter(
       <Route path="/suppliers">
         <Route path="/suppliers" index={true} element={<SuppliersList />} />
         <Route path="/suppliers/:id" element={<SupplierDetails />} />
+      </Route>
+      <Route path="/invlogs">
+        <Route path="/invlogs" index={true} element={<LogsList />} />
       </Route>
     </Route>,
   ),

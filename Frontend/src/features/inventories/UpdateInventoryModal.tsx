@@ -20,7 +20,6 @@ const UpdateInventoryModal = ({ id }: UpdateInvProps) => {
   const [updateInventory] = useUpdateInventoryMutation();
 
   const [name, setName] = useState("");
-  const [quantity, setQuantity] = useState("");
   const [minQuantity, setMinQuantity] = useState("");
   const [expirationData, setExpirationData] = useState("");
   const [show, setShow] = useState(false);
@@ -34,7 +33,6 @@ const UpdateInventoryModal = ({ id }: UpdateInvProps) => {
   useEffect(() => {
     if (isSuccess) {
       setName(data?.inventory!.name);
-      setQuantity(data?.inventory!.quantity.toString());
       setMinQuantity(data?.inventory!.minQuantity.toString());
       setExpirationData(data?.inventory!.expirationDate);
     }
@@ -52,7 +50,6 @@ const UpdateInventoryModal = ({ id }: UpdateInvProps) => {
       await updateInventory({
         id: Number(id),
         name,
-        quantity: Number(quantity),
         minQuantity: Number(minQuantity),
         expirationDate: moment(expirationData).format("YYYY-MM-DD"),
       }).unwrap();
@@ -91,18 +88,6 @@ const UpdateInventoryModal = ({ id }: UpdateInvProps) => {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <div className="form-group mb-3">
-            <label htmlFor="quantity" className="form-label">
-              الكمية
-            </label>
-            <input
-              type="number"
-              className="form-control"
-              id="quantity"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
             />
           </div>
           <div className="form-group mb-3">

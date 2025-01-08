@@ -7,10 +7,9 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { BsInfoCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import moment from "moment";
-import AddInventoryModal from "../inventories/AddInventoryModal.tsx";
-import UpdateInventoryModal from "../inventories/UpdateInventoryModal.tsx";
 import { LogType } from "../../Types/InventoryLogs.ts";
+import AddLogModal from "./AddLogModal.tsx";
+import UseLogModal from "./UseLogModal.tsx";
 
 const LogsList = () => {
   const { data, isLoading, isSuccess, isError, error } = useGetAllLogsQuery();
@@ -61,7 +60,10 @@ const LogsList = () => {
       <>
         <h4 className="text-center mb-2">العمليات</h4>
         <hr className="mb-3" />
-        {/*<AddInventoryModal/>*/}
+        <div className="d-flex justify-content-between">
+          <AddLogModal />
+          <UseLogModal />
+        </div>
         <table className="table table-hover table-responsive table-striped shadow">
           <thead>
             <tr>
@@ -76,7 +78,7 @@ const LogsList = () => {
             {data?.logs?.map((log) => (
               <tr key={log.id}>
                 <td>{log.inventory!.name}</td>
-                <td>{log.supplier!.name}</td>
+                <td>{log.supplier?.name}</td>
                 <td>{log.quantity}</td>
                 <td>{LogType[log.type]}</td>
                 <td>

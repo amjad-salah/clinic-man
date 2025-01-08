@@ -2,7 +2,7 @@ import { apiSlice } from "../api/apiSlice.ts";
 import {
   AddInventoryLogDto,
   InventoryLogResponseDto,
-  UpdateInventoryLogDto,
+  UseInventoryLogDto,
 } from "../../Types/InventoryLogs.ts";
 import { inventoriesApiSlice } from "../inventories/inventoriesApiSlice.ts";
 
@@ -22,7 +22,7 @@ export const inventoryLogsApiSlice = apiSlice.injectEndpoints({
 
     addLog: builder.mutation<InventoryLogResponseDto, AddInventoryLogDto>({
       query: (data) => ({
-        url: LOGS_URL,
+        url: `${LOGS_URL}/add`,
         method: "POST",
         body: data,
       }),
@@ -30,27 +30,23 @@ export const inventoryLogsApiSlice = apiSlice.injectEndpoints({
       onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
         if (await queryFulfilled) {
           dispatch(inventoriesApiSlice.util.invalidateTags(["Inventories"]));
-          //dispatch(inventoriesApiSlice.util.invalidateTags(["Inventories"]));
         }
       },
     }),
 
-    updateLog: builder.mutation<InventoryLogResponseDto, UpdateInventoryLogDto>(
-      {
-        query: (data) => ({
-          url: `${LOGS_URL}/${data.id}`,
-          method: "PUT",
-          body: data,
-        }),
-        invalidatesTags: ["InventoryLogs"],
-        onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
-          if (await queryFulfilled) {
-            dispatch(inventoriesApiSlice.util.invalidateTags(["Inventories"]));
-            //dispatch(inventoriesApiSlice.util.invalidateTags(["Inventories"]));
-          }
-        },
+    usageLog: builder.mutation<InventoryLogResponseDto, UseInventoryLogDto>({
+      query: (data) => ({
+        url: `${LOGS_URL}/use`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["InventoryLogs"],
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        if (await queryFulfilled) {
+          dispatch(inventoriesApiSlice.util.invalidateTags(["Inventories"]));
+        }
       },
-    ),
+    }),
 
     deleteLog: builder.mutation<InventoryLogResponseDto, number>({
       query: (id) => ({
@@ -72,6 +68,6 @@ export const {
   useGetAllLogsQuery,
   useGetLogByIdQuery,
   useAddLogMutation,
-  useUpdateLogMutation,
+  useUsageLogMutation,
   useDeleteLogMutation,
 } = inventoryLogsApiSlice;
