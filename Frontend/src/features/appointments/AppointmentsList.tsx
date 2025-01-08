@@ -8,8 +8,11 @@ import { BsInfoCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
+import { useState } from "react";
 
 const AppointmentsList = () => {
+  const [filter, setFilter] = useState("");
+
   const { data, isSuccess, isLoading, isError, error } =
     useGetAllAppointmentsQuery();
   const [deleteAppointment] = useDeleteAppointmentMutation();
@@ -61,6 +64,15 @@ const AppointmentsList = () => {
         <Link to="/appointments/add" className="btn btn-primary mb-4">
           إضافة
         </Link>
+        <div className="col-md-5 mb-5">
+          <input
+            type="text"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="بحث بالمريض"
+            className="form-control"
+          />
+        </div>
         <div className="table-responsive">
           <table className="table table-striped table-hover shadow">
             <thead>
@@ -74,35 +86,43 @@ const AppointmentsList = () => {
               </tr>
             </thead>
             <tbody>
-              {data?.appointments!.map((appointment) => (
-                <tr key={appointment.id}>
-                  <td>{appointment.id}</td>
-                  <td>{moment(appointment.date).format("YYYY/MM/DD")}</td>
-                  <td>{appointment.time}</td>
-                  <td>{appointment.patient.fullName}</td>
-                  <td>{appointment.doctor.user.fullName}</td>
-                  <td>
-                    <Link
-                      to={`/appointments/${appointment.id}`}
-                      className="btn btn-success btn-sm me-2"
-                    >
-                      <BsInfoCircle />
-                    </Link>
-                    {/*<Link*/}
-                    {/*  to={`/appointments/edit/${appointment.id}`}*/}
-                    {/*  className="btn btn-primary btn-sm me-2"*/}
-                    {/*>*/}
-                    {/*  <FaRegEdit />*/}
-                    {/*</Link>*/}
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDeleteAppointment(appointment.id)}
-                    >
-                      <FaRegTrashAlt />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {data
+                ?.appointments!.filter((appointment) => {
+                  if (filter !== "") {
+                    return appointment.patient.fullName.includes(filter);
+                  }
+
+                  return true;
+                })
+                .map((appointment) => (
+                  <tr key={appointment.id}>
+                    <td>{appointment.id}</td>
+                    <td>{moment(appointment.date).format("YYYY/MM/DD")}</td>
+                    <td>{appointment.time}</td>
+                    <td>{appointment.patient.fullName}</td>
+                    <td>{appointment.doctor.user.fullName}</td>
+                    <td>
+                      <Link
+                        to={`/appointments/${appointment.id}`}
+                        className="btn btn-success btn-sm me-2"
+                      >
+                        <BsInfoCircle />
+                      </Link>
+                      {/*<Link*/}
+                      {/*  to={`/appointments/edit/${appointment.id}`}*/}
+                      {/*  className="btn btn-primary btn-sm me-2"*/}
+                      {/*>*/}
+                      {/*  <FaRegEdit />*/}
+                      {/*</Link>*/}
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleDeleteAppointment(appointment.id)}
+                      >
+                        <FaRegTrashAlt />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

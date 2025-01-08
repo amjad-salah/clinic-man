@@ -8,8 +8,11 @@ import { BsInfoCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
+import { useState } from "react";
 
 const BillingsList = () => {
+  const [filter, setFilter] = useState("");
+
   const { data, isSuccess, isLoading, isError, error } =
     useGetAllBillingsQuery();
 
@@ -62,6 +65,15 @@ const BillingsList = () => {
         <Link to="/bills/add" className="btn btn-primary mb-4">
           إضافة
         </Link>
+        <div className="col-md-5 mb-5">
+          <input
+            type="text"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="بحث برقم الفاتورة"
+            className="form-control"
+          />
+        </div>
         <div className="table-responsive">
           <table className="table table-striped table-hover">
             <thead>
@@ -76,30 +88,38 @@ const BillingsList = () => {
               </tr>
             </thead>
             <tbody>
-              {data?.billings!.map((billing) => (
-                <tr key={billing.id}>
-                  <td>{billing.id}</td>
-                  <td>{moment(billing.date).format("YYYY/MM/DD")}</td>
-                  <td>{billing.patient!.fullName}</td>
-                  <td>{billing.total}</td>
-                  <td>{billing.paidAmount}</td>
-                  <td>{billing.remainingBalance}</td>
-                  <td>
-                    <Link
-                      to={`/bills/${billing.id}`}
-                      className="btn btn-success btn-sm me-2"
-                    >
-                      <BsInfoCircle />
-                    </Link>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDeleteBillingItem(billing.id)}
-                    >
-                      <FaRegTrashAlt />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {data
+                ?.billings!.filter((billing) => {
+                  if (filter !== "") {
+                    return billing.id.toString().includes(filter);
+                  }
+
+                  return true;
+                })
+                .map((billing) => (
+                  <tr key={billing.id}>
+                    <td>{billing.id}</td>
+                    <td>{moment(billing.date).format("YYYY/MM/DD")}</td>
+                    <td>{billing.patient!.fullName}</td>
+                    <td>{billing.total}</td>
+                    <td>{billing.paidAmount}</td>
+                    <td>{billing.remainingBalance}</td>
+                    <td>
+                      <Link
+                        to={`/bills/${billing.id}`}
+                        className="btn btn-success btn-sm me-2"
+                      >
+                        <BsInfoCircle />
+                      </Link>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleDeleteBillingItem(billing.id)}
+                      >
+                        <FaRegTrashAlt />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

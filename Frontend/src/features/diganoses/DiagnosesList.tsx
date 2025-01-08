@@ -7,8 +7,11 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { BsInfoCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 const DiagnosesList = () => {
+  const [filter, setFilter] = useState("");
+
   const { data, isSuccess, isLoading, isError, error } =
     useGetAllDiagnosesQuery();
 
@@ -58,6 +61,15 @@ const DiagnosesList = () => {
       <>
         <h4 className="text-center mb-2">التشخيصات</h4>
         <hr className="mb-5" />
+        <div className="col-md-5 mb-5">
+          <input
+            type="text"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="بحث بالمريض"
+            className="form-control"
+          />
+        </div>
         <table className="table table-striped table-hover shadow">
           <thead>
             <tr>
@@ -68,21 +80,29 @@ const DiagnosesList = () => {
             </tr>
           </thead>
           <tbody>
-            {data?.diagnoses!.map((diagnose) => (
-              <tr key={diagnose.id}>
-                <td>{diagnose.appointmentId}</td>
-                <td>{diagnose.patient.fullName}</td>
-                <td>{diagnose.diagnosis}</td>
-                <td>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleDeleteDiagnose(diagnose.id)}
-                  >
-                    <FaRegTrashAlt />
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {data
+              ?.diagnoses!.filter((diagnose) => {
+                if (filter !== "") {
+                  return diagnose.patient!.fullName.includes(filter);
+                }
+
+                return true;
+              })
+              .map((diagnose) => (
+                <tr key={diagnose.id}>
+                  <td>{diagnose.appointmentId}</td>
+                  <td>{diagnose.patient.fullName}</td>
+                  <td>{diagnose.diagnosis}</td>
+                  <td>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleDeleteDiagnose(diagnose.id)}
+                    >
+                      <FaRegTrashAlt />
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </>

@@ -6,8 +6,11 @@ import { BsInfoCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { TestStatus } from "../../Types/LabTests.ts";
+import { useState } from "react";
 
 const TestsList = () => {
+  const [filter, setFilter] = useState("");
+
   const { data, isSuccess, isLoading, isError, error } = useGetAllTestsQuery();
 
   const [deleteTest] = useDeleteTestMutation();
@@ -56,6 +59,15 @@ const TestsList = () => {
       <>
         <h4 className="text-center mb-2">الفحوصات</h4>
         <hr className="mb-5" />
+        <div className="col-md-5 mb-5">
+          <input
+            type="text"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="بحث بالمريض"
+            className="form-control"
+          />
+        </div>
         <table className="table table-striped table-hover shadow">
           <thead>
             <tr>
@@ -68,35 +80,43 @@ const TestsList = () => {
             </tr>
           </thead>
           <tbody>
-            {data!.tests?.map((test) => (
-              <tr key={test.id}>
-                <td>{test.appointmentId}</td>
-                <td>{test.testName}</td>
-                <td>{test.patient.fullName}</td>
-                <td>{TestStatus[test.status]}</td>
-                <td>{test.result}</td>
-                <td>
-                  <Link
-                    to={`/labtests/${test.id}`}
-                    className="btn btn-success btn-sm me-2"
-                  >
-                    <BsInfoCircle />
-                  </Link>
-                  <Link
-                    to={`/labtests/edit/${test.id}`}
-                    className="btn btn-primary btn-sm me-2"
-                  >
-                    <FaRegEdit />
-                  </Link>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleDeleteTest(test.id)}
-                  >
-                    <FaRegTrashAlt />
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {data!
+              .tests!.filter((test) => {
+                if (filter !== "") {
+                  return test.patient!.fullName.includes(filter);
+                }
+
+                return true;
+              })
+              .map((test) => (
+                <tr key={test.id}>
+                  <td>{test.appointmentId}</td>
+                  <td>{test.testName}</td>
+                  <td>{test.patient.fullName}</td>
+                  <td>{TestStatus[test.status]}</td>
+                  <td>{test.result}</td>
+                  <td>
+                    <Link
+                      to={`/labtests/${test.id}`}
+                      className="btn btn-success btn-sm me-2"
+                    >
+                      <BsInfoCircle />
+                    </Link>
+                    <Link
+                      to={`/labtests/edit/${test.id}`}
+                      className="btn btn-primary btn-sm me-2"
+                    >
+                      <FaRegEdit />
+                    </Link>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleDeleteTest(test.id)}
+                    >
+                      <FaRegTrashAlt />
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </>

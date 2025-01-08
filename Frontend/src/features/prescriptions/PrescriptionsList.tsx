@@ -8,8 +8,11 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { BsInfoCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 const PrescriptionsList = () => {
+  const [filter, setFilter] = useState("");
+
   const { data, isSuccess, isLoading, isError, error } =
     useGetAllPrescriptionsQuery();
 
@@ -59,6 +62,15 @@ const PrescriptionsList = () => {
       <>
         <h4 className="text-center mb-2">الوصفات</h4>
         <hr className="mb-5" />
+        <div className="col-md-5 mb-5">
+          <input
+            type="text"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="بحث بالمريض"
+            className="form-control"
+          />
+        </div>
         <table className="table table-striped table-hover shadow">
           <thead>
             <tr>
@@ -70,28 +82,36 @@ const PrescriptionsList = () => {
             </tr>
           </thead>
           <tbody>
-            {data.prescriptions?.map((prescription) => (
-              <tr key={prescription.id}>
-                <td>{prescription.appointmentId}</td>
-                <td>{prescription.patient.fullName}</td>
-                <td>{prescription.medicationName}</td>
-                <td>{prescription.dosage}</td>
-                <td>
-                  <Link
-                    to={`/prescriptions/${prescription.id}`}
-                    className="btn btn-success btn-sm me-2"
-                  >
-                    <BsInfoCircle />
-                  </Link>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleDeletePrescription(prescription.id)}
-                  >
-                    <FaRegTrashAlt />
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {data
+              ?.prescriptions!.filter((pres) => {
+                if (filter !== "") {
+                  return pres.patient!.fullName.includes(filter);
+                }
+
+                return true;
+              })
+              .map((prescription) => (
+                <tr key={prescription.id}>
+                  <td>{prescription.appointmentId}</td>
+                  <td>{prescription.patient.fullName}</td>
+                  <td>{prescription.medicationName}</td>
+                  <td>{prescription.dosage}</td>
+                  <td>
+                    <Link
+                      to={`/prescriptions/${prescription.id}`}
+                      className="btn btn-success btn-sm me-2"
+                    >
+                      <BsInfoCircle />
+                    </Link>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleDeletePrescription(prescription.id)}
+                    >
+                      <FaRegTrashAlt />
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </>

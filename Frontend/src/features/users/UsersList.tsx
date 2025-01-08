@@ -5,8 +5,11 @@ import { FaRegEdit } from "react-icons/fa";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 const UsersList = () => {
+  const [filter, setFilter] = useState("");
+
   const { data, isSuccess, isError, error, isLoading } = useGetAllUsersQuery();
   const [deleteUser] = useDeleteUserMutation();
 
@@ -57,6 +60,15 @@ const UsersList = () => {
         <Link to="/users/add" className="btn btn-primary mb-4">
           إضافة
         </Link>
+        <div className="col-md-5 mb-5">
+          <input
+            type="text"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="بحث بالبريد الإلكتروني"
+            className="form-control"
+          />
+        </div>
         <table className="table table-striped table-hover shadow">
           <thead>
             <tr>
@@ -67,27 +79,35 @@ const UsersList = () => {
             </tr>
           </thead>
           <tbody>
-            {data?.users?.map((user) => (
-              <tr key={user.id}>
-                <td>{user.fullName}</td>
-                <td>{user.email}</td>
-                <td>{UserRole[user.role]}</td>
-                <td>
-                  <Link
-                    to={`/users/edit/${user.id}`}
-                    className="btn btn-primary btn-sm me-2"
-                  >
-                    <FaRegEdit />
-                  </Link>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleDeleteUser(user.id)}
-                  >
-                    <FaRegTrashAlt />
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {data
+              ?.users!.filter((user) => {
+                if (filter !== "") {
+                  return user.email.includes(filter);
+                }
+
+                return true;
+              })
+              .map((user) => (
+                <tr key={user.id}>
+                  <td>{user.fullName}</td>
+                  <td>{user.email}</td>
+                  <td>{UserRole[user.role]}</td>
+                  <td>
+                    <Link
+                      to={`/users/edit/${user.id}`}
+                      className="btn btn-primary btn-sm me-2"
+                    >
+                      <FaRegEdit />
+                    </Link>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleDeleteUser(user.id)}
+                    >
+                      <FaRegTrashAlt />
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </>

@@ -10,8 +10,11 @@ import { toast } from "react-toastify";
 import { LogType } from "../../Types/InventoryLogs.ts";
 import AddLogModal from "./AddLogModal.tsx";
 import UseLogModal from "./UseLogModal.tsx";
+import { useState } from "react";
 
 const LogsList = () => {
+  const [filter, setFilter] = useState("");
+
   const { data, isLoading, isSuccess, isError, error } = useGetAllLogsQuery();
 
   const [deleteLog] = useDeleteLogMutation();
@@ -64,6 +67,15 @@ const LogsList = () => {
           <AddLogModal />
           <UseLogModal />
         </div>
+        <div className="col-md-5 mb-5">
+          <input
+            type="text"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="بحث بالمخزون أو المورد"
+            className="form-control"
+          />
+        </div>
         <table className="table table-hover table-responsive table-striped shadow">
           <thead>
             <tr>
@@ -75,29 +87,40 @@ const LogsList = () => {
             </tr>
           </thead>
           <tbody>
-            {data?.logs?.map((log) => (
-              <tr key={log.id}>
-                <td>{log.inventory!.name}</td>
-                <td>{log.supplier?.name}</td>
-                <td>{log.quantity}</td>
-                <td>{LogType[log.type]}</td>
-                <td>
-                  <Link
-                    to={`/inventories/${log.id}`}
-                    className="btn btn-success btn-sm me-2"
-                  >
-                    <BsInfoCircle />
-                  </Link>
-                  {/*<UpdateInventoryModal id={log.id}/>*/}
-                  <button
-                    onClick={() => handleDeleteLog(log.id)}
-                    className="btn btn-danger btn-sm"
-                  >
-                    <FaRegTrashAlt />
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {data
+              ?.logs!.filter((log) => {
+                if (filter !== "") {
+                  return (
+                    log.inventory!.name.includes(filter) ||
+                    log.supplier?.name.includes(filter)
+                  );
+                }
+
+                return true;
+              })
+              .map((log) => (
+                <tr key={log.id}>
+                  <td>{log.inventory!.name}</td>
+                  <td>{log.supplier?.name}</td>
+                  <td>{log.quantity}</td>
+                  <td>{LogType[log.type]}</td>
+                  <td>
+                    <Link
+                      to={`/inventories/${log.id}`}
+                      className="btn btn-success btn-sm me-2"
+                    >
+                      <BsInfoCircle />
+                    </Link>
+                    {/*<UpdateInventoryModal id={log.id}/>*/}
+                    <button
+                      onClick={() => handleDeleteLog(log.id)}
+                      className="btn btn-danger btn-sm"
+                    >
+                      <FaRegTrashAlt />
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </>

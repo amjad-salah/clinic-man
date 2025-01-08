@@ -9,8 +9,11 @@ import { BsInfoCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Gender } from "../../Types/Patients.ts";
+import { useState } from "react";
 
 const PatientsList = () => {
+  const [filter, setFilter] = useState("");
+
   const { data, isSuccess, isLoading, isError, error } = useGetPatientsQuery();
 
   const [deletePatient] = useDeletePatientMutation();
@@ -62,6 +65,15 @@ const PatientsList = () => {
         <Link to="/patients/add" className="btn btn-primary mb-5">
           إضافة
         </Link>
+        <div className="col-md-5 mb-5">
+          <input
+            type="text"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="بحث بالإسم أو رقم الهاتف"
+            className="form-control"
+          />
+        </div>
         <div className="table-responsive">
           <table className="table table-striped table-hover shadow">
             <thead>
@@ -75,38 +87,49 @@ const PatientsList = () => {
               </tr>
             </thead>
             <tbody>
-              {data?.patients!.map((patient) => (
-                <tr key={patient.id}>
-                  <td>{patient.fullName}</td>
-                  <td>{Gender[patient.gender]}</td>
-                  <td>{patient.phoneNo}</td>
-                  <td>{patient.address}</td>
-                  <td>
-                    {new Date().getFullYear() -
-                      new Date(patient.doB).getFullYear()}
-                  </td>
-                  <td>
-                    <Link
-                      to={`/patients/${patient.id}`}
-                      className="btn btn-success btn-sm me-2"
-                    >
-                      <BsInfoCircle />
-                    </Link>
-                    <Link
-                      to={`/patients/edit/${patient.id}`}
-                      className="btn btn-primary btn-sm me-2"
-                    >
-                      <FaRegEdit />
-                    </Link>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDeletePatient(patient.id)}
-                    >
-                      <FaRegTrashAlt />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {data
+                ?.patients!.filter((patient) => {
+                  if (filter !== "") {
+                    return (
+                      patient.fullName.includes(filter) ||
+                      patient.phoneNo.includes(filter)
+                    );
+                  }
+
+                  return true;
+                })
+                .map((patient) => (
+                  <tr key={patient.id}>
+                    <td>{patient.fullName}</td>
+                    <td>{Gender[patient.gender]}</td>
+                    <td>{patient.phoneNo}</td>
+                    <td>{patient.address}</td>
+                    <td>
+                      {new Date().getFullYear() -
+                        new Date(patient.doB).getFullYear()}
+                    </td>
+                    <td>
+                      <Link
+                        to={`/patients/${patient.id}`}
+                        className="btn btn-success btn-sm me-2"
+                      >
+                        <BsInfoCircle />
+                      </Link>
+                      <Link
+                        to={`/patients/edit/${patient.id}`}
+                        className="btn btn-primary btn-sm me-2"
+                      >
+                        <FaRegEdit />
+                      </Link>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleDeletePatient(patient.id)}
+                      >
+                        <FaRegTrashAlt />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

@@ -8,8 +8,11 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { DayOfWeek } from "../../Types/DoctorSchedules.ts";
+import { useState } from "react";
 
 const SchedulesList = () => {
+  const [filter, setFilter] = useState("");
+
   const { data, isSuccess, isLoading, isError, error } =
     useGetAllSchedulesQuery();
 
@@ -62,6 +65,15 @@ const SchedulesList = () => {
         <Link to="/schedules/add" className="btn btn-primary mb-4">
           إضافة
         </Link>
+        <div className="col-md-5 mb-5">
+          <input
+            type="text"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="بحث بالطبيب"
+            className="form-control"
+          />
+        </div>
         <div className="table-responsive">
           <table className="table table-striped table-hover shadow">
             <thead>
@@ -74,28 +86,36 @@ const SchedulesList = () => {
               </tr>
             </thead>
             <tbody>
-              {data?.schedules!.map((schedule) => (
-                <tr key={schedule.id}>
-                  <td>{schedule.doctor.user.fullName}</td>
-                  <td>{DayOfWeek[schedule.day]}</td>
-                  <td>{schedule.startTime}</td>
-                  <td>{schedule.endTime}</td>
-                  <td>
-                    <Link
-                      to={`/schedules/edit/${schedule.id}`}
-                      className="btn btn-sm btn-primary me-2"
-                    >
-                      <FaRegEdit />
-                    </Link>
-                    <button
-                      onClick={() => handleDeleteSchedule(schedule.id)}
-                      className="btn btn-sm btn-danger"
-                    >
-                      <FaRegTrashAlt />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {data
+                ?.schedules!.filter((schedule) => {
+                  if (filter !== "") {
+                    return schedule.doctor!.user!.fullName.includes(filter);
+                  }
+
+                  return true;
+                })
+                .map((schedule) => (
+                  <tr key={schedule.id}>
+                    <td>{schedule.doctor.user.fullName}</td>
+                    <td>{DayOfWeek[schedule.day]}</td>
+                    <td>{schedule.startTime}</td>
+                    <td>{schedule.endTime}</td>
+                    <td>
+                      <Link
+                        to={`/schedules/edit/${schedule.id}`}
+                        className="btn btn-sm btn-primary me-2"
+                      >
+                        <FaRegEdit />
+                      </Link>
+                      <button
+                        onClick={() => handleDeleteSchedule(schedule.id)}
+                        className="btn btn-sm btn-danger"
+                      >
+                        <FaRegTrashAlt />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

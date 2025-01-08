@@ -9,8 +9,11 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import AddSupplierModal from "./AddSupplierModal.tsx";
 import UpdateSupplierModal from "./UpdateSupplierModal.tsx";
+import { useState } from "react";
 
 const SuppliersList = () => {
+  const [filter, setFilter] = useState("");
+
   const { data, isSuccess, isLoading, isError, error } =
     useGetAllSuppliersQuery();
 
@@ -61,6 +64,15 @@ const SuppliersList = () => {
         <h4 className="text-center mb-2">الموردون</h4>
         <hr className="mb-3" />
         <AddSupplierModal />
+        <div className="col-md-5 mb-5">
+          <input
+            type="text"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="بحث بالإسم"
+            className="form-control"
+          />
+        </div>
         <table className="table table-hover table-responsive table-striped shadow">
           <thead>
             <tr>
@@ -71,28 +83,36 @@ const SuppliersList = () => {
             </tr>
           </thead>
           <tbody>
-            {data?.suppliers?.map((supplier) => (
-              <tr key={supplier.id}>
-                <td>{supplier.name}</td>
-                <td>{supplier.contactInfo}</td>
-                <td>{supplier.address}</td>
-                <td>
-                  <Link
-                    to={`/suppliers/${supplier.id}`}
-                    className="btn btn-success btn-sm me-2"
-                  >
-                    <BsInfoCircle />
-                  </Link>
-                  <UpdateSupplierModal id={supplier.id} />
-                  <button
-                    onClick={() => handleDeleteSupplier(supplier.id)}
-                    className="btn btn-danger btn-sm"
-                  >
-                    <FaRegTrashAlt />
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {data
+              ?.suppliers!.filter((supp) => {
+                if (filter !== "") {
+                  return supp.name.includes(filter);
+                }
+
+                return true;
+              })
+              .map((supplier) => (
+                <tr key={supplier.id}>
+                  <td>{supplier.name}</td>
+                  <td>{supplier.contactInfo}</td>
+                  <td>{supplier.address}</td>
+                  <td>
+                    <Link
+                      to={`/suppliers/${supplier.id}`}
+                      className="btn btn-success btn-sm me-2"
+                    >
+                      <BsInfoCircle />
+                    </Link>
+                    <UpdateSupplierModal id={supplier.id} />
+                    <button
+                      onClick={() => handleDeleteSupplier(supplier.id)}
+                      className="btn btn-danger btn-sm"
+                    >
+                      <FaRegTrashAlt />
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </>
