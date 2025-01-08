@@ -9,6 +9,8 @@ import { BsInfoCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import AddDoctorModal from "./AddDoctorModal.tsx";
+import UpdateDoctorModal from "./UpdateDoctorModal.tsx";
 
 const DoctorsList = () => {
   const [filter, setFilter] = useState("");
@@ -62,9 +64,7 @@ const DoctorsList = () => {
       <>
         <h4 className="text-center mb-2">الأطباء</h4>
         <hr className="mb-3" />
-        <Link to="/doctors/add" className="btn btn-primary mb-4">
-          إضافة
-        </Link>
+        <AddDoctorModal />
         <div className="col-md-5 mb-5">
           <input
             type="text"
@@ -107,12 +107,7 @@ const DoctorsList = () => {
                     >
                       <BsInfoCircle />
                     </Link>
-                    <Link
-                      to={`/doctors/edit/${doctor.id}`}
-                      className="btn btn-primary btn-sm me-2"
-                    >
-                      <FaRegEdit />
-                    </Link>
+                    <UpdateDoctorModal id={doctor.id} />
                     <button
                       className="btn btn-danger btn-sm"
                       onClick={() => handleDeleteDoctor(doctor.id)}

@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { useState } from "react";
+import AddBillingModal from "./AddBillingModal.tsx";
 
 const BillingsList = () => {
   const [filter, setFilter] = useState("");
@@ -62,9 +63,7 @@ const BillingsList = () => {
       <>
         <h4 className="text-center mb-2">الفواتير</h4>
         <hr className="mb-3" />
-        <Link to="/bills/add" className="btn btn-primary mb-4">
-          إضافة
-        </Link>
+        <AddBillingModal />
         <div className="col-md-5 mb-5">
           <input
             type="text"

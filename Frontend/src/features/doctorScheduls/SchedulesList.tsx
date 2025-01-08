@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { DayOfWeek } from "../../Types/DoctorSchedules.ts";
 import { useState } from "react";
+import AddScheduleModal from "./AddScheduleModal.tsx";
+import UpdateScheduleModal from "./UpdateScheduleModal.tsx";
 
 const SchedulesList = () => {
   const [filter, setFilter] = useState("");
@@ -62,9 +64,7 @@ const SchedulesList = () => {
       <>
         <h4 className="text-center mb-2">جدولة الأطباء</h4>
         <hr className="mb-3" />
-        <Link to="/schedules/add" className="btn btn-primary mb-4">
-          إضافة
-        </Link>
+        <AddScheduleModal />
         <div className="col-md-5 mb-5">
           <input
             type="text"
@@ -101,12 +101,7 @@ const SchedulesList = () => {
                     <td>{schedule.startTime}</td>
                     <td>{schedule.endTime}</td>
                     <td>
-                      <Link
-                        to={`/schedules/edit/${schedule.id}`}
-                        className="btn btn-sm btn-primary me-2"
-                      >
-                        <FaRegEdit />
-                      </Link>
+                      <UpdateScheduleModal id={schedule.id} />
                       <button
                         onClick={() => handleDeleteSchedule(schedule.id)}
                         className="btn btn-sm btn-danger"

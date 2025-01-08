@@ -3,7 +3,6 @@ import {
   useDeletePrescriptionMutation,
 } from "./prescriptionsApiSlice.ts";
 import Loader from "../../components/Loader.tsx";
-import { FaRegEdit } from "react-icons/fa";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { BsInfoCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";

@@ -2,6 +2,7 @@ import { PatientDto } from "./Patients.ts";
 import { AppointmentDto } from "./Appointments.ts";
 
 export type DiagnoseDto = {
+  id: number;
   patientId: number;
   appointmentId: number;
   diagnosis: string;

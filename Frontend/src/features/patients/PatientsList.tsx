@@ -10,6 +10,8 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Gender } from "../../Types/Patients.ts";
 import { useState } from "react";
+import AddPatientModal from "./AddPatientModal.tsx";
+import UpdatePatientModal from "./UpdatePatientModal.tsx";
 
 const PatientsList = () => {
   const [filter, setFilter] = useState("");
@@ -62,9 +64,7 @@ const PatientsList = () => {
       <>
         <h4 className="text-center mb-2">المرضى</h4>
         <hr className="mb-3" />
-        <Link to="/patients/add" className="btn btn-primary mb-5">
-          إضافة
-        </Link>
+        <AddPatientModal />
         <div className="col-md-5 mb-5">
           <input
             type="text"
@@ -115,12 +115,7 @@ const PatientsList = () => {
                       >
                         <BsInfoCircle />
                       </Link>
-                      <Link
-                        to={`/patients/edit/${patient.id}`}
-                        className="btn btn-primary btn-sm me-2"
-                      >
-                        <FaRegEdit />
-                      </Link>
+                      <UpdatePatientModal id={patient.id} />
                       <button
                         className="btn btn-danger btn-sm"
                         onClick={() => handleDeletePatient(patient.id)}

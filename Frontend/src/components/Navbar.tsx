@@ -67,7 +67,7 @@ const Navbar = () => {
             <li className="sidebar-item">
               <Link to="appointments" className="sidebar-link">
                 <GrSchedules />
-                <span className="ms-2">المواعيد</span>
+                <span className="ms-2">الحجوزات</span>
               </Link>
             </li>
             <li className="sidebar-item">

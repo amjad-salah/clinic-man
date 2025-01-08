@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { TestStatus } from "../../Types/LabTests.ts";
 import { useState } from "react";
+import UpdateTestModal from "./UpdateTestModal.tsx";
 
 const TestsList = () => {
   const [filter, setFilter] = useState("");
@@ -102,12 +103,7 @@ const TestsList = () => {
                     >
                       <BsInfoCircle />
                     </Link>
-                    <Link
-                      to={`/labtests/edit/${test.id}`}
-                      className="btn btn-primary btn-sm me-2"
-                    >
-                      <FaRegEdit />
-                    </Link>
+                    <UpdateTestModal id={test.id} />
                     <button
                       className="btn btn-danger btn-sm"
                       onClick={() => handleDeleteTest(test.id)}

@@ -6,6 +6,8 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import AddUserModal from "./AddUserModal.tsx";
+import EditUserModal from "./EditUserModal.tsx";
 
 const UsersList = () => {
   const [filter, setFilter] = useState("");
@@ -57,9 +59,7 @@ const UsersList = () => {
       <>
         <h4 className="text-center mb-2">المستخدمين</h4>
         <hr className="mb-3" />
-        <Link to="/users/add" className="btn btn-primary mb-4">
-          إضافة
-        </Link>
+        <AddUserModal />
         <div className="col-md-5 mb-5">
           <input
             type="text"
@@ -93,12 +93,7 @@ const UsersList = () => {
                   <td>{user.email}</td>
                   <td>{UserRole[user.role]}</td>
                   <td>
-                    <Link
-                      to={`/users/edit/${user.id}`}
-                      className="btn btn-primary btn-sm me-2"
-                    >
-                      <FaRegEdit />
-                    </Link>
+                    <EditUserModal id={user.id} />
                     <button
                       className="btn btn-danger btn-sm"
                       onClick={() => handleDeleteUser(user.id)}

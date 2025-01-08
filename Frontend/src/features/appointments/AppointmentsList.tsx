@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { useState } from "react";
+import AddAppointmentModal from "./AddAppointmentModal.tsx";
 
 const AppointmentsList = () => {
   const [filter, setFilter] = useState("");
@@ -59,11 +60,9 @@ const AppointmentsList = () => {
   if (isSuccess) {
     content = (
       <>
-        <h4 className="text-center mb-2">المواعيد</h4>
+        <h4 className="text-center mb-2">الحجوزات</h4>
         <hr className="mb-3" />
-        <Link to="/appointments/add" className="btn btn-primary mb-4">
-          إضافة
-        </Link>
+        <AddAppointmentModal />
         <div className="col-md-5 mb-5">
           <input
             type="text"

@@ -4,8 +4,6 @@ import {
 } from "./diagnosesApiSlice.ts";
 import Loader from "../../components/Loader.tsx";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { BsInfoCircle } from "react-icons/bs";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useState } from "react";
 

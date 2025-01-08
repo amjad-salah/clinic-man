@@ -1,14 +1,69 @@
 import { useGetAppointmentByIdQuery } from "./appointmentsApiSlice.ts";
+import { useDeleteDiagnoseMutation } from "../diganoses/diagnosesApiSlice.ts";
+import { useDeleteTestMutation } from "../labTests/testsApiSlice.ts";
+import { useDeletePrescriptionMutation } from "../prescriptions/prescriptionsApiSlice.ts";
 import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/Loader.tsx";
 import { IoMdReturnRight } from "react-icons/io";
 import { AppointmentStatus } from "../../Types/Appointments.ts";
+import AddDiagnoseModal from "./AddDiagnoseModal.tsx";
+import AddPrescriptionModal from "./AddPrescriptionModal.tsx";
+import AddTestModal from "./AddTestModal.tsx";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { toast } from "react-toastify";
+import UpdateTestModal from "../labTests/UpdateTestModal.tsx";
 
 const AppointmentDetails = () => {
   const { id } = useParams();
 
   const { data, isSuccess, isLoading, error, isError } =
     useGetAppointmentByIdQuery(parseInt(id!));
+
+  const [deleteDiagnose] = useDeleteDiagnoseMutation();
+  const [deleteTest] = useDeleteTestMutation();
+  const [deletePrescription] = useDeletePrescriptionMutation();
+
+  const handleDeleteDiagnose = async (id: number) => {
+    const deleteConfirm = confirm("هل تريد مسح هذا التشخيص؟");
+
+    if (deleteConfirm) {
+      try {
+        await deleteDiagnose(id).unwrap();
+      } catch (e) {
+        console.log(e);
+        // @ts-ignore
+        toast.error(e.data.error);
+      }
+    }
+  };
+
+  const handleDeleteTest = async (id: number) => {
+    const deleteConfirm = confirm("هل تريد مسح هذا الفحص؟");
+
+    if (deleteConfirm) {
+      try {
+        await deleteTest(id).unwrap();
+      } catch (e) {
+        console.log(e);
+        // @ts-ignore
+        toast.error(e.data.error);
+      }
+    }
+  };
+
+  const handleDeletePrescription = async (id: number) => {
+    const deleteConfirm = confirm("هل تريد مسح هذه الوصفة؟");
+
+    if (deleteConfirm) {
+      try {
+        await deletePrescription(id).unwrap();
+      } catch (e) {
+        console.log(e);
+        // @ts-ignore
+        toast.error(e.data.error);
+      }
+    }
+  };
 
   let content = <div></div>;
 
@@ -76,12 +131,7 @@ const AppointmentDetails = () => {
             <div className="card card-body p-4 mb-5 shadow">
               <div className="d-flex justify-content-between">
                 <h6 className="mb-2">التشخيص</h6>
-                <Link
-                  to={`/appointments/${id}/add-diagnose`}
-                  className="btn btn-primary btn-sm"
-                >
-                  إضافة
-                </Link>
+                <AddDiagnoseModal />
               </div>
               <hr className="mb-3" />
               <table className="table table-striped table-hover table-sm">
@@ -89,6 +139,7 @@ const AppointmentDetails = () => {
                   <tr>
                     <th>رقم الحجز</th>
                     <th>التشخيص</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -96,6 +147,14 @@ const AppointmentDetails = () => {
                     <tr>
                       <td>{diagnose.appointmentId}</td>
                       <td>{diagnose.diagnosis}</td>
+                      <td>
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDeleteDiagnose(diagnose.id)}
+                        >
+                          <FaRegTrashAlt />
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -103,12 +162,7 @@ const AppointmentDetails = () => {
 
               <div className="d-flex justify-content-between">
                 <h6 className="mb-2">الفحوصات</h6>
-                <Link
-                  to={`/appointments/${id}/add-test`}
-                  className="btn btn-primary btn-sm"
-                >
-                  إضافة
-                </Link>
+                <AddTestModal />
               </div>
               <hr className="mb-3" />
               <table className="table table-striped table-sm">
@@ -116,6 +170,7 @@ const AppointmentDetails = () => {
                   <tr>
                     <th>الفحص</th>
                     <th>النتيجة</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -123,6 +178,15 @@ const AppointmentDetails = () => {
                     <tr key={test.id}>
                       <td>{test.testName}</td>
                       <td>{test.result}</td>
+                      <td>
+                        <UpdateTestModal id={test.id} />
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDeleteTest(test.id)}
+                        >
+                          <FaRegTrashAlt />
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -132,13 +196,8 @@ const AppointmentDetails = () => {
           <div className="col-md-6">
             <div className="card card-body p-4 mb-5 shadow">
               <div className="d-flex justify-content-between">
-                <h6 className="mb-2">العلاج</h6>
-                <Link
-                  to={`/appointments/${id}/add-prescription`}
-                  className="btn btn-primary btn-sm"
-                >
-                  إضافة
-                </Link>
+                <h6 className="mb-2">الوصفات الطبية</h6>
+                <AddPrescriptionModal />
               </div>
               <hr className="mb-3" />
               <table className="table table-striped table-sm">
@@ -147,6 +206,7 @@ const AppointmentDetails = () => {
                     <th>الدواء</th>
                     <th>الجرعة</th>
                     <th>التكرار</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -155,6 +215,14 @@ const AppointmentDetails = () => {
                       <td>{pres.medicationName}</td>
                       <td>{pres.dosage}</td>
                       <td>{pres.frequency}</td>
+                      <td>
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDeletePrescription(pres.id)}
+                        >
+                          <FaRegTrashAlt />
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
