@@ -8,6 +8,7 @@ namespace Models.DTOs.Billings;
 
 public class BillingDetailsDto
 {
+    public int Id { get; set; }
     public DateOnly Date { get; set; }
     public decimal SubTotal { get; set; }
     public decimal Tax { get; set; }

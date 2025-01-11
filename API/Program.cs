@@ -1,6 +1,7 @@
 using System.Text;
 using API.Data;
 using API.Services.Appointments;
+using API.Services.AppointmentTypes;
 using API.Services.Billings;
 using API.Services.Diagnoses;
 using API.Services.Doctors;
@@ -13,6 +14,7 @@ using API.Services.Prescriptions;
 using API.Services.Suppliers;
 using API.Services.Users;
 using API.Validations.Appointments;
+using API.Validations.AppointmentTypes;
 using API.Validations.BillingItems;
 using API.Validations.Billings;
 using API.Validations.Diagnoses;
@@ -30,6 +32,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Models.DTOs.Appointments;
+using Models.DTOs.AppointmentTypes;
 using Models.DTOs.BillingItems;
 using Models.DTOs.Billings;
 using Models.DTOs.Diagnoses;
@@ -84,6 +87,7 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IDoctorSchedulesService, DoctorSchedulesService>();
 builder.Services.AddScoped<IPatientsService, PatientsService>();
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
+builder.Services.AddScoped<IAppointmentTypesService, AppointmentTypesService>();
 builder.Services.AddScoped<IDiagnosesService, DiagnosesService>();
 builder.Services.AddScoped<IPrescriptionsService, PrescriptionsService>();
 builder.Services.AddScoped<ILabTestsService, LabTestsService>();
@@ -110,6 +114,7 @@ builder.Services.AddScoped<IValidator<UpsertInventoryDto>, UpsertInventoryValida
 builder.Services.AddScoped<IValidator<AddInventoryDto>, AddInventoryValidation>();
 builder.Services.AddScoped<IValidator<UseInventoryDto>, UseInventoryValidation>();
 builder.Services.AddScoped<IValidator<UpsertSupplierDto>, UpsertSupplierValidation>();
+builder.Services.AddScoped<IValidator<UpsertAppointmentTypeDto>, UpsertAppointmentTypeValidation>();
 
 var app = builder.Build();
 

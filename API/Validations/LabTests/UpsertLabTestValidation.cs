@@ -11,5 +11,6 @@ public class UpsertLabTestValidation : AbstractValidator<UpsertLabTestDto>
             .MaximumLength(255).WithMessage("Test Name must not exceed 255 characters");
         RuleFor(t => t.Status).IsInEnum().WithMessage("Status is required");
         RuleFor(t => t.AppointmentId).GreaterThan(0).WithMessage("Appointment is required");
+        RuleFor(t => t.Fees).NotNull().WithMessage("Fees is required");
     }
 }

@@ -106,9 +106,9 @@ public class BillingsService(AppDbContext context) : IBillingsService
         return new BillingResponseDto { Success = true };
     }
 
-    public async Task<BillingResponseDto> AddBillingItem(int id, UpsertBillingItemDto item)
+    public async Task<BillingResponseDto> AddBillingItem(UpsertBillingItemDto item)
     {
-        var existBilling = await context.Billings.FindAsync(id);
+        var existBilling = await context.Billings.FindAsync(item.BillingId);
 
         if (existBilling == null || existBilling.Status == BillStatus.Paid)
             return new BillingResponseDto { Success = false, Error = "Billing not found or billing is already paid" };
@@ -150,9 +150,9 @@ public class BillingsService(AppDbContext context) : IBillingsService
         return new BillingResponseDto { Success = true };
     }
 
-    public async Task<BillingResponseDto> AddBillingPayment(int id, UpsertPaymentDto payment)
+    public async Task<BillingResponseDto> AddBillingPayment(UpsertPaymentDto payment)
     {
-        var existBilling = await context.Billings.FindAsync(id);
+        var existBilling = await context.Billings.FindAsync(payment.BillingId);
 
         if (existBilling == null || existBilling.Status == BillStatus.Paid)
             return new BillingResponseDto

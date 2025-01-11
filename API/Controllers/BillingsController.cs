@@ -157,7 +157,7 @@ public class BillingsController(
                 return BadRequest(new BillingResponseDto { Success = false, Error = error });
             }
 
-            var response = await service.AddBillingItem(id, item);
+            var response = await service.AddBillingItem(item);
 
             if (!response.Success)
                 return BadRequest(response);
@@ -207,7 +207,7 @@ public class BillingsController(
                 return BadRequest(new BillingResponseDto { Success = false, Error = error });
             }
 
-            var response = await service.AddBillingPayment(id, payment);
+            var response = await service.AddBillingPayment(payment);
 
             if (!response.Success)
                 return BadRequest(response);

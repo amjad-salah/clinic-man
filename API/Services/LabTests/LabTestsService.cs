@@ -1,13 +1,15 @@
 using API.Data;
+using API.Services.Billings;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.DTOs.BillingItems;
 using Models.DTOs.LabTests;
 using Models.Entities;
 
 namespace API.Services.LabTests;
 
-public class LabTestsService(AppDbContext context) : ILabTestsService
+public class LabTestsService(AppDbContext context, IBillingsService billingsService) : ILabTestsService
 {
     public async Task<LabTestResponseDto> GetTests()
     {
@@ -45,6 +47,16 @@ public class LabTestsService(AppDbContext context) : ILabTestsService
 
         context.LabTests.Add(newTest);
         await context.SaveChangesAsync();
+        
+        var bill = await context.Billings.FirstAsync(b => b.AppointmentId == appointment.Id);
+
+        await billingsService.AddBillingItem(new UpsertBillingItemDto()
+        {
+            BillingId = bill.Id,
+            Quantity = 1,
+            UnitPrice = test.Fees,
+            Description = test.TestName
+        });
 
         return new LabTestResponseDto { Success = true };
     }

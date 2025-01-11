@@ -12,8 +12,8 @@ public interface IBillingsService
     Task<BillingResponseDto> AddBilling(UpsertBillingDto billing);
     // Task<BillingResponseDto> UpdateBilling(int id, UpsertBillingDto billing);
     Task<BillingResponseDto> DeleteBilling(int id);
-    Task<BillingResponseDto> AddBillingItem(int id, UpsertBillingItemDto item);
+    Task<BillingResponseDto> AddBillingItem(UpsertBillingItemDto item);
     Task<BillingResponseDto> DeleteItem(int id);
-    Task<BillingResponseDto> AddBillingPayment(int id, UpsertPaymentDto payment);
+    Task<BillingResponseDto> AddBillingPayment(UpsertPaymentDto payment);
     Task<BillingResponseDto> DeletePayment(int id);
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Text.Json.Serialization;
+using Models.DTOs.AppointmentTypes;
 using Models.DTOs.Doctors;
 using Models.DTOs.Patients;
 using Models.Entities;
@@ -18,8 +19,9 @@ public class AppointmentDto
     [JsonConverter(typeof(TimeOnlyConverter))]
     public TimeOnly Time { get; set; }
 
-    public string? Reason { get; set; }
+    public int AppointmentTypeId { get; set; }
     public AppointmentStatus Status { get; set; }
-    public PatientDto Patient { get; set; }
-    public DoctorDto Doctor { get; set; }
+    public AppointmentTypeDto? AppointmentType { get; set; }
+    public PatientDto? Patient { get; set; }
+    public DoctorDto? Doctor { get; set; }
 }

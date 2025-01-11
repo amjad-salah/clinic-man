@@ -10,6 +10,7 @@ public class LabTest : BaseEntity
     public string? Description { get; set; }
     public string Result { get; set; } = string.Empty;
     public TestStatus Status { get; set; } = TestStatus.Pending;
+    public decimal Fees { get; set; }
     public int PatientId { get; set; }
 
     [ForeignKey("PatientId")] public virtual Patient? Patient { get; set; }

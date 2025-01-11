@@ -1,18 +1,22 @@
 using API.Data;
+using API.Services.Billings;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.DTOs.Appointments;
+using Models.DTOs.BillingItems;
+using Models.DTOs.Billings;
 using Models.Entities;
 
 namespace API.Services.Appointments;
 
-public class AppointmentsService(AppDbContext context) : IAppointmentsService
+public class AppointmentsService(AppDbContext context, IBillingsService billingsService) : IAppointmentsService
 {
     public async Task<AppointmentResponseDto> GetAllAppointments()
     {
         var appointments = await context.Appointments.OrderByDescending(a => a.Date)
             .AsNoTracking()
+            .Include(a =>a.AppointmentType)
             .Include(a => a.Patient)
             .Include(a => a.Doctor)
             .ThenInclude(d => d!.User)
@@ -25,6 +29,7 @@ public class AppointmentsService(AppDbContext context) : IAppointmentsService
     public async Task<AppointmentResponseDto> GetAppointmentById(int id)
     {
         var appointment = await context.Appointments.AsNoTracking()
+            .Include(a =>a.AppointmentType)
             .Include(a => a.Patient)
             .Include(a => a.Doctor)
             .ThenInclude(d => d!.User)
@@ -43,10 +48,32 @@ public class AppointmentsService(AppDbContext context) : IAppointmentsService
         var response = await GetDoctorAndPatient(appointment);
         if (!response.Success) return response;
 
+        var existType = await context.AppointmentTypes.AsNoTracking()
+            .FirstOrDefaultAsync(t => t.Id == appointment.AppointmentTypeId);
+
+        if (existType == null)
+            return new AppointmentResponseDto() { Success = false, Error = "Type not exist" };
+        
         var newAppointment = appointment.Adapt<Appointment>();
 
         context.Appointments.Add(newAppointment);
+        
         await context.SaveChangesAsync();
+
+        var newBill = await billingsService.AddBilling(new UpsertBillingDto()
+        {
+            Date = DateOnly.FromDateTime(DateTime.Now),
+            Tax = 0,
+            AppointmentId = newAppointment.Id,
+        });
+
+        await billingsService.AddBillingItem(new UpsertBillingItemDto()
+        {
+            BillingId = newBill.Billing!.Id,
+            Quantity = 1,
+            UnitPrice = existType.Fees,
+            Description = existType.Name
+        });
 
         return new AppointmentResponseDto { Success = true };
     }
@@ -58,14 +85,15 @@ public class AppointmentsService(AppDbContext context) : IAppointmentsService
         if (existingAppointment == null)
             return new AppointmentResponseDto { Success = false, Error = "Appointment not found" };
 
-        var response = await GetDoctorAndPatient(appointment);
-        if (!response.Success) return response;
+        if (appointment.Status == AppointmentStatus.Completed)
+        {
+            var bill = await context.Billings
+                .FirstAsync(b => b.AppointmentId == existingAppointment.Id);
+            
+            bill.PaidAmount = bill.Total;
+            bill.Status = BillStatus.Paid;
+        }
 
-        existingAppointment.Date = appointment.Date;
-        existingAppointment.Time = appointment.Time;
-        existingAppointment.DoctorId = appointment.DoctorId;
-        existingAppointment.DoctorId = appointment.DoctorId;
-        existingAppointment.Reason = appointment.Reason;
         existingAppointment.Status = appointment.Status;
 
         await context.SaveChangesAsync();

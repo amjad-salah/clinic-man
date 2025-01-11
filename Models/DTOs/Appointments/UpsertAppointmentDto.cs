@@ -15,6 +15,6 @@ public class UpsertAppointmentDto
     [JsonConverter(typeof(TimeOnlyConverter))]
     public TimeOnly Time { get; set; }
 
-    public string? Reason { get; set; }
+    public int AppointmentTypeId { get; set; }
     public AppointmentStatus Status { get; set; }
 }

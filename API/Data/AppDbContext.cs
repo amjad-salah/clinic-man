@@ -10,6 +10,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<DoctorSchedule> DoctorSchedules { get; set; }
     public DbSet<Patient> Patients { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
+    public DbSet<AppointmentType> AppointmentTypes { get; set; }
     public DbSet<Diagnose> Diagnoses { get; set; }
     public DbSet<Prescription> Prescriptions { get; set; }
     public DbSet<LabTest> LabTests { get; set; }

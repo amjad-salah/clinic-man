@@ -16,9 +16,10 @@ public class Appointment : BaseEntity
     public DateOnly Date { get; set; }
     public TimeOnly Time { get; set; }
 
-    [MaxLength(255)] public string? Reason { get; set; }
-
     public AppointmentStatus Status { get; set; }
+    public int? AppointmentTypeId { get; set; }
+    [ForeignKey("AppointmentTypeId")]
+    public virtual AppointmentType? AppointmentType { get; set; }
 
     public virtual List<Diagnose>? Diagnoses { get; set; }
     public virtual List<Prescription>? Prescriptions { get; set; }
