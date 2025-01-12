@@ -20,6 +20,7 @@ const UpdateTestModal = ({ id }: UpdateTestProps) => {
   const [testName, setTestName] = useState("");
   const [status, setStatus] = useState("");
   const [result, setResult] = useState("");
+  const [fees, setFees] = useState(0);
   const [description, setDescription] = useState("");
   const [show, setShow] = useState(false);
 
@@ -54,6 +55,7 @@ const UpdateTestModal = ({ id }: UpdateTestProps) => {
         status: parseInt(status),
         result,
         description,
+        fees,
       }).unwrap();
 
       toast.success("تمت تعديل الفحص بنجاح");
@@ -126,6 +128,18 @@ const UpdateTestModal = ({ id }: UpdateTestProps) => {
                   </option>
                 ))}
               </select>
+            </div>
+            <div className="mb-3">
+              <label htmlFor="fees" className="form-label">
+                السعر
+              </label>
+              <input
+                type="number"
+                id="fees"
+                value={fees}
+                className="form-control"
+                onChange={(e) => setFees(Number(e.target.value))}
+              />
             </div>
             <div className="mb-3">
               <label htmlFor="result" className="form-label">

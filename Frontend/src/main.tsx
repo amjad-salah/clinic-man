@@ -36,6 +36,8 @@ import InventoryDetails from "./features/inventories/InventoryDetails.tsx";
 import SuppliersList from "./features/suppliers/SuppliersList.tsx";
 import SupplierDetails from "./features/suppliers/SupplierDetails.tsx";
 import LogsList from "./features/inventoryLogs/LogsList.tsx";
+import TypesList from "./features/appointments/TypesList.tsx";
+import TypeDetails from "./features/appointments/TypeDetails.tsx";
 
 //Routes
 const router = createBrowserRouter(
@@ -70,6 +72,8 @@ const router = createBrowserRouter(
             element={<AppointmentsList />}
           />
           <Route path="/appointments/:id" element={<AppointmentDetails />} />
+          <Route path="/appointments/types" element={<TypesList />} />
+          <Route path="/appointments/types/:id" element={<TypeDetails />} />
         </Route>
 
         <Route path="/labtests">

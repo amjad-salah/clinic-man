@@ -13,7 +13,7 @@ public class BillingsService(AppDbContext context) : IBillingsService
 {
     public async Task<BillingResponseDto> GetBillings()
     {
-        var billings = await context.Billings.OrderByDescending(b => b.Date)
+        var billings = await context.Billings.OrderByDescending(b => b.Id)
             .AsNoTracking()
             .Include(b => b.Appointment)
             .Include(b => b.Patient)

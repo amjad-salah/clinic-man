@@ -46,14 +46,14 @@ const UpdateDoctorModal = ({ id }: UpdateDocProps) => {
     }
 
     // @ts-ignore
-    if (
-      usersError &&
-      (usersError.status === 401 || usersError.status === 403)
-    ) {
-      dispatch(clearCredentials());
-      navigate("/login");
-    }
-  }, [isSuccess, data, usersError, dispatch, navigate]);
+    // if (
+    //   usersError &&
+    //   (usersError.status === 401 || usersError.status === 403)
+    // ) {
+    //   dispatch(clearCredentials());
+    //   navigate("/login");
+    // }
+  }, [isSuccess, data]);
 
   const handleUpdateDoctor = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,8 +106,8 @@ const UpdateDoctorModal = ({ id }: UpdateDocProps) => {
                   إختر المستخدم
                 </option>
                 {usersIsSuccess &&
-                  usersData
-                    .users!.filter((user) => user.role === UserRole.Doctor)
+                  usersData.users
+                    ?.filter((user) => user.role === UserRole.Doctor)
                     .map((user) => (
                       <option key={user.id} value={user.id}>
                         {user.fullName}

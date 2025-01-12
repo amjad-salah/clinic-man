@@ -61,6 +61,10 @@ const PatientDetails = () => {
                 {Gender[data?.patient!.gender]}
               </p>
               <p>
+                <span className="fw-bold me-2">الحساسية/ الأمراض المزمنة:</span>
+                {data?.patient!.allergies}
+              </p>
+              <p>
                 <span className="fw-bold me-2">رقم الهاتف:</span>
                 {data?.patient!.phoneNo}
               </p>

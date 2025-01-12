@@ -8,7 +8,7 @@ import { Modal, Button } from "react-bootstrap";
 import { Gender } from "../../Types/Patients.ts";
 import moment from "moment";
 
-const AddPatientModal = () => {
+const AddPatientModal = ({ tag }: { tag: string }) => {
   const [fullName, setFullName] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [gender, setGender] = useState("");
@@ -59,7 +59,7 @@ const AddPatientModal = () => {
   return (
     <>
       <button className="btn btn-primary mb-3" onClick={handleShow}>
-        إضافة
+        إضافة{`${tag}`}
       </button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header>

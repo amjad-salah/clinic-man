@@ -96,6 +96,12 @@ const AppointmentDetails = () => {
         <Link to="/appointments" className="btn btn-dark mb-5">
           <IoMdReturnRight />
         </Link>
+        <Link
+          to={`/doctors/${data?.appointment!.doctorId}`}
+          className="btn btn-dark ms-5 mb-5"
+        >
+          عودة للطبيب
+        </Link>
         <div className="card card-body p-4 mb-5 shadow">
           <div className="row">
             <div className="col-md-6">

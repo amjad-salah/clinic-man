@@ -19,7 +19,7 @@ const AppointmentsList = () => {
   const [deleteAppointment] = useDeleteAppointmentMutation();
 
   const handleDeleteAppointment = async (id: number) => {
-    const deleteConfirm = confirm("هل تريد مسح هذا الموعد؟");
+    const deleteConfirm = confirm("هل تريد مسح هذا الحجز؟");
 
     if (deleteConfirm) {
       try {
@@ -62,7 +62,12 @@ const AppointmentsList = () => {
       <>
         <h4 className="text-center mb-2">الحجوزات</h4>
         <hr className="mb-3" />
-        <AddAppointmentModal />
+        <div className="d-flex justify-content-between">
+          <AddAppointmentModal />
+          <Link to="/appointments/types" className="btn btn-primary mb-3">
+            أنواع الحجز
+          </Link>
+        </div>
         <div className="col-md-5 mb-5">
           <input
             type="text"

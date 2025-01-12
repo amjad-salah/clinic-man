@@ -26,6 +26,7 @@ export type AddLabTestDto = {
   description: string | null;
   patientId: number;
   appointmentId: number;
+  fees: number;
 };
 
 export type UpdateLabTestDto = {
@@ -36,6 +37,7 @@ export type UpdateLabTestDto = {
   description: string | null;
   patientId: number;
   appointmentId: number;
+  fees: number;
 };
 
 export type TestResponseDto = {

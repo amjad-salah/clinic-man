@@ -64,7 +64,7 @@ const PatientsList = () => {
       <>
         <h4 className="text-center mb-2">المرضى</h4>
         <hr className="mb-3" />
-        <AddPatientModal />
+        <AddPatientModal tag="" />
         <div className="col-md-5 mb-5">
           <input
             type="text"

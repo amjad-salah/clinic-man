@@ -1,10 +1,21 @@
 import { useGetDoctorByIdQuery } from "./doctorApiSlice.ts";
-import { Link, useParams } from "react-router-dom";
+import {
+  useUpdateAppointmentMutation,
+  useGetAppointmentByIdQuery,
+} from "../appointments/appointmentsApiSlice.ts";
+import { useAppDispatch } from "../../app/hooks.ts";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader.tsx";
 import { IoMdReturnRight } from "react-icons/io";
+import { GoIssueClosed } from "react-icons/go";
+import { TbCancel } from "react-icons/tb";
 import { DayOfWeek } from "../../Types/DoctorSchedules.ts";
 import moment from "moment";
-import { AppointmentStatus } from "../../Types/Appointments.ts";
+import { AppointmentDto, AppointmentStatus } from "../../Types/Appointments.ts";
+import AddAppointmentModal from "../appointments/AddAppointmentModal.tsx";
+import { clearCredentials } from "../users/authSlice.ts";
+import { toast } from "react-toastify";
+import AddPatientModal from "../patients/AddPatientModal.tsx";
 
 const DoctorDetails = () => {
   const { id } = useParams();
@@ -12,6 +23,63 @@ const DoctorDetails = () => {
   const { data, isSuccess, isError, isLoading, error } = useGetDoctorByIdQuery(
     parseInt(id!),
   );
+
+  const [updateAppointment] = useUpdateAppointmentMutation();
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleFinishAppStatusToggle = async (appointment: AppointmentDto) => {
+    try {
+      await updateAppointment({
+        id: appointment.id,
+        date: appointment.date,
+        time: appointment.time,
+        appointmentTypeId: appointment.appointmentTypeId,
+        status: AppointmentStatus.إنتهى,
+        patientId: appointment.patientId,
+        doctorId: appointment.doctorId,
+      }).unwrap();
+
+      toast.success("تم التعديل بنجاح");
+    } catch (e) {
+      console.log(e);
+
+      // @ts-ignore
+      if (e.status == 401 || e.status == 403) {
+        dispatch(clearCredentials());
+        navigate("/login");
+      }
+      // @ts-ignore
+      toast.error(e.data.error);
+    }
+  };
+
+  const handleCancelAppStatusToggle = async (appointment: AppointmentDto) => {
+    try {
+      await updateAppointment({
+        id: appointment.id,
+        date: appointment.date,
+        time: appointment.time,
+        appointmentTypeId: appointment.appointmentTypeId,
+        status: AppointmentStatus.ملغي,
+        patientId: appointment.patientId,
+        doctorId: appointment.doctorId,
+      }).unwrap();
+
+      toast.success("تم التعديل بنجاح");
+    } catch (e) {
+      console.log(e);
+
+      // @ts-ignore
+      if (e.status == 401 || e.status == 403) {
+        dispatch(clearCredentials());
+        navigate("/login");
+      }
+      // @ts-ignore
+      toast.error(e.data.error);
+    }
+  };
 
   let content = <div></div>;
 
@@ -86,13 +154,18 @@ const DoctorDetails = () => {
           <div className="col-md-8">
             <h4 className="text-center mb-2">الحجوزات</h4>
             <hr className="mb-5" />
+            <div className="d-flex justify-content-sm-between">
+              <AddAppointmentModal />
+              <AddPatientModal tag=" مريض" />
+            </div>
             <table className="table table-hover table-striped shadow">
               <thead>
                 <tr>
                   <th>رقم الحجز</th>
                   <th>إسم المريض</th>
                   <th>تاريخ الحجز</th>
-                  <th>زمن الحجز</th>
+                  <th>نوع الحجز</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -103,10 +176,32 @@ const DoctorDetails = () => {
                   )
                   .map((appointment) => (
                     <tr>
-                      <td>{appointment.id}</td>
+                      <td>
+                        <Link to={`/appointments/${appointment.id}`}>
+                          {appointment.id}
+                        </Link>
+                      </td>
                       <td>{appointment.patient.fullName}</td>
                       <td>{moment(appointment.date).format("YYYY/MM/DD")}</td>
-                      <td>{appointment.time}</td>
+                      <td>{appointment.appointmentType?.name}</td>
+                      <td>
+                        <button
+                          className="btn btn-sm btn-success me-2"
+                          onClick={() =>
+                            handleFinishAppStatusToggle(appointment)
+                          }
+                        >
+                          <GoIssueClosed />
+                        </button>
+                        <button
+                          className="btn btn-sm btn-warning"
+                          onClick={() =>
+                            handleCancelAppStatusToggle(appointment)
+                          }
+                        >
+                          <TbCancel />
+                        </button>
+                      </td>
                     </tr>
                   ))}
               </tbody>

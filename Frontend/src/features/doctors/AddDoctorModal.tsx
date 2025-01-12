@@ -24,13 +24,13 @@ const AddDoctorModal = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // @ts-ignore
-    if (error && (error.status === 401 || error.status === 403)) {
-      dispatch(clearCredentials());
-      navigate("/login");
-    }
-  }, [error, navigate, dispatch]);
+  // useEffect(() => {
+  //   // @ts-ignore
+  //   if (error && (error.status === 401 || error.status === 403)) {
+  //     dispatch(clearCredentials());
+  //     navigate("/login");
+  //   }
+  // }, [error, navigate, dispatch]);
 
   const handleAddDoctor = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,8 +82,8 @@ const AddDoctorModal = () => {
                   إختر المستخدم
                 </option>
                 {isSuccess &&
-                  data
-                    .users!.filter((user) => user.role === UserRole.Doctor)
+                  data.users
+                    ?.filter((user) => user.role === UserRole.Doctor)
                     .map((user) => (
                       <option key={user.id} value={user.id}>
                         {user.fullName}

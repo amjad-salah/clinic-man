@@ -9,7 +9,7 @@ import {
 
 const BILLINGS_URL = "/billings";
 
-const billingsApiSlice = apiSlice.injectEndpoints({
+export const billingsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllBillings: builder.query<BillingResponse, void>({
       query: () => BILLINGS_URL,

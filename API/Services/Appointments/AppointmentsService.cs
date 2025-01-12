@@ -6,6 +6,7 @@ using Models;
 using Models.DTOs.Appointments;
 using Models.DTOs.BillingItems;
 using Models.DTOs.Billings;
+using Models.DTOs.Payments;
 using Models.Entities;
 
 namespace API.Services.Appointments;
@@ -14,7 +15,7 @@ public class AppointmentsService(AppDbContext context, IBillingsService billings
 {
     public async Task<AppointmentResponseDto> GetAllAppointments()
     {
-        var appointments = await context.Appointments.OrderByDescending(a => a.Date)
+        var appointments = await context.Appointments.OrderByDescending(a => a.Id)
             .AsNoTracking()
             .Include(a =>a.AppointmentType)
             .Include(a => a.Patient)
@@ -87,11 +88,14 @@ public class AppointmentsService(AppDbContext context, IBillingsService billings
 
         if (appointment.Status == AppointmentStatus.Completed)
         {
-            var bill = await context.Billings
-                .FirstAsync(b => b.AppointmentId == existingAppointment.Id);
-            
-            bill.PaidAmount = bill.Total;
-            bill.Status = BillStatus.Paid;
+            var billing = await context.Billings.FirstAsync(b => b.AppointmentId == id);
+
+
+            await billingsService.AddBillingPayment(new UpsertPaymentDto()
+            {
+                Amount = billing.Total,
+                BillingId = billing.Id,
+            });
         }
 
         existingAppointment.Status = appointment.Status;
