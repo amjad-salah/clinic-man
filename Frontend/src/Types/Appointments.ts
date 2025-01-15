@@ -4,6 +4,7 @@ import { LabTestDetailsDto } from "./LabTests.ts";
 import { DiagnoseDto } from "./Diagnoses.ts";
 import { PrescriptionDto } from "./Prescriptions.ts";
 import { AppointmentTypeDto } from "./AppointmentTypes.ts";
+import { BillingDto } from "./Billings.ts";
 
 export enum AppointmentStatus {
   مقرر,
@@ -38,6 +39,7 @@ export type AppointmentDetailsDto = {
   tests: LabTestDetailsDto[] | null;
   diagnoses: DiagnoseDto[] | null;
   prescriptions: PrescriptionDto[] | null;
+  billings: BillingDto[] | null;
 };
 
 export type AddAppointmentDto = {

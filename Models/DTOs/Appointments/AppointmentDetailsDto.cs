@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Text.Json.Serialization;
 using Models.DTOs.AppointmentTypes;
+using Models.DTOs.Billings;
 using Models.DTOs.Diagnoses;
 using Models.DTOs.Doctors;
 using Models.DTOs.LabTests;
@@ -30,4 +31,5 @@ public class AppointmentDetailsDto
     public List<DiagnoseDto>? Diagnoses { get; set; }
     public List<PrescriptionDto>? Prescriptions { get; set; }
     public List<UpsertLabTestDto>? Tests { get; set; }
+    public List<BillingDto>? Billings { get; set; }
 }

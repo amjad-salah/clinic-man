@@ -69,7 +69,6 @@ export const appointmentsApiSlice = apiSlice.injectEndpoints({
       onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
         if (await queryFulfilled) {
           dispatch(doctorsApiSlice.util.invalidateTags(["Doctors"]));
-          dispatch(billingsApiSlice.util.invalidateTags(["Billings"]));
         }
       },
     }),

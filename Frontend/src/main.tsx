@@ -38,6 +38,9 @@ import SupplierDetails from "./features/suppliers/SupplierDetails.tsx";
 import LogsList from "./features/inventoryLogs/LogsList.tsx";
 import TypesList from "./features/appointments/TypesList.tsx";
 import TypeDetails from "./features/appointments/TypeDetails.tsx";
+import PrintPrescriptions from "./features/appointments/print/PrintPrescriptions.tsx";
+import PrintTests from "./features/appointments/print/PrintTests.tsx";
+import PrintBill from "./features/appointments/print/PrintBill.tsx";
 
 //Routes
 const router = createBrowserRouter(
@@ -72,6 +75,18 @@ const router = createBrowserRouter(
             element={<AppointmentsList />}
           />
           <Route path="/appointments/:id" element={<AppointmentDetails />} />
+          <Route
+            path="/appointments/:id/print-pres"
+            element={<PrintPrescriptions />}
+          />
+          <Route
+            path="/appointments/:id/print-tests"
+            element={<PrintTests />}
+          />
+          <Route
+            path="/appointments/:billId/print-bill"
+            element={<PrintBill />}
+          />
           <Route path="/appointments/types" element={<TypesList />} />
           <Route path="/appointments/types/:id" element={<TypeDetails />} />
         </Route>

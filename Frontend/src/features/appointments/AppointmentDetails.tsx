@@ -5,6 +5,7 @@ import { useDeletePrescriptionMutation } from "../prescriptions/prescriptionsApi
 import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/Loader.tsx";
 import { IoMdReturnRight } from "react-icons/io";
+import { IoPrintSharp } from "react-icons/io5";
 import { AppointmentStatus } from "../../Types/Appointments.ts";
 import AddDiagnoseModal from "./AddDiagnoseModal.tsx";
 import AddPrescriptionModal from "./AddPrescriptionModal.tsx";
@@ -131,7 +132,23 @@ const AppointmentDetails = () => {
               </p>
             </div>
           </div>
+          <div className="row">
+            <div className="col-md-6">
+              <p>
+                <span className="fw-bold me-2">الحساسية/ الأمراض المزمنة:</span>
+                {data?.appointment!.patient.allergies}
+              </p>
+            </div>
+          </div>
         </div>
+        {data?.appointment!.billings && (
+          <Link
+            to={`/appointments/${data?.appointment!.billings[0].id}/print-bill`}
+            className="my-3 btn btn-secondary"
+          >
+            الفاتورة
+          </Link>
+        )}
         <div className="row">
           <div className="col-md-6">
             <div className="card card-body p-4 mb-5 shadow">
@@ -140,7 +157,7 @@ const AppointmentDetails = () => {
                 <AddDiagnoseModal />
               </div>
               <hr className="mb-3" />
-              <table className="table table-striped table-hover table-sm">
+              <table className="table table-striped table-hover table-sm mb-5">
                 <thead>
                   <tr>
                     <th>رقم الحجز</th>
@@ -168,7 +185,15 @@ const AppointmentDetails = () => {
 
               <div className="d-flex justify-content-between">
                 <h6 className="mb-2">الفحوصات</h6>
-                <AddTestModal />
+                <div>
+                  <Link
+                    to={`/appointments/${id}/print-tests`}
+                    className="btn btn-secondary btn-sm me-2 mb-3"
+                  >
+                    <IoPrintSharp />
+                  </Link>
+                  <AddTestModal />
+                </div>
               </div>
               <hr className="mb-3" />
               <table className="table table-striped table-sm">
@@ -203,7 +228,15 @@ const AppointmentDetails = () => {
             <div className="card card-body p-4 mb-5 shadow">
               <div className="d-flex justify-content-between">
                 <h6 className="mb-2">الوصفات الطبية</h6>
-                <AddPrescriptionModal />
+                <div>
+                  <Link
+                    to={`/appointments/${id}/print-pres`}
+                    className="btn btn-secondary btn-sm me-2 mb-3"
+                  >
+                    <IoPrintSharp />
+                  </Link>
+                  <AddPrescriptionModal />
+                </div>
               </div>
               <hr className="mb-3" />
               <table className="table table-striped table-sm">

@@ -37,6 +37,7 @@ public class AppointmentsService(AppDbContext context, IBillingsService billings
             .Include(a => a.Diagnoses)
             .Include(a => a.Prescriptions)
             .Include(a => a.Tests)
+            .Include(a => a.Billings)
             .FirstOrDefaultAsync(a => a.Id == id);
 
         return appointment == null
