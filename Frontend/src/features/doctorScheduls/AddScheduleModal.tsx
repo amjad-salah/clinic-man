@@ -138,11 +138,6 @@ const AddScheduleModal = () => {
                 onChange={(e) => setEndTime(e.target.value)}
               />
             </div>
-            <div className="mb-3">
-              <button type="submit" className="btn btn-primary">
-                إضافة
-              </button>
-            </div>
           </form>
         </Modal.Body>
         <Modal.Footer>

@@ -20,11 +20,7 @@ const UpdateDoctorModal = ({ id }: UpdateDocProps) => {
   const { data, isSuccess } = useGetDoctorByIdQuery(id);
 
   // @ts-ignore
-  const {
-    data: usersData,
-    isSuccess: usersIsSuccess,
-    error: usersError,
-  } = useGetAllUsersQuery();
+  const { data: usersData, isSuccess: usersIsSuccess } = useGetAllUsersQuery();
   const [updateDoctor] = useUpdateDoctorMutation();
 
   const [userId, setUserId] = useState("");

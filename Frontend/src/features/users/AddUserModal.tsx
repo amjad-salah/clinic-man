@@ -115,11 +115,6 @@ const AddUserModal = () => {
                 )}
               </select>
             </div>
-            <div className="mb-3">
-              <button type="submit" className="btn btn-primary">
-                إضافة
-              </button>
-            </div>
           </form>
         </Modal.Body>
         <Modal.Footer>
