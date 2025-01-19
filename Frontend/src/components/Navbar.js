@@ -1,0 +1,30 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { useAppDispatch, useAppSelector } from "../app/hooks.ts";
+import { clearCredentials } from "../features/users/authSlice.ts";
+import { useNavigate } from "react-router-dom";
+import { FaUsers } from "react-icons/fa6";
+import { FaClinicMedical } from "react-icons/fa";
+import { AiOutlineLogin, AiOutlineLogout } from "react-icons/ai";
+import { FaBookMedical } from "react-icons/fa";
+import { GrSchedule } from "react-icons/gr";
+import { BiHealth } from "react-icons/bi";
+import { GrSchedules } from "react-icons/gr";
+import { GiTestTubes } from "react-icons/gi";
+import { LiaDiagnosesSolid } from "react-icons/lia";
+import { GiMedicines } from "react-icons/gi";
+import { FaMoneyBill } from "react-icons/fa";
+import { MdOutlineInventory2 } from "react-icons/md";
+import { LuLogs } from "react-icons/lu";
+import { PiTruckTrailerBold } from "react-icons/pi";
+import { Link } from "react-router-dom";
+const Navbar = () => {
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const { user } = useAppSelector((state) => state.auth);
+    const handleLogout = () => {
+        dispatch(clearCredentials());
+        navigate("/");
+    };
+    return (_jsxs("aside", { id: "sidebar", className: "expand d-print-none", children: [_jsx("div", { className: "d-flex", children: _jsxs("div", { className: "sidebar-logo", children: [_jsx(FaClinicMedical, { className: "text-white" }), _jsx(Link, { to: "/", className: "ms-2", children: "\u0639\u064A\u0627\u062F\u0629" })] }) }), user ? (_jsxs("div", { children: [_jsxs("ul", { className: "sidebar-nav", children: [_jsx("li", { className: "sidebar-item", children: _jsxs(Link, { to: "users", className: "sidebar-link", children: [_jsx(FaUsers, {}), _jsx("span", { className: "ms-2", children: "\u0627\u0644\u0645\u0633\u062A\u062E\u062F\u0645\u064A\u0646" })] }) }), _jsx("li", { className: "sidebar-item", children: _jsxs(Link, { to: "doctors", className: "sidebar-link", children: [_jsx(FaBookMedical, {}), _jsx("span", { className: "ms-2", children: "\u0627\u0644\u0623\u0637\u0628\u0627\u0621" })] }) }), _jsx("li", { className: "sidebar-item", children: _jsxs(Link, { to: "schedules", className: "sidebar-link", children: [_jsx(GrSchedule, {}), _jsx("span", { className: "ms-2", children: "\u062C\u062F\u0648\u0644\u0629 \u0627\u0644\u0623\u0637\u0628\u0627\u0621" })] }) }), _jsx("li", { className: "sidebar-item", children: _jsxs(Link, { to: "patients", className: "sidebar-link", children: [_jsx(BiHealth, {}), _jsx("span", { className: "ms-2", children: "\u0627\u0644\u0645\u0631\u0636\u0649" })] }) }), _jsx("li", { className: "sidebar-item", children: _jsxs(Link, { to: "appointments", className: "sidebar-link", children: [_jsx(GrSchedules, {}), _jsx("span", { className: "ms-2", children: "\u0627\u0644\u062D\u062C\u0648\u0632\u0627\u062A" })] }) }), _jsx("li", { className: "sidebar-item", children: _jsxs(Link, { to: "labtests", className: "sidebar-link", children: [_jsx(GiTestTubes, {}), _jsx("span", { className: "ms-2", children: "\u0627\u0644\u0641\u062D\u0648\u0635\u0627\u062A" })] }) }), _jsx("li", { className: "sidebar-item", children: _jsxs(Link, { to: "diagnoses", className: "sidebar-link", children: [_jsx(LiaDiagnosesSolid, {}), _jsx("span", { className: "ms-2", children: "\u0627\u0644\u062A\u0634\u062D\u064A\u0635" })] }) }), _jsx("li", { className: "sidebar-item", children: _jsxs(Link, { to: "prescriptions", className: "sidebar-link", children: [_jsx(GiMedicines, {}), _jsx("span", { className: "ms-2", children: "\u0627\u0644\u0648\u0635\u0641\u0627\u062A" })] }) }), _jsx("li", { className: "sidebar-item", children: _jsxs(Link, { to: "bills", className: "sidebar-link", children: [_jsx(FaMoneyBill, {}), _jsx("span", { className: "ms-2", children: "\u0627\u0644\u0641\u0648\u0627\u062A\u064A\u0631" })] }) }), _jsxs("li", { className: "sidebar-item", children: [_jsxs(Link, { to: "#", className: "sidebar-link has-dropdown collapsed", "data-bs-toggle": "collapse", "data-bs-target": "#auth", "aria-expanded": "false", "aria-controls": "auth", children: [_jsx(MdOutlineInventory2, {}), _jsx("span", { className: "ms-2", children: "\u0625\u062F\u0627\u0631\u0629 \u0627\u0644\u0645\u062E\u0632\u0646" })] }), _jsxs("ul", { id: "auth", className: "sidebar-dropdown list-unstyled collapse", "data-bs-parent": "#sidebar", children: [_jsx("li", { className: "sidebar-item", children: _jsxs(Link, { to: "inventories", className: "sidebar-link", children: [_jsx(MdOutlineInventory2, {}), _jsx("span", { className: "ms-2", children: "\u0627\u0644\u0645\u062E\u0632\u0648\u0646" })] }) }), _jsx("li", { className: "sidebar-item", children: _jsxs(Link, { to: "suppliers", className: "sidebar-link", children: [_jsx(PiTruckTrailerBold, {}), _jsx("span", { className: "ms-2", children: "\u0627\u0644\u0645\u0648\u0631\u062F\u0648\u0646" })] }) }), _jsx("li", { className: "sidebar-item", children: _jsxs(Link, { to: "invlogs", className: "sidebar-link", children: [_jsx(LuLogs, {}), _jsx("span", { className: "ms-2", children: "\u0627\u0644\u0639\u0645\u0644\u064A\u0627\u062A" })] }) })] })] })] }), _jsxs("div", { className: "sidebar-footer", children: [_jsx("span", { className: "text-white mx-5", children: user.fullName }), _jsx("br", {}), _jsxs(Link, { to: "/", className: "sidebar-link", onClick: handleLogout, children: [_jsx(AiOutlineLogout, {}), _jsx("span", { className: "ms-2", children: "\u062E\u0631\u0648\u062C" })] })] })] })) : (_jsx("div", { className: "sidebar-footer", children: _jsxs(Link, { to: "/login", className: "sidebar-link", children: [_jsx(AiOutlineLogin, {}), _jsx("span", { className: "ms-2", children: "\u062F\u062E\u0648\u0644" })] }) }))] }));
+};
+export default Navbar;

@@ -39,22 +39,20 @@ const AddLogModal = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // @ts-ignore
-    if (
-      supplierError &&
-      (supplierError.status === 401 || supplierError.status === 403)
-    ) {
-      dispatch(clearCredentials());
-      navigate("/login");
+    if (supplierError) {
+      // @ts-ignore
+      if (supplierError.status === 401 || supplierError.status === 403) {
+        dispatch(clearCredentials());
+        navigate("/login");
+      }
     }
 
-    // @ts-ignore
-    if (
-      inventoryError &&
-      (inventoryError.status === 401 || inventoryError.status === 403)
-    ) {
-      dispatch(clearCredentials());
-      navigate("/login");
+    if (inventoryError) {
+      // @ts-ignore
+      if (inventoryError.status === 401 || inventoryError.status === 403) {
+        dispatch(clearCredentials());
+        navigate("/login");
+      }
     }
   }, [supplierError, inventoryError, navigate, dispatch]);
 

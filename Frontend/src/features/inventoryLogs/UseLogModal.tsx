@@ -31,14 +31,12 @@ const AddLogModal = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // @ts-ignore
-    // @ts-ignore
-    if (
-      inventoryError &&
-      (inventoryError.status === 401 || inventoryError.status === 403)
-    ) {
-      dispatch(clearCredentials());
-      navigate("/login");
+    if (inventoryError) {
+      // @ts-ignore
+      if (inventoryError.status === 401 || inventoryError.status === 403) {
+        dispatch(clearCredentials());
+        navigate("/login");
+      }
     }
   }, [inventoryError, navigate, dispatch]);
 

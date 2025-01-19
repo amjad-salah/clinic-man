@@ -19,7 +19,6 @@ type UpdateDocSchProps = {
 
 const UpdateScheduleModal = ({ id }: UpdateDocSchProps) => {
   const { data, isSuccess } = useGetScheduleByIdQuery(id);
-  // @ts-ignore
   const {
     data: doctorsData,
     isSuccess: doctorsIsSuccess,
@@ -48,12 +47,12 @@ const UpdateScheduleModal = ({ id }: UpdateDocSchProps) => {
       setEndTime(data!.schedule!.endTime);
     }
     // @ts-ignore
-    if (
-      doctorsError &&
-      (doctorsError.status === 401 || doctorsError.status === 403)
-    ) {
-      dispatch(clearCredentials());
-      navigate("/login");
+    if (doctorsError) {
+      // @ts-ignore
+      if (doctorsError.status === 401 || doctorsError.status === 403) {
+        dispatch(clearCredentials());
+        navigate("/login");
+      }
     }
   }, [isSuccess, data, doctorsError, dispatch, navigate]);
 

@@ -10,7 +10,6 @@ import { IoMdReturnRight } from "react-icons/io";
 import { BillingStatus } from "../../Types/Billings.ts";
 import moment from "moment";
 import AddItemModal from "./AddItemModal.tsx";
-import AddDoctor from "../doctors/AddDoctor.tsx";
 import AddPaymentModal from "./AddPaymentModal.tsx";
 
 const BillingDetails = () => {

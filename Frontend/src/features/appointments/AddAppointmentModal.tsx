@@ -49,22 +49,20 @@ const AddAppointmentModal = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // @ts-ignore
-    if (
-      patientsError &&
-      (patientsError.status === 401 || patientsError.status === 403)
-    ) {
-      dispatch(clearCredentials());
-      navigate("/login");
+    if (patientsError) {
+      // @ts-ignore
+      if (patientsError.status === 401 || patientsError.status === 403) {
+        dispatch(clearCredentials());
+        navigate("/login");
+      }
     }
 
-    // @ts-ignore
-    if (
-      doctorsError &&
-      (doctorsError.status === 401 || doctorsError.status === 403)
-    ) {
-      dispatch(clearCredentials());
-      navigate("/login");
+    if (doctorsError) {
+      // @ts-ignore
+      if (doctorsError.status === 401 || doctorsError.status === 403) {
+        dispatch(clearCredentials());
+        navigate("/login");
+      }
     }
   }, [patientsError, doctorsError, navigate, dispatch]);
 

@@ -1,0 +1,10 @@
+export var DayOfWeek;
+(function (DayOfWeek) {
+    DayOfWeek[DayOfWeek["\u0627\u0644\u0623\u062D\u062F"] = 0] = "\u0627\u0644\u0623\u062D\u062F";
+    DayOfWeek[DayOfWeek["\u0627\u0644\u0625\u062B\u0646\u064A\u0646"] = 1] = "\u0627\u0644\u0625\u062B\u0646\u064A\u0646";
+    DayOfWeek[DayOfWeek["\u0627\u0644\u062B\u0644\u0627\u062B\u0627\u0621"] = 2] = "\u0627\u0644\u062B\u0644\u0627\u062B\u0627\u0621";
+    DayOfWeek[DayOfWeek["\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621"] = 3] = "\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621";
+    DayOfWeek[DayOfWeek["\u0627\u0644\u062E\u0645\u064A\u0633"] = 4] = "\u0627\u0644\u062E\u0645\u064A\u0633";
+    DayOfWeek[DayOfWeek["\u0627\u0644\u062C\u0645\u0639\u0629"] = 5] = "\u0627\u0644\u062C\u0645\u0639\u0629";
+    DayOfWeek[DayOfWeek["\u0627\u0644\u0633\u0628\u062A"] = 6] = "\u0627\u0644\u0633\u0628\u062A";
+})(DayOfWeek || (DayOfWeek = {}));
